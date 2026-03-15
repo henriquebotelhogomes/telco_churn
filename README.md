@@ -28,6 +28,19 @@ Para garantir que a aplicação seja escalável e de fácil manutenção, as seg
 
 ---
 
+## 🔄 Fluxo de Inferência da API
+```mermaid
+flowchart LR
+    subgraph "Telco Churn Prediction"
+    direction LR
+    end
+
+    classDef component fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000
+    classDef user fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000
+    class U user
+    class F,P,S,X component
+```
+
 ## 📊 Performance do Modelo
 
 Avaliação no conjunto de teste (20% dos dados invisíveis ao modelo):
@@ -35,6 +48,8 @@ Avaliação no conjunto de teste (20% dos dados invisíveis ao modelo):
 - **F1-Score (Churn):** `0.59`
 - **Recall (Churn):** `0.67` 🎯 *(Métrica de negócio priorizada)*
 
+
+*  "Nota: A análise exploratória de dados (EDA) que originou as decisões de feature engineering encontra-se na pasta `/notebooks`."*
 ---
 
 ## 🚀 Como Executar
