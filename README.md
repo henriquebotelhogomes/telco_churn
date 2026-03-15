@@ -28,20 +28,6 @@ Para garantir que a aplicação seja escalável e de fácil manutenção, as seg
 
 ---
 
-## 🔄 Fluxo de Inferência da API
-```mermaid
-```mermaid
-flowchart LR
-    subgraph telco [Telco Churn Prediction]
-    end
-
-    classDef component fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000
-    classDef user fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000
-    class U user
-    class F,P,S,X component
-
-```
-
 ## 📊 Performance do Modelo
 
 Avaliação no conjunto de teste (20% dos dados invisíveis ao modelo):
