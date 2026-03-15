@@ -1,0 +1,89 @@
+# ==============================================================================
+# 🐍 Python & Ambientes Virtuais
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Ambientes virtuais (uv, venv, poetry)
+.venv/
+venv/
+env/
+ENV/
+
+# ==============================================================================
+# 🛠️ Ferramentas de Qualidade e Testes (Ruff, Mypy, Pytest)
+# ==============================================================================
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# ==============================================================================
+# 🧠 Machine Learning: Dados e Modelos (CRÍTICO)
+# ==============================================================================
+# Ignora todos os arquivos dentro das pastas de dados, EXCETO o .gitkeep
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# Ignora os artefatos de modelo pesados, EXCETO o .gitkeep
+models/*.joblib
+models/*.pkl
+models/*.h5
+models/*.model
+!models/.gitkeep
+
+# Notebooks checkpoints
+.ipynb_checkpoints/
+
+# ==============================================================================
+# ⚙️ Configurações Locais e Segredos
+# ==============================================================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ==============================================================================
+# 💻 IDEs e Sistema Operacional
+# ==============================================================================
+.vscode/
+.idea/
+*.swp
+*.sublime-workspace
+*.sublime-project
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
