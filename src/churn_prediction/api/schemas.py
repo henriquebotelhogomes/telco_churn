@@ -103,10 +103,36 @@ class PrevisaoChurnRequest(BaseModel):
         }
 
 
+class FatorRisco(BaseModel):
+    fator: str = Field(..., description="Nome do fator de negócio")
+    impacto: str = Field(..., description="Impacto em % da probabilidade final (ex: +28% ou -12%)")
+    shap_value: float = Field(..., description="SHAP em log-odds bruto para auditoria")
+    direcao: str = Field(..., description="aumenta_risco | reduz_risco")
+    descricao: str = Field(..., description="Descrição humana do driver")
+
+
+class AcaoRecomendada(BaseModel):
+    playbook: str = Field(..., description="Identificador do playbook recomendado")
+    descricao: str = Field(..., description="Descrição da ação recomendada")
+    reducao_estimada_risco: float = Field(
+        ..., description="Redução absoluta de probabilidade estimada"
+    )
+
+
 class PrevisaoChurnResponse(BaseModel):
     previsao_cancelamento: int = Field(
         ..., description="1 se o modelo prevê que vai cancelar (Churn), 0 se não"
     )
     probabilidade_cancelamento: float = Field(
         ..., description="Probabilidade de cancelamento (0.0 a 1.0)"
+    )
+    nivel_risco: str = Field(..., description="Baixo | Médio | Alto | Crítico")
+    mrr_em_risco: float = Field(
+        ..., description="MonthlyCharges * p(churn) se Alto/Crítico, senão 0"
+    )
+    top_fatores_risco: list[FatorRisco] = Field(
+        ..., description="Top 3 fatores SHAP ordenados por impacto"
+    )
+    acao_recomendada: AcaoRecomendada | None = Field(
+        None, description="Playbook com maior redução de risco"
     )
