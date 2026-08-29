@@ -41,7 +41,7 @@ def test_predict_churn_success():
         "faturamento_sem_papel": "Sim",
         "metodo_pagamento": "Cheque eletrônico",
         "cobranca_mensal": 29.85,
-        "cobranca_total": "29.85"
+        "cobranca_total": "29.85",
     }
 
     # Usamos o TestClient com o gerenciador de contexto (with) para acionar o lifespan
@@ -70,10 +70,7 @@ def test_predict_churn_validation_error():
     """Testa se a API rejeita payloads inválidos (ex: faltando campos obrigatórios)."""
 
     # Payload incompleto (faltam vários campos)
-    payload_invalido = {
-        "genero": "Feminino",
-        "idoso": 0
-    }
+    payload_invalido = {"genero": "Feminino", "idoso": 0}
 
     with TestClient(app) as live_client:
         response = live_client.post("/predict", json=payload_invalido)

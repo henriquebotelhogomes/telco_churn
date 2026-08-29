@@ -36,10 +36,17 @@ jobs:
       - name: Checagem de tipagem estática (Mypy)
         run: uv run mypy src
 
-      - name: Executar testes (Pytest)
+      - name: Executar testes (Pytest) com cobertura >=60% (M0) -> 80% alvo M3
         # Nota: O teste precisa do modelo treinado. Em um cenário real de CI,
         # o modelo seria baixado de um bucket S3/GCS ou DVC.
         # Aqui, vamos rodar o script de treino rápido antes do teste para gerar o artefato.
         run: |
           uv run python src/churn_prediction/models/train.py
-          uv run pytest tests/ -v
+          uv run pytest tests/ -v --cov=churn_prediction --cov-report=term-missing --cov-report=xml --cov-fail-under=60
+
+      - name: Upload coverage XML
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-xml
+          path: coverage.xml

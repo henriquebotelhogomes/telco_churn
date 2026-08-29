@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from typing import Any
 
 import joblib
 import pandas as pd
@@ -10,7 +11,7 @@ from churn_prediction.config import settings
 
 # Dicionário global para manter o modelo em memória.
 # Evita o carregamento do disco a cada requisição, garantindo baixa latência.
-ml_models = {}
+ml_models: dict[str, Any] = {}
 
 
 @asynccontextmanager
@@ -88,7 +89,4 @@ def health_check():
     Endpoint leve para monitoramento de saúde da aplicação (Liveness Probe).
     Ideal para orquestradores como Kubernetes ou Docker Swarm.
     """
-    return {
-        "status": "ok",
-        "model_loaded": "churn_model" in ml_models
-    }
+    return {"status": "ok", "model_loaded": "churn_model" in ml_models}
