@@ -28,14 +28,18 @@ from churn_prediction.api.schemas import (
     EvolucaoTemporalPonto,
     EvolucaoTemporalResponse,
     LinhaInvalida,
+    ModelRegistryResponse,
     PlaybookHistoricoItem,
     PrevisaoBatchLinha,
     PrevisaoBatchResponse,
     PrevisaoChurnRequest,
     PrevisaoChurnResponse,
+    PromoteModelRequest,
+    PromoteModelResponse,
     RegistrarOutcomeRequest,
     RegistrarOutcomeResponse,
     ResumoBatch,
+    ShadowTelemetryResponse,
     SimulacaoRequest,
     SimulacaoResponse,
     SimulacaoResultado,
@@ -49,6 +53,7 @@ from churn_prediction.db.models import (
 )
 from churn_prediction.db.session import get_db, init_db
 from churn_prediction.models import drift, simulator
+from churn_prediction.models.registry import model_manager
 
 # Globais para baixa latencia (modelo + explainer em memoria)
 ml_models: dict[str, Any] = {}
@@ -60,7 +65,7 @@ LEVEL_NAMES = ["Baixo", "Médio", "Alto", "Crítico"]
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Carrega pipeline + explainer e inicializa banco de dados no startup."""
+    """Carrega pipeline + explainer, model registry e inicializa banco de dados no startup."""
     try:
         from churn_prediction.db.seed import seed_historical_data
 
@@ -71,19 +76,24 @@ async def lifespan(app: FastAPI):
         print(f"Aviso na inicialização do banco: {e}")
 
     try:
-        model = joblib.load(settings.model_path)
-        ml_models["churn_model"] = model
-        print(f"Modelo carregado: {settings.model_path}")
-        # Tenta criar explainer (SHAP) — falha nao bloqueia API
-        try:
-            from churn_prediction.models.explainability import ChurnExplainer
+        # Inicializa o Model Registry com Champion e Challengers
+        model_manager.initialize()
+        champ_name, model = model_manager.get_champion()
+        if model is not None:
+            ml_models["churn_model"] = model
+            print(f"Modelo Champion ativo carregado: {champ_name}")
+            try:
+                from churn_prediction.models.explainability import ChurnExplainer
 
-            ml_explainers["churn_explainer"] = ChurnExplainer(model)
-            print("Explainer SHAP carregado")
-        except Exception as e:
-            print(f"Aviso: falha ao criar explainer SHAP: {e}")
+                ml_explainers["churn_explainer"] = ChurnExplainer(model)
+                print("Explainer SHAP carregado")
+            except Exception as e:
+                print(f"Aviso: falha ao criar explainer SHAP: {e}")
+        elif settings.model_path.exists():
+            model = joblib.load(settings.model_path)
+            ml_models["churn_model"] = model
     except Exception as e:
-        print(f"Erro ao carregar modelo. Rode train.py. Detalhes: {e}")
+        print(f"Erro ao carregar modelo: {e}")
     yield
     ml_models.clear()
     ml_explainers.clear()
@@ -204,6 +214,12 @@ def predict_churn(request: PrevisaoChurnRequest):
     telemetry.predictions_total.labels(endpoint="/api/v1/predict").inc()
     telemetry.risk_level_total.labels(level=nivel).inc()
     telemetry.drift_buffer.append(canonical)
+
+    # Shadow Scoring M7: pontua Challengers em background
+    try:
+        model_manager.record_shadow_scoring(input_data, probability, nivel)
+    except Exception:
+        pass
 
     return PrevisaoChurnResponse(
         previsao_cancelamento=prediction,
@@ -661,6 +677,50 @@ async def get_retention_efficiency(
         mrr_acumulado_salvo=mrr_global,
         detalhe_por_playbook=detalhes,
     )
+
+
+# ---------------------------------------------------------------------------
+# M7 — Model Registry, Champion/Challenger & Shadow Scoring
+# ---------------------------------------------------------------------------
+
+
+@v1.get("/models", response_model=ModelRegistryResponse)
+def list_models_registry():
+    """Retorna o catálogo completo de modelos (Champion, Challengers, Baseline e Métricas)."""
+    return model_manager.list_models()
+
+
+@v1.post("/models/promote", response_model=PromoteModelResponse)
+def promote_model_to_champion(request: PromoteModelRequest):
+    """Promove dinamicamente um modelo para Champion em produção sem downtime."""
+    try:
+        res = model_manager.promote_to_champion(request.model_name)
+        # Atualiza a referência global em memória usada nas rotas de inferência e XAI
+        champ_name, model = model_manager.get_champion()
+        if model is not None:
+            ml_models["churn_model"] = model
+            try:
+                from churn_prediction.models.explainability import ChurnExplainer
+
+                ml_explainers["churn_explainer"] = ChurnExplainer(model)
+            except Exception:
+                pass
+        return PromoteModelResponse(
+            status=res["status"],
+            previous_champion=res["previous_champion"],
+            new_champion=res["new_champion"],
+            promoted_at=res["promoted_at"],
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Falha ao promover modelo: {str(e)}")
+
+
+@v1.get("/models/shadow-metrics", response_model=ShadowTelemetryResponse)
+def get_shadow_scoring_metrics():
+    """Retorna métricas de concordância, divergência de risco e latência do Shadow Scoring."""
+    return model_manager.get_shadow_telemetry()
 
 
 app.include_router(v1)

@@ -265,3 +265,79 @@ export interface EficienciaRetencaoResponse {
   detalhe_por_playbook: EficienciaPlaybook[]
 }
 
+// ---------------------------------------------------------------------------
+// M7 — Champion/Challenger, Model Registry & Shadow Scoring
+// ---------------------------------------------------------------------------
+
+export interface ModelRegistryItem {
+  model_name: string
+  version: string
+  algo: string
+  role: 'champion' | 'challenger' | 'baseline' | 'archived'
+  trained_at: string
+  artifact: string
+  metrics: {
+    roc_auc: number
+    pr_auc: number
+    f1: number
+    precision: number
+    recall: number
+    brier_score: number
+    latency_ms: number
+    confusion_matrix?: number[][]
+  }
+  dataset: {
+    path: string
+    rows: number
+    positive_rate: number
+  }
+  git_sha?: string | null
+}
+
+export interface ModelRegistryResponse {
+  active_champion: string
+  total_models: number
+  updated_at: string | null
+  models: ModelRegistryItem[]
+}
+
+export interface ShadowModelComparison {
+  model_name: string
+  total_samples: number
+  agreement_rate_pct: number
+  avg_latency_ms: number
+  avg_prob_diff: number
+}
+
+export interface ShadowTelemetryResponse {
+  total_shadow_scored: number
+  avg_concordance_pct: number
+  recent_samples_count: number
+  model_comparisons: ShadowModelComparison[]
+  recent_events: Array<{
+    timestamp: string
+    champion_name: string
+    champion_prob: number
+    champion_risk: string
+    concordance_rate_pct: number
+    challengers: Record<
+      string,
+      {
+        probability: number
+        risk_level: string
+        latency_ms: number
+        agrees_with_champion: boolean
+        prob_difference: number
+      }
+    >
+  }>
+}
+
+export interface PromoteModelResponse {
+  status: string
+  previous_champion: string
+  new_champion: string
+  promoted_at: string
+}
+
+

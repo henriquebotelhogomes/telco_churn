@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -303,3 +303,54 @@ class EficienciaRetencaoResponse(BaseModel):
     total_clientes_salvos: int
     mrr_acumulado_salvo: float
     detalhe_por_playbook: list[EficienciaPlaybook]
+
+
+# ---------------------------------------------------------------------------
+# M7 — Champion/Challenger, Model Registry & Shadow Scoring
+# ---------------------------------------------------------------------------
+
+
+class PromoteModelRequest(BaseModel):
+    model_name: str = Field(..., description="Nome do modelo a ser promovido para Champion")
+
+
+class PromoteModelResponse(BaseModel):
+    status: str
+    previous_champion: str
+    new_champion: str
+    promoted_at: str
+
+
+class ModelRegistryItem(BaseModel):
+    model_name: str
+    version: str
+    algo: str
+    role: str = Field(..., description="champion | challenger | baseline | archived")
+    trained_at: str
+    artifact: str
+    metrics: dict[str, Any]
+    dataset: dict[str, Any]
+    git_sha: str | None = None
+
+
+class ModelRegistryResponse(BaseModel):
+    active_champion: str
+    total_models: int
+    updated_at: str | None = None
+    models: list[ModelRegistryItem]
+
+
+class ShadowModelComparison(BaseModel):
+    model_name: str
+    total_samples: int
+    agreement_rate_pct: float
+    avg_latency_ms: float
+    avg_prob_diff: float
+
+
+class ShadowTelemetryResponse(BaseModel):
+    total_shadow_scored: int
+    avg_concordance_pct: float
+    recent_samples_count: int
+    model_comparisons: list[ShadowModelComparison]
+    recent_events: list[dict[str, Any]]

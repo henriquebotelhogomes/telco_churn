@@ -108,4 +108,20 @@ export const api = {
   retentionEfficiency(): Promise<import('@/types').EficienciaRetencaoResponse> {
     return request('/api/v1/analytics/retention-efficiency')
   },
+
+  listModels(): Promise<import('@/types').ModelRegistryResponse> {
+    return request('/api/v1/models')
+  },
+
+  promoteModel(modelName: string): Promise<import('@/types').PromoteModelResponse> {
+    return request('/api/v1/models/promote', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model_name: modelName }),
+    })
+  },
+
+  shadowMetrics(): Promise<import('@/types').ShadowTelemetryResponse> {
+    return request('/api/v1/models/shadow-metrics')
+  },
 }
