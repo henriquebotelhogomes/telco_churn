@@ -1,14 +1,18 @@
 import io
+import json
 from contextlib import asynccontextmanager
 from typing import Any, cast
 
 import joblib
 import numpy as np
 import pandas as pd
-from fastapi import APIRouter, FastAPI, HTTPException, Request
+from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
+from prometheus_fastapi_instrumentator import Instrumentator
 from pydantic import ValidationError
 
+from churn_prediction.api import telemetry
 from churn_prediction.api.schemas import (
     AcaoRecomendada,
     AcaoSimulavel,
@@ -25,7 +29,7 @@ from churn_prediction.api.schemas import (
 )
 from churn_prediction.config import settings
 from churn_prediction.data.contracts import MissingColumnsError, validate_customer_batch
-from churn_prediction.models import simulator
+from churn_prediction.models import drift, simulator
 
 # Globais para baixa latencia (modelo + explainer em memoria)
 ml_models: dict[str, Any] = {}
@@ -64,8 +68,27 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Router versionado
-v1 = APIRouter(prefix="/api/v1", tags=["v1"])
+# CORS via env CORS_ORIGINS (frontend Vite local + produção)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Prometheus: métricas http_* + contadores de negócio em GET /metrics
+Instrumentator().instrument(app).expose(app, endpoint="/metrics", include_in_schema=False)
+
+
+async def verify_api_key(x_api_key: str | None = Header(default=None)) -> None:
+    """X-API-Key opcional: só exige quando settings.api_key_enabled."""
+    if settings.api_key_enabled and x_api_key != settings.api_key:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+
+
+# Router versionado (auth opcional aplicada em todas as rotas de negócio)
+v1 = APIRouter(prefix="/api/v1", tags=["v1"], dependencies=[Depends(verify_api_key)])
 
 
 def _nivel_risco(p: float) -> str:
@@ -153,6 +176,11 @@ def predict_churn(request: PrevisaoChurnRequest):
         acao = _acao_recomendada(canonical, model)
     except Exception:
         acao = None
+
+    # Telemetria M3: contadores + ring buffer (drift fora do caminho crítico)
+    telemetry.predictions_total.labels(endpoint="/api/v1/predict").inc()
+    telemetry.risk_level_total.labels(level=nivel).inc()
+    telemetry.drift_buffer.append(canonical)
 
     return PrevisaoChurnResponse(
         previsao_cancelamento=prediction,
@@ -262,6 +290,14 @@ def _build_batch_response(
         for posicao, indice in enumerate(canonical.index)
     ]
     counts = np.bincount(levels, minlength=4)
+
+    # Telemetria M3: contadores + ring buffer (drift fora do caminho crítico)
+    telemetry.predictions_total.labels(endpoint="/api/v1/predict/batch").inc(len(canonical))
+    for nome_nivel, quantidade in zip(LEVEL_NAMES, counts):
+        if quantidade:
+            telemetry.risk_level_total.labels(level=nome_nivel).inc(int(quantidade))
+    telemetry.drift_buffer.extend(canonical.to_dict(orient="records"))
+
     resumo = ResumoBatch(
         total_analisado=len(canonical),
         total_em_risco=int(counts[2:].sum()),
@@ -330,6 +366,31 @@ def simulate_churn(request: SimulacaoRequest):
         resultados=resultados,
         melhor_acao=cast(AcaoSimulavel | None, simulator.best_action(resultados_brutos)),
     )
+
+
+@v1.get("/metrics/drift")
+def metrics_drift():
+    """Cache do relatório de drift. Nunca roda o Evidently (caminho crítico)."""
+    return drift.get_cached_report(len(telemetry.drift_buffer))
+
+
+@v1.post("/admin/drift/refresh")
+def admin_drift_refresh():
+    """Recalcula o drift com o ring buffer contra o dataset de treino."""
+    return drift.refresh_report(telemetry.drift_buffer.to_dataframe())
+
+
+@v1.get("/model/info")
+def model_info():
+    """Metadados do modelo gerados no treino (model_metadata.json)."""
+    metadata: dict[str, Any] | None = None
+    if settings.model_metadata_path.exists():
+        metadata = json.loads(settings.model_metadata_path.read_text(encoding="utf-8"))
+    return {
+        "model_loaded": "churn_model" in ml_models,
+        "artifact": str(settings.model_path),
+        "metadata": metadata,
+    }
 
 
 app.include_router(v1)

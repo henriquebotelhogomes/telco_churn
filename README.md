@@ -117,6 +117,18 @@ curl -X 'POST' 'http://localhost:8000/api/v1/simulate' \
   -d '{"cliente": { ...payload PT-BR acima... }, "acoes": ["fidelizacao"]}'
 ```
 
+> **M3 — Observabilidade (RetainIQ):** drift fica **fora do caminho crítico** — a inferência só alimenta um ring buffer (`deque(maxlen=5000)`); o Evidently roda apenas sob demanda administrativa, com cache por TTL.
+> - `GET /api/v1/metrics/drift` — lê o relatório em cache (nunca calcula): `status` (`ok|stale|not_computed`), idade, `report` com `drift_by_feature`.
+> - `POST /api/v1/admin/drift/refresh` — único ponto que dispara o Evidently (buffer × dataset de treino). Protegido por `X-API-Key` quando `API_KEY_ENABLED=true`.
+> - `GET /api/v1/model/info` — `model_metadata.json` gerado no treino (métricas, dataset, versões, git SHA, thresholds).
+> - `GET /metrics` — Prometheus (`http_*`, `churn_predictions_total`, `churn_risk_level_total`, `churn_drift_buffer_rows`).
+
+```bash
+curl http://localhost:8000/api/v1/metrics/drift
+curl -X POST http://localhost:8000/api/v1/admin/drift/refresh  # + -H 'X-API-Key: ...' se habilitada
+curl http://localhost:8000/api/v1/model/info
+```
+
 ## 📂 Estrutura do Projeto
 ````
 .

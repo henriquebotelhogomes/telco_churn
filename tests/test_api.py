@@ -296,3 +296,86 @@ def test_simulate_invalid_action():
             json={"cliente": VALID_PAYLOAD, "acoes": ["voo_gratis"]},
         )
         assert response.status_code == 422
+
+
+# ---------------------------------------------------------------------------
+# M3 — Observabilidade
+# ---------------------------------------------------------------------------
+
+
+def test_predict_appends_to_ring_buffer():
+    """Inferência alimenta o ring buffer (drift off critical path)."""
+    from churn_prediction.api import telemetry
+
+    with TestClient(app) as live_client:
+        antes = len(telemetry.drift_buffer)
+        response = live_client.post("/api/v1/predict", json=VALID_PAYLOAD)
+        assert response.status_code == 200
+        assert len(telemetry.drift_buffer) == antes + 1
+
+
+def test_metrics_drift_endpoint_shape():
+    """GET /api/v1/metrics/drift só lê cache e devolve o envelope completo."""
+    with TestClient(app) as live_client:
+        response = live_client.get("/api/v1/metrics/drift")
+        assert response.status_code == 200
+        dados = response.json()
+        for chave in (
+            "status",
+            "generated_at",
+            "age_seconds",
+            "cache_ttl_seconds",
+            "samples_in_buffer",
+            "report",
+        ):
+            assert chave in dados
+        assert dados["status"] in ("ok", "stale", "not_computed")
+
+
+def test_admin_drift_refresh_insufficient_data():
+    """Com <50 amostras acumuladas nos testes, refresh reporta insufficient_data."""
+    with TestClient(app) as live_client:
+        response = live_client.post("/api/v1/admin/drift/refresh")
+        assert response.status_code == 200
+        dados = response.json()
+        assert dados["report"]["status"] == "insufficient_data"
+
+
+def test_model_info_exposes_metadata():
+    with TestClient(app) as live_client:
+        response = live_client.get("/api/v1/model/info")
+        assert response.status_code == 200
+        dados = response.json()
+        assert dados["model_loaded"] is True
+        assert "artifact" in dados
+        if dados["metadata"] is not None:
+            assert "trained_at" in dados["metadata"]
+            assert "metrics" in dados["metadata"]
+            assert "risk_thresholds" in dados["metadata"]
+
+
+def test_prometheus_metrics_endpoint():
+    with TestClient(app) as live_client:
+        response = live_client.get("/metrics")
+        assert response.status_code == 200
+        assert "http_" in response.text
+        assert "churn_predictions_total" in response.text
+
+
+def test_api_key_enforced_when_enabled(monkeypatch):
+    """X-API-Key: 401 sem chave/errada, 200 com chave correta, /health livre."""
+    from churn_prediction.config import settings
+
+    monkeypatch.setattr(settings, "api_key_enabled", True)
+    monkeypatch.setattr(settings, "api_key", "segredo-m3")
+    with TestClient(app) as live_client:
+        assert live_client.post("/api/v1/predict", json=VALID_PAYLOAD).status_code == 401
+        errada = live_client.post(
+            "/api/v1/predict", json=VALID_PAYLOAD, headers={"X-API-Key": "outra"}
+        )
+        assert errada.status_code == 401
+        ok = live_client.post(
+            "/api/v1/predict", json=VALID_PAYLOAD, headers={"X-API-Key": "segredo-m3"}
+        )
+        assert ok.status_code == 200
+        assert live_client.get("/health").status_code == 200

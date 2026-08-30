@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.metrics import classification_report, roc_auc_score
+from sklearn.metrics import classification_report, f1_score, recall_score, roc_auc_score
 from sklearn.pipeline import Pipeline
 
 
@@ -11,6 +11,8 @@ def evaluate_model(model: Pipeline, X_test: pd.DataFrame, y_test: pd.Series) -> 
     y_prob = model.predict_proba(X_test)[:, 1]
 
     roc_auc = roc_auc_score(y_test, y_prob)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
 
     print("\n" + "=" * 50)
     print("📊 RELATÓRIO DE CLASSIFICAÇÃO")
@@ -19,4 +21,4 @@ def evaluate_model(model: Pipeline, X_test: pd.DataFrame, y_test: pd.Series) -> 
     print(f"ROC-AUC Score: {roc_auc:.4f}")
     print("=" * 50 + "\n")
 
-    return {"roc_auc": float(roc_auc)}
+    return {"roc_auc": float(roc_auc), "recall": float(recall), "f1": float(f1)}

@@ -41,6 +41,7 @@ class Settings(BaseSettings):
     # RetainIQ - Drift & observabilidade
     ring_buffer_maxlen: int = 5000
     drift_ttl_seconds: int = 3600
+    drift_min_samples: int = 50
     cors_origins: list[str] = []
     api_key_enabled: bool = False
     api_key: str | None = None

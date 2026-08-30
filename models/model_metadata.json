@@ -1,0 +1,54 @@
+{
+  "model_name": "churn-xgboost",
+  "version": "1.0.0",
+  "algo": "XGBoost",
+  "trained_at": "2026-08-30T03:31:59.164159+00:00",
+  "framework_versions": {
+    "xgboost": "3.4.1",
+    "scikit-learn": "1.9.0"
+  },
+  "dataset": {
+    "path": "D:\\telco_churn\\data\\raw\\WA_Fn-UseC_-Telco-Customer-Churn.csv",
+    "rows": 7043,
+    "columns": [
+      "customerID",
+      "gender",
+      "SeniorCitizen",
+      "Partner",
+      "Dependents",
+      "tenure",
+      "PhoneService",
+      "MultipleLines",
+      "InternetService",
+      "OnlineSecurity",
+      "OnlineBackup",
+      "DeviceProtection",
+      "TechSupport",
+      "StreamingTV",
+      "StreamingMovies",
+      "Contract",
+      "PaperlessBilling",
+      "PaymentMethod",
+      "MonthlyCharges",
+      "TotalCharges"
+    ],
+    "positive_rate": 0.2654
+  },
+  "split": {
+    "test_size": 0.2,
+    "random_state": 42
+  },
+  "metrics": {
+    "roc_auc": 0.8141892066444496,
+    "recall": 0.6497326203208557,
+    "f1": 0.5751479289940828
+  },
+  "risk_thresholds": {
+    "baixo": 0.3,
+    "medio": 0.6,
+    "alto": 0.8,
+    "critico": 0.8
+  },
+  "artifact": "D:\\telco_churn\\models\\churn_model_pipeline.joblib",
+  "git_sha": "975094105176537b64faa41b713fa9e6aac5634c"
+}

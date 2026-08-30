@@ -1,4 +1,10 @@
+import json
+import subprocess
+from datetime import UTC, datetime
+
 import joblib
+import sklearn
+import xgboost
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from xgboost import XGBClassifier
@@ -6,6 +12,17 @@ from xgboost import XGBClassifier
 from churn_prediction.config import settings
 from churn_prediction.data.preprocess import get_preprocessing_pipeline, load_and_split_data
 from churn_prediction.models.evaluate import evaluate_model
+
+
+def _git_sha() -> str | None:
+    try:
+        return (
+            subprocess.check_output(["git", "rev-parse", "HEAD"], stderr=subprocess.DEVNULL)
+            .decode()
+            .strip()
+        )
+    except Exception:
+        return None
 
 
 def train() -> None:
@@ -48,12 +65,40 @@ def train() -> None:
 
     # 5. Avaliação
     print("📈 Avaliando o modelo no conjunto de teste...")
-    evaluate_model(model_pipeline, X_test, y_test)
+    metrics = evaluate_model(model_pipeline, X_test, y_test)
 
     # 6. Salvar o artefato
     settings.model_dir.mkdir(parents=True, exist_ok=True)
     joblib.dump(model_pipeline, settings.model_path)
     print(f"✅ Modelo salvo com sucesso em: {settings.model_path}")
+
+    # 7. Metadados do modelo (expostos em GET /api/v1/model/info)
+    metadata = {
+        "model_name": "churn-xgboost",
+        "version": "1.0.0",
+        "algo": "XGBoost",
+        "trained_at": datetime.now(UTC).isoformat(),
+        "framework_versions": {
+            "xgboost": xgboost.__version__,
+            "scikit-learn": sklearn.__version__,
+        },
+        "dataset": {
+            "path": str(settings.raw_data_path),
+            "rows": int(len(X)),
+            "columns": [str(coluna) for coluna in X.columns],
+            "positive_rate": round(float(y.mean()), 4),
+        },
+        "split": {
+            "test_size": settings.test_size,
+            "random_state": settings.random_state,
+        },
+        "metrics": metrics,
+        "risk_thresholds": settings.risk_thresholds,
+        "artifact": str(settings.model_path),
+        "git_sha": _git_sha(),
+    }
+    settings.model_metadata_path.write_text(json.dumps(metadata, indent=2), encoding="utf-8")
+    print(f"🪪 Metadados salvos em: {settings.model_metadata_path}")
 
 
 if __name__ == "__main__":
