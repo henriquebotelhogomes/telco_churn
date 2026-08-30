@@ -148,4 +148,8 @@ export const api = {
   listTrainingJobs(): Promise<import('@/types').TrainingJobsListResponse> {
     return request('/api/v1/admin/train/jobs')
   },
+
+  getExecutiveReportData(): Promise<Record<string, unknown>> {
+    return request('/api/v1/analytics/executive-report/data')
+  },
 }

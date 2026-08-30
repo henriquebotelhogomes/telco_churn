@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 from fastapi import APIRouter, BackgroundTasks, Depends, FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from prometheus_fastapi_instrumentator import Instrumentator
 from pydantic import ValidationError
@@ -59,7 +59,7 @@ from churn_prediction.db.models import (
     RetentionPlaybookAction,
 )
 from churn_prediction.db.session import get_db, init_db
-from churn_prediction.models import continuous_training, copilot, drift, simulator
+from churn_prediction.models import continuous_training, copilot, drift, reporting, simulator
 from churn_prediction.models.registry import model_manager
 
 # Globais para baixa latencia (modelo + explainer em memoria)
@@ -804,6 +804,30 @@ async def list_training_jobs(
         for r in rows
     ]
     return TrainingJobsListResponse(total_jobs=len(items), jobs=items)
+
+
+# ---------------------------------------------------------------------------
+# M10 — Executive Retention Dossier & Relatório Executivo C-Level
+# ---------------------------------------------------------------------------
+
+
+@v1.get("/analytics/executive-report/data")
+async def get_executive_report_data() -> dict[str, Any]:
+    """Retorna os dados consolidados do Dossiê Executivo em formato JSON."""
+    return await reporting.executive_reporter.get_report_data()
+
+
+@v1.get("/analytics/executive-report/download", response_class=HTMLResponse)
+async def download_executive_report():
+    """Gera e retorna o Dossiê Executivo completo em HTML pronto para impressão/PDF."""
+    data = await reporting.executive_reporter.get_report_data()
+    html_content = reporting.executive_reporter.render_html_dossier(data)
+    return HTMLResponse(
+        content=html_content,
+        headers={
+            "Content-Disposition": "inline; filename=retainiq_executive_dossier.html",
+        },
+    )
 
 
 app.include_router(v1)
