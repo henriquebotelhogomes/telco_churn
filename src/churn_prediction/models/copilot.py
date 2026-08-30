@@ -74,7 +74,6 @@ class RetentionCopilot:
         economia: float,
     ) -> dict[str, Any]:
         meses = cliente.get("meses_permanencia") or cliente.get("tenure") or 12
-        mensalidade = cliente.get("cobranca_mensal") or cliente.get("MonthlyCharges") or 75.0
 
         # Identifica dores a partir dos fatores SHAP com DEDUPLICAÇÃO
         dores_detectadas = []
