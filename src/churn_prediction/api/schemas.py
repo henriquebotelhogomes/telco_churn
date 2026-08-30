@@ -354,3 +354,41 @@ class ShadowTelemetryResponse(BaseModel):
     recent_samples_count: int
     model_comparisons: list[ShadowModelComparison]
     recent_events: list[dict[str, Any]]
+
+
+# ---------------------------------------------------------------------------
+# M8 — Copilot GenAI de Retenção & Smart Assistant
+# ---------------------------------------------------------------------------
+
+
+class GenerateCopilotScriptRequest(BaseModel):
+    customer_id: str = Field(..., description="Identificador do cliente")
+    canal: Literal["call_center", "whatsapp", "email"] = Field(
+        default="call_center", description="Canal de comunicação"
+    )
+    tom: Literal["empatico", "direto", "consultivo"] = Field(
+        default="empatico", description="Tom de abordagem"
+    )
+    cliente: dict[str, Any] = Field(default_factory=dict, description="Dados cadastrais do cliente")
+    fatores_shap: list[dict[str, Any]] = Field(
+        default_factory=list, description="Top fatores de risco explicados pelo SHAP"
+    )
+    playbook: str = Field(
+        default="MIGRAÇÃO_CONTRATO_ANUAL", description="Playbook de retenção selecionado"
+    )
+    reducao_estimada_risco: float = Field(
+        default=0.0, description="Redução estimada da probabilidade de churn"
+    )
+    economia_esperada: float = Field(default=0.0, description="Economia financeira anual projetada")
+
+
+class GenerateCopilotScriptResponse(BaseModel):
+    customer_id: str
+    canal: str
+    tom: str
+    mensagem_completa: str
+    roteiro_etapas: dict[str, str] | None = None
+    argumentos_chave: list[str] = Field(default_factory=list)
+    playbook_aplicado: str
+    provider_used: str
+    latency_ms: float

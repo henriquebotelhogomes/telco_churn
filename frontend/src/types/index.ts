@@ -340,4 +340,42 @@ export interface PromoteModelResponse {
   promoted_at: string
 }
 
+// ---------------------------------------------------------------------------
+// M8 — Copilot GenAI de Retenção & Smart Assistant
+// ---------------------------------------------------------------------------
+
+export interface GenerateCopilotScriptRequest {
+  customer_id: string
+  canal?: 'call_center' | 'whatsapp' | 'email'
+  tom?: 'empatico' | 'direto' | 'consultivo'
+  cliente: Record<string, unknown>
+  fatores_shap?: Array<{
+    fator: string
+    impacto?: string
+    shap_value?: number
+    direcao: string
+  }>
+  playbook?: string
+  reducao_estimada_risco?: number
+  economia_esperada?: number
+}
+
+export interface GenerateCopilotScriptResponse {
+  customer_id: string
+  canal: string
+  tom: string
+  mensagem_completa: string
+  roteiro_etapas?: {
+    etapa_1_abertura?: string
+    etapa_2_sondagem?: string
+    etapa_3_proposta_valor?: string
+    etapa_4_fechamento?: string
+  } | null
+  argumentos_chave: string[]
+  playbook_aplicado: string
+  provider_used: string
+  latency_ms: number
+}
+
+
 

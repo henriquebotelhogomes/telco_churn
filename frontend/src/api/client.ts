@@ -124,4 +124,14 @@ export const api = {
   shadowMetrics(): Promise<import('@/types').ShadowTelemetryResponse> {
     return request('/api/v1/models/shadow-metrics')
   },
+
+  generateCopilotScript(
+    payload: import('@/types').GenerateCopilotScriptRequest,
+  ): Promise<import('@/types').GenerateCopilotScriptResponse> {
+    return request('/api/v1/copilot/generate-script', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+  },
 }

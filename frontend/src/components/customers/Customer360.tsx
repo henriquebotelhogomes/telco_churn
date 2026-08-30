@@ -5,6 +5,7 @@ import { FlaskConical, Lightbulb, RefreshCw } from 'lucide-react'
 import { api } from '@/api/client'
 import { RiskGauge } from '@/components/charts/RiskGauge'
 import { ShapWaterfall } from '@/components/charts/ShapWaterfall'
+import { CopilotRetentionAssistant } from '@/components/customers/CopilotRetentionAssistant'
 import { RiskBadge } from '@/components/ui/risk-badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -185,6 +186,20 @@ export function Customer360({ linha, onClose }: Customer360Props) {
                   ✅ {mensagemSucesso}
                 </div>
               )}
+
+              <CopilotRetentionAssistant
+                customerId={linha.customerId}
+                cliente={linha.row}
+                previsao={explicacao.data}
+                playbookSugerido={explicacao.data?.acao_recomendada?.playbook}
+                economiaEsperada={
+                  explicacao.data?.acao_recomendada
+                    ? linha.monthlyCharges *
+                      12 *
+                      explicacao.data.acao_recomendada.reducao_estimada_risco
+                    : 120.0
+                }
+              />
 
               <Card>
                 <CardHeader>

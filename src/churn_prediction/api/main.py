@@ -27,6 +27,8 @@ from churn_prediction.api.schemas import (
     EficienciaRetencaoResponse,
     EvolucaoTemporalPonto,
     EvolucaoTemporalResponse,
+    GenerateCopilotScriptRequest,
+    GenerateCopilotScriptResponse,
     LinhaInvalida,
     ModelRegistryResponse,
     PlaybookHistoricoItem,
@@ -52,7 +54,7 @@ from churn_prediction.db.models import (
     RetentionPlaybookAction,
 )
 from churn_prediction.db.session import get_db, init_db
-from churn_prediction.models import drift, simulator
+from churn_prediction.models import copilot, drift, simulator
 from churn_prediction.models.registry import model_manager
 
 # Globais para baixa latencia (modelo + explainer em memoria)
@@ -721,6 +723,26 @@ def promote_model_to_champion(request: PromoteModelRequest):
 def get_shadow_scoring_metrics():
     """Retorna métricas de concordância, divergência de risco e latência do Shadow Scoring."""
     return model_manager.get_shadow_telemetry()
+
+
+# ---------------------------------------------------------------------------
+# M8 — Copilot GenAI de Retenção & Smart Retention Assistant
+# ---------------------------------------------------------------------------
+
+
+@v1.post("/copilot/generate-script", response_model=GenerateCopilotScriptResponse)
+def generate_copilot_script(request: GenerateCopilotScriptRequest):
+    """Gera roteiro e comunicação de retenção sob medida usando IA Generativa / Fallback."""
+    return copilot.copilot.generate_script(
+        customer_id=request.customer_id,
+        canal=request.canal,
+        tom=request.tom,
+        cliente=request.cliente,
+        fatores_shap=request.fatores_shap,
+        playbook=request.playbook,
+        reducao_estimada_risco=request.reducao_estimada_risco,
+        economia_esperada=request.economia_esperada,
+    )
 
 
 app.include_router(v1)

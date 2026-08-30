@@ -1,6 +1,6 @@
 {
   "active_champion": "churn-xgboost",
-  "updated_at": "2026-08-30T13:37:37.643738+00:00",
+  "updated_at": "2026-08-30T15:24:39.238808+00:00",
   "models": [
     {
       "model_name": "churn-xgboost",
