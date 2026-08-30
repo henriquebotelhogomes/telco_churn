@@ -118,7 +118,10 @@ export function Customer360({ linha, onClose }: Customer360Props) {
             <div className="mt-4 space-y-4">
               <Card>
                 <CardHeader className="pb-0">
-                  <CardTitle className="text-sm text-muted-foreground">Risco de churn</CardTitle>
+                  <CardTitle className="text-sm font-semibold">Risco de Churn do Cliente</CardTitle>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Probabilidade preditiva calibrada pelo modelo com classificação de severidade
+                  </p>
                 </CardHeader>
                 <CardContent>
                   <RiskGauge probabilidade={linha.probabilidade} nivel={linha.nivel} />
@@ -126,8 +129,11 @@ export function Customer360({ linha, onClose }: Customer360Props) {
               </Card>
 
               <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">Top fatores de risco (SHAP)</CardTitle>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-semibold">Top Fatores de Risco (TreeSHAP)</CardTitle>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Impacto marginal de cada atributo na decisão (vermelho eleva o risco, verde reduz)
+                  </p>
                 </CardHeader>
                 <CardContent>
                   {explicacao.isPending && <Skeleton className="h-40" />}
@@ -202,10 +208,13 @@ export function Customer360({ linha, onClose }: Customer360Props) {
               />
 
               <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-sm">
-                    <FlaskConical aria-hidden /> Simulador What-If
+                <CardHeader className="pb-2">
+                  <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+                    <FlaskConical aria-hidden size={16} /> Simulador Prescritivo What-If
                   </CardTitle>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Simule ações comerciais e avalie a redução estimada de probabilidade e retorno financeiro
+                  </p>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex flex-wrap gap-2">
@@ -289,8 +298,11 @@ export function Customer360({ linha, onClose }: Customer360Props) {
 
               {historicoQuery.data && historicoQuery.data.length > 0 && (
                 <Card>
-                  <CardHeader>
-                    <CardTitle className="text-sm">Histórico de Playbooks Aplicados</CardTitle>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-semibold">Histórico de Playbooks Aplicados & Fechamento de Ciclo</CardTitle>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Registro de ações aplicadas, analista responsável e desfecho real observado
+                    </p>
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-2 text-xs">

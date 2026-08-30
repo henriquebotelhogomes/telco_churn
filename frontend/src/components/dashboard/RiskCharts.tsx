@@ -121,7 +121,7 @@ export function RiskCharts({ resumo, linhas }: RiskChartsProps) {
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card>
-          <CardHeader>
+          <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base">Distribuição de Risco</CardTitle>
               <span
@@ -131,6 +131,9 @@ export function RiskCharts({ resumo, linhas }: RiskChartsProps) {
                 <HelpCircle size={15} />
               </span>
             </div>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Proporção e volume de clientes categorizados nos 4 níveis de criticidade
+            </p>
           </CardHeader>
           <CardContent className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -154,7 +157,7 @@ export function RiskCharts({ resumo, linhas }: RiskChartsProps) {
         </Card>
 
         <Card>
-          <CardHeader>
+          <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base">MRR Esperado por Nível de Risco</CardTitle>
               <span
@@ -164,6 +167,9 @@ export function RiskCharts({ resumo, linhas }: RiskChartsProps) {
                 <HelpCircle size={15} />
               </span>
             </div>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Receita Recorrente Mensal ponderada pela probabilidade de cancelamento de cada cliente
+            </p>
           </CardHeader>
           <CardContent className="h-64">
             <ResponsiveContainer width="100%" height="100%">
