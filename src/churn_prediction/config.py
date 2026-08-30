@@ -42,7 +42,13 @@ class Settings(BaseSettings):
     ring_buffer_maxlen: int = 5000
     drift_ttl_seconds: int = 3600
     drift_min_samples: int = 50
-    cors_origins: list[str] = []
+    cors_origins: list[str] = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        "http://localhost:3000",
+    ]
     api_key_enabled: bool = False
     api_key: str | None = None
 

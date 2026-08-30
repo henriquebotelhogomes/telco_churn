@@ -66,11 +66,14 @@ export function MlopsHealth() {
                     {modelInfo.data.metadata.git_sha?.slice(0, 7) ?? '—'}
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {Object.entries(modelInfo.data.metadata.metrics).map(([nome, valor]) => (
-                      <Badge key={nome} variant="secondary">
-                        {nome}: {valor.toFixed(2)}
-                      </Badge>
-                    ))}
+                    {Object.entries(modelInfo.data.metadata.metrics).map(([nome, valor]) => {
+                      if (typeof valor !== 'number') return null
+                      return (
+                        <Badge key={nome} variant="secondary">
+                          {nome}: {valor.toFixed(3)}
+                        </Badge>
+                      )
+                    })}
                   </div>
                 </>
               )}
