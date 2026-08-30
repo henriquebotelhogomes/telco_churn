@@ -30,6 +30,7 @@ exigentes e demonstrar maturidade de engenharia de ponta a ponta.
 | 10 | [`10_roadmap.md`](./10_roadmap.md) | Roadmap de evolução em fases e marcos demonstráveis |
 | 11 | [`11_risks_assumptions_adr.md`](./11_risks_assumptions_adr.md) | Riscos, premissas e Architecture Decision Records (ADRs) |
 | 12 | [`12_global_scaleup_architecture.md`](./12_global_scaleup_architecture.md) | Arquitetura de nível Global Scale-Up / Enterprise Tier-1 (Kafka, Feast, K8s, GDPR) |
+| 13 | [`../PRD_PHASE_2_GLOBAL_SCALEUP.md`](../PRD_PHASE_2_GLOBAL_SCALEUP.md) | **PRD Mestre Fase 2:** Documento Executivo & Épicos para Escala Global de Hiperescala |
 
 ---
 
