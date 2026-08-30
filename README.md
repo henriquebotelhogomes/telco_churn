@@ -1,30 +1,33 @@
-# 📉 Telco Customer Churn Prediction - ML in Production
+# 📉 RetainIQ — SaaS de Inteligência de Retenção de Clientes (Telco Churn)
 
 ![Python](https://img.shields.io/badge/Python-3.12+-blue.svg?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi)
+![React](https://img.shields.io/badge/React-19.2+-61DAFB?style=flat&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8+-3178C6?style=flat&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3+-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
 ![XGBoost](https://img.shields.io/badge/XGBoost-F37626?style=flat&logo=xgboost&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
 ![uv](https://img.shields.io/badge/uv-Fast_Dependency_Manager-purple)
 ![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-2088FF?logo=github-actions&logoColor=white)
 
-> **Mais do que um Jupyter Notebook:** Uma solução completa de Machine Learning orientada a produção, focada em Engenharia de Software, MLOps e impacto de negócio.
+> **De Modelo Preditivo a SaaS Global:** Uma solução completa de Machine Learning orientada a produto, com Engenharia de Software robusta, MLOps e interface executiva de alto nível.
 
-Este projeto resolve o problema de predição de cancelamento de clientes (Churn) utilizando dados de Telecom. O foco principal não é apenas treinar um modelo, mas demonstrar **como servir este modelo em um ambiente real**, com segurança, tipagem estrita, testes automatizados e containerização.
+Este projeto transforma o problema de retenção de clientes em Telecom em uma plataforma completa de SaaS e MLOps (**RetainIQ**), demonstrando **serviço em produção, observabilidade de drift, explicabilidade XAI (SHAP), simulador prescritivo What-If e interface moderna SPA em React + TypeScript**.
 
 ---
 
-## 🌟 Por que este projeto se destaca? (Destaques Arquiteturais)
+## 🌟 Destaques Arquiteturais & de Engenharia
 
-Para garantir que a aplicação seja escalável e de fácil manutenção, as seguintes decisões de Engenharia Sênior foram aplicadas:
-
-1. **Padrão Adapter na API:** A API recebe requisições 100% em **Português** (facilitando a integração com o Front-end/Negócio local), mas utiliza o padrão *Adapter* no Pydantic para traduzir o payload em milissegundos para o formato original em Inglês esperado pelo modelo treinado.
-2. **Pipeline Anti-Leakage:** O pré-processamento (imputação, encoding) não é feito solto em scripts. Ele está encapsulado em um `Pipeline` do *scikit-learn* junto com o modelo. A API aplica exatamente as mesmas transformações matemáticas dos dados de treino em tempo de inferência.
-3. **Segurança no Docker (Non-Root):** O `Dockerfile` utiliza *multi-stage build* com cache de dependências e executa a aplicação sob um usuário sem privilégios de root (Princípio do Menor Privilégio).
-4. **Tooling Moderno (State of the Art):** 
-   - **`uv`**: Resolução e instalação de dependências em milissegundos.
-   - **`Ruff` & `Mypy`**: Linting ultrarrápido e checagem de tipagem estática.
-   - **`Pydantic V2`**: Validação de dados de entrada de alta performance.
-5. **Foco em Métricas de Negócio:** O modelo XGBoost foi calibrado com `scale_pos_weight` para lidar com o desbalanceamento. A métrica otimizada foi o **Recall (0.67)**, pois em regras de negócio de Churn, o custo de um Falso Negativo (perder o cliente sem prever) é muito maior que um Falso Positivo.
+1. **Frontend SPA Moderno (Zero-Streamlit):** Interface de alta fidelidade desenvolvida em **React 19 + TypeScript + Vite + Tailwind CSS + Radix UI / shadcn**, com:
+   - **Dashboard Executivo:** KPIs de MRR em risco, clientes em alto risco e gráficos de distribuição.
+   - **Risk Queue (TanStack Table):** Tabela virtualizada com busca, filtros semânticos por nível de risco e ordenação.
+   - **Customer 360 & Simulador What-If:** Explicabilidade via TreeSHAP divergente e simulação interativa em tempo real com projeção de ROI anual.
+   - **MLOps Cockpit:** Monitor de saúde do modelo, detecção de Data Drift (Evidently) e metadados de versão.
+2. **Padrão Adapter na API (FastAPI):** Recebe requisições 100% em **Português** e traduz em milissegundos para o formato canônico em Inglês exigido pelo pipeline de inferência.
+3. **Pipeline Anti-Leakage:** Pré-processamento matematicamente integrado no `Pipeline` do scikit-learn junto ao XGBoost.
+4. **Data Contracts & Batch Dual (Pandera):** Endpoint `/api/v1/predict/batch` suportando JSON PT-BR ou upload de CSV EN-US, isolando linhas inválidas com relatório detalhado.
+5. **Observabilidade Fora do Caminho Crítico:** Ring buffer de telemetria em memória; cálculo de Data Drift (Evidently AI) executado sob demanda e servido de cache; métricas Prometheus em `/metrics`.
+6. **Docker Multi-Stage & Segurança:** Container unificado com build do frontend (Node 22) e runtime Python 3.12 (uv) sob usuário não-root.
 
 ---
 
@@ -33,121 +36,94 @@ Para garantir que a aplicação seja escalável e de fácil manutenção, as seg
 Avaliação no conjunto de teste (20% dos dados invisíveis ao modelo):
 - **ROC-AUC Score:** `0.82`
 - **F1-Score (Churn):** `0.59`
-- **Recall (Churn):** `0.67` 🎯 *(Métrica de negócio priorizada)*
-
-
-*  "Nota: A análise exploratória de dados (EDA) que originou as decisões de feature engineering encontra-se na pasta `/notebooks`."*
-> **M0 — Higiene (RetainIQ):** `__init__.py` corrigido, `pytest-cov` ≥80% no CI, caminhos reais documentados e `HEALTHCHECK` em `/health`.
+- **Recall (Churn):** `0.67` 🎯 *(Métrica de negócio priorizada para minimizar perda de clientes)*
 
 ---
 
 ## 🚀 Como Executar
 
-### Opção 1: Via Docker (Recomendado para Produção)
+### Opção 1: Via Docker (Aplicação Completa — API + Frontend)
 ```bash
-# 1. Construa a imagem otimizada
-docker build -t telco-churn-api .
+# 1. Construa a imagem multi-stage
+docker build -t telco-churn-app .
 
-# 2. Rode o container mapeando a porta 8000
-docker run -p 8000:8000 telco-churn-api
+# 2. Execute o container na porta 8000
+docker run -p 8000:8000 telco-churn-app
 ```
-### Opção 2: Ambiente Local (Desenvolvimento)
-```
-# 1. Instale o gerenciador uv (se não possuir)
-pip install uv
+Acesse a aplicação no navegador em:
+- **Cockpit Frontend:** 👉 http://localhost:8000/
+- **API Docs (Swagger UI):** 👉 http://localhost:8000/docs
+- **Healthcheck:** 👉 http://localhost:8000/health
+- **Métricas Prometheus:** 👉 http://localhost:8000/metrics
 
-# 2. Instale todas as dependências via Makefile
+---
+
+### Opção 2: Desenvolvimento Local
+
+```bash
+# 1. Instale dependências Python e Frontend
 make install
+make frontend-install
 
-# 3. Rode os testes automatizados (Pytest)
-make test
+# 2. Execute todos os testes automatizados (Backend Pytest + Frontend Vitest)
+make test-all
 
-# 4. Inicie a API localmente
+# 3. Inicie o Backend FastAPI (porta 8000)
 make api
+
+# 4. Em outro terminal, inicie o Frontend Vite (porta 5173 com proxy reverso)
+make frontend-dev
 ```
 
-## 🌐 Consumindo a API
-Com a API rodando, acesse a documentação interativa (Swagger UI) gerada automaticamente:
-👉 http://localhost:8000/docs 
+---
 
-> **Versionamento (RetainIQ M0):** Todas as rotas de negócio vivem sob `/api/v1` (ex.: `/api/v1/predict`). `GET /health` permanece na raiz como liveness probe para Docker/K8s. A rota legada `/predict` foi removida.
+## 🌐 Endpoints da API (`/api/v1`)
 
-Ou faça uma requisição de teste via cURL (Payload validado estritamente em Português):
-````
-curl -X 'POST' \
-  'http://localhost:8000/api/v1/predict' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "genero": "Feminino",
-  "idoso": 0,
-  "tem_parceiro": "Sim",
-  "tem_dependentes": "Não",
-  "meses_permanencia": 1,
-  "servico_telefone": "Não",
-  "multiplas_linhas": "Sem serviço de telefone",
-  "servico_internet": "DSL",
-  "seguranca_online": "Não",
-  "backup_online": "Sim",
-  "protecao_dispositivo": "Não",
-  "suporte_tecnico": "Não",
-  "streaming_tv": "Não",
-  "streaming_filmes": "Não",
-  "contrato": "Mensal",
-  "faturamento_sem_papel": "Sim",
-  "metodo_pagamento": "Cheque eletrônico",
-  "cobranca_mensal": 29.85,
-  "cobranca_total": "29.85"
-}'
-````
+| Endpoint | Método | Descrição |
+|---|---|---|
+| `/health` | GET | Liveness probe para Docker/K8s (`{"status": "ok"}`) |
+| `/metrics` | GET | Métricas padrão Prometheus (`http_*`, `churn_predictions_total`, etc.) |
+| `/api/v1/predict` | POST | Predição individual com SHAP Top 3 e recomendação de playbook |
+| `/api/v1/predict/batch` | POST | Predição em lote via JSON PT-BR ou upload de arquivo CSV |
+| `/api/v1/simulate` | POST | Simulador *What-If* com cálculo de redução de risco e ROI anual |
+| `/api/v1/metrics/drift` | GET | Leitura em cache do relatório de Data Drift (Evidently) |
+| `/api/v1/admin/drift/refresh` | POST | Recálculo sob demanda do relatório de drift |
+| `/api/v1/model/info` | GET | Metadados do modelo (`model_metadata.json`, métricas, git sha) |
 
-> **M2 — Batch & Simulador (RetainIQ):**
-> - `POST /api/v1/predict/batch` — predição em lote com **ingestão dupla**: array JSON PT-BR (mesmo Adapter do `/predict`) *ou* CSV EN-US cru (campo `file`, validado pelo contrato Pandera). Linhas inválidas não derrubam o lote: voltam em `linhas_invalidas` junto do `resumo` (MRR total em risco e distribuição Baixo/Médio/Alto/Crítico).
-> - `POST /api/v1/simulate` — simulador *What-If*: aplica as 4 ações canônicas de retenção ao estado do cliente e recalcula o risco pelo pipeline, retornando `delta_risk` e `roi_expected_annual_savings`.
-
-```bash
-# Batch via CSV EN-US (cliente com risco alto + linha inválida)
-printf 'gender,SeniorCitizen,Partner,Dependents,tenure,PhoneService,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,TotalCharges\nFemale,0,Yes,No,1,No,No phone service,DSL,No,Yes,No,No,No,No,Month-to-month,Yes,Electronic check,29.85,29.85\n' > clientes.csv
-curl -X 'POST' 'http://localhost:8000/api/v1/predict/batch' \
-  -F 'file=@clientes.csv;type=text/csv'
-
-# What-If: simular fidelização para um cliente PT-BR
-curl -X 'POST' 'http://localhost:8000/api/v1/simulate' \
-  -H 'Content-Type: application/json' \
-  -d '{"cliente": { ...payload PT-BR acima... }, "acoes": ["fidelizacao"]}'
-```
-
-> **M3 — Observabilidade (RetainIQ):** drift fica **fora do caminho crítico** — a inferência só alimenta um ring buffer (`deque(maxlen=5000)`); o Evidently roda apenas sob demanda administrativa, com cache por TTL.
-> - `GET /api/v1/metrics/drift` — lê o relatório em cache (nunca calcula): `status` (`ok|stale|not_computed`), idade, `report` com `drift_by_feature`.
-> - `POST /api/v1/admin/drift/refresh` — único ponto que dispara o Evidently (buffer × dataset de treino). Protegido por `X-API-Key` quando `API_KEY_ENABLED=true`.
-> - `GET /api/v1/model/info` — `model_metadata.json` gerado no treino (métricas, dataset, versões, git SHA, thresholds).
-> - `GET /metrics` — Prometheus (`http_*`, `churn_predictions_total`, `churn_risk_level_total`, `churn_drift_buffer_rows`).
-
-```bash
-curl http://localhost:8000/api/v1/metrics/drift
-curl -X POST http://localhost:8000/api/v1/admin/drift/refresh  # + -H 'X-API-Key: ...' se habilitada
-curl http://localhost:8000/api/v1/model/info
-```
+---
 
 ## 📂 Estrutura do Projeto
-````
+
+```
 .
-├── .github/workflows/   # Pipeline de CI/CD (Lint, Types, Tests + coverage ≥80%)
+├── .github/workflows/       # CI Pipeline (Backend lint/types/tests + Frontend tests/build)
 ├── data/
-│   └── raw/WA_Fn-UseC_-Telco-Customer-Churn.csv  # Dataset canônico (7.032 clientes)
+│   └── raw/                 # Dataset canônico (WA_Fn-UseC_-Telco-Customer-Churn.csv)
+├── frontend/                # SPA React 19 + TypeScript + Vite + Tailwind + Radix/TanStack
+│   ├── src/
+│   │   ├── api/             # Client HTTP e queries TanStack
+│   │   ├── components/      # UI components, Dashboard, Customer 360, Charts, MLOps
+│   │   ├── pages/           # DashboardPage, CustomersPage, MlopsPage
+│   │   └── types/           # Schemas e tipagens TypeScript
+│   ├── package.json
+│   └── vite.config.ts
 ├── models/
-│   ├── churn_model_pipeline.joblib  # Pipeline scikit-learn + XGBoost (trackado via joblib)
-│   └── model_metadata.json          # Gerado no treino (M3, exposto em /api/v1/model/info)
+│   ├── churn_model_pipeline.joblib  # Pipeline treinado (scikit-learn + XGBoost)
+│   └── model_metadata.json          # Metadados e métricas gerados no treino
+├── specs/                   # Especificações técnicas e funcionais detalhadas (00 a 11)
 ├── src/
 │   └── churn_prediction/
-│       ├── api/         # FastAPI, Schemas (Pydantic V2) e rotas sob /api/v1
-│       ├── data/        # Pipeline Anti-Leakage + Pandera contracts (M2)
-│       ├── models/      # train/evaluate + explainability/simulator/drift (M1-M3)
-│       └── config.py    # Settings (RISK_THRESHOLDS, CORS, drift TTL)
-├── tests/               # Pytest + httpx + coverage
-├── Dockerfile           # Multi-stage (futuro: node+python) + HEALTHCHECK /health + Non-root
-├── Makefile             # Atalhos para comandos comuns
-└── pyproject.toml       # uv + Ruff + Mypy + coverage
-````
+│       ├── api/             # FastAPI, telemetry (Prometheus), schemas Pydantic V2
+│       ├── data/            # Preprocessamento anti-leakage e contratos Pandera
+│       ├── models/          # Treino, avaliação, explainability (TreeSHAP), simulator e drift
+│       └── config.py        # Configurações centralizadas e thresholds de risco
+├── tests/                   # Suíte de testes Pytest (54 testes, cobertura >= 80%)
+├── Dockerfile               # Build multi-stage (Node 22 + Python 3.12 slim)
+├── Makefile                 # Automação de tarefas (testes, lint, dev, build)
+├── PRD.md                   # Product Requirement Document mestre
+└── pyproject.toml           # Gerenciamento uv, Ruff, Mypy e Pytest-cov
+```
 
-Desenvolvido por Henrique Botelho Gomes - Engenheiro de Software Sênior & Especialista em IA.
+---
+
+Desenvolvido por Henrique Botelho Gomes - Engenheiro de Software Sênior & Especialista em IA.

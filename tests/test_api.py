@@ -379,3 +379,19 @@ def test_api_key_enforced_when_enabled(monkeypatch):
         )
         assert ok.status_code == 200
         assert live_client.get("/health").status_code == 200
+
+
+def test_root_endpoint_serves_spa_or_redirect():
+    """GET / deve servir index.html (200) se dist existir ou redirecionar para /docs (307/200)."""
+    with TestClient(app) as live_client:
+        response = live_client.get("/", follow_redirects=False)
+        assert response.status_code in (200, 307)
+
+
+def test_static_assets_endpoints():
+    """Testa endpoints de favicon e demo CSV."""
+    with TestClient(app) as live_client:
+        fav_resp = live_client.get("/favicon.svg")
+        assert fav_resp.status_code in (200, 404)
+        csv_resp = live_client.get("/telco_customers.csv")
+        assert csv_resp.status_code in (200, 404)

@@ -87,3 +87,10 @@ models/*.model
 .Trashes
 ehthumbs.db
 Thumbs.db
+.agentbridge/
+
+# ==============================================================================
+# 🌐 Frontend (React / Vite / Node)
+# ==============================================================================
+frontend/node_modules/
+frontend/dist/

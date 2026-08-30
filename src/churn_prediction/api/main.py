@@ -1,6 +1,7 @@
 import io
 import json
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import Any, cast
 
 import joblib
@@ -8,7 +9,8 @@ import numpy as np
 import pandas as pd
 from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
+from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from prometheus_fastapi_instrumentator import Instrumentator
 from pydantic import ValidationError
 
@@ -132,11 +134,6 @@ def _risk_levels(probas: np.ndarray) -> np.ndarray:
     """Buckets vectorizados via thresholds centralizados: Baixo|Médio|Alto|Crítico."""
     t = settings.risk_thresholds
     return np.searchsorted([t["baixo"], t["medio"], t["alto"]], probas, side="right")
-
-
-@app.get("/", include_in_schema=False)
-def root():
-    return RedirectResponse(url="/docs")
 
 
 @app.get("/health")
@@ -394,3 +391,43 @@ def model_info():
 
 
 app.include_router(v1)
+
+# Se os arquivos estáticos do frontend (Vite) existirem, serve na raiz /
+_dist_path: Path | None = None
+for _cand in [
+    Path("frontend/dist"),
+    Path(__file__).resolve().parent.parent.parent.parent / "frontend" / "dist",
+]:
+    if _cand.exists() and (_cand / "index.html").exists():
+        _dist_path = _cand
+        break
+
+if _dist_path is not None:
+    if (_dist_path / "assets").exists():
+        app.mount("/assets", StaticFiles(directory=str(_dist_path / "assets")), name="assets")
+
+    @app.get("/", include_in_schema=False)
+    def root():
+        index_file = _dist_path / "index.html"
+        if index_file.exists():
+            return FileResponse(index_file)
+        return RedirectResponse(url="/docs")
+
+    @app.get("/favicon.svg", include_in_schema=False)
+    def favicon():
+        fav = _dist_path / "favicon.svg"
+        if fav.exists():
+            return FileResponse(fav)
+        raise HTTPException(status_code=404, detail="Favicon not found")
+
+    @app.get("/telco_customers.csv", include_in_schema=False)
+    def demo_csv():
+        csv_file = _dist_path / "telco_customers.csv"
+        if csv_file.exists():
+            return FileResponse(csv_file)
+        raise HTTPException(status_code=404, detail="Demo CSV not found")
+else:
+
+    @app.get("/", include_in_schema=False)
+    def root():
+        return RedirectResponse(url="/docs")
