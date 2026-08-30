@@ -78,7 +78,7 @@ interface AnalysisContextValue {
 const AnalysisContext = createContext<AnalysisContextValue | null>(null)
 
 export function AnalysisProvider({ children }: { children: ReactNode }) {
-  const [input, setInput] = useState<AnalysisInput | null>(null)
+  const [input, setInput] = useState<AnalysisInput | null>({ tipo: 'bundled' })
 
   const query = useQuery({
     queryKey: [

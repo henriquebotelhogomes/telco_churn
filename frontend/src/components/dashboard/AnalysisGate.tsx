@@ -86,5 +86,46 @@ export function AnalysisGate({ children }: AnalysisGateProps) {
     )
   }
 
-  return <>{children(resultado)}</>
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border bg-muted/40 px-4 py-2 text-xs">
+        <div className="flex items-center gap-2">
+          <Database size={14} className="text-primary" />
+          <span>
+            Base em análise: <strong>{resultado.fonte}</strong> ({resultado.linhas.length} clientes)
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <input
+            id="upload-csv-gate"
+            type="file"
+            accept=".csv,text/csv"
+            className="sr-only"
+            onChange={(evento) => {
+              const arquivo = evento.target.files?.[0]
+              if (arquivo) analisarUpload(arquivo)
+              evento.target.value = ''
+            }}
+          />
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-7 text-xs gap-1"
+            onClick={() => document.getElementById('upload-csv-gate')?.click()}
+          >
+            <Upload size={12} /> Enviar outro CSV
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-7 text-xs gap-1"
+            onClick={analisarBundled}
+          >
+            <Database size={12} /> Recarregar Base Telco
+          </Button>
+        </div>
+      </div>
+      {children(resultado)}
+    </div>
+  )
 }
