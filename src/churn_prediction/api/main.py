@@ -13,17 +13,28 @@ from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from prometheus_fastapi_instrumentator import Instrumentator
 from pydantic import ValidationError
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from churn_prediction.api import telemetry
 from churn_prediction.api.schemas import (
     AcaoRecomendada,
     AcaoSimulavel,
+    AplicarPlaybookRequest,
+    AplicarPlaybookResponse,
     DistribuicaoRisco,
+    EficienciaPlaybook,
+    EficienciaRetencaoResponse,
+    EvolucaoTemporalPonto,
+    EvolucaoTemporalResponse,
     LinhaInvalida,
+    PlaybookHistoricoItem,
     PrevisaoBatchLinha,
     PrevisaoBatchResponse,
     PrevisaoChurnRequest,
     PrevisaoChurnResponse,
+    RegistrarOutcomeRequest,
+    RegistrarOutcomeResponse,
     ResumoBatch,
     SimulacaoRequest,
     SimulacaoResponse,
@@ -31,6 +42,12 @@ from churn_prediction.api.schemas import (
 )
 from churn_prediction.config import settings
 from churn_prediction.data.contracts import MissingColumnsError, validate_customer_batch
+from churn_prediction.db.models import (
+    CustomerOutcome,
+    CustomerPrediction,
+    RetentionPlaybookAction,
+)
+from churn_prediction.db.session import get_db, init_db
 from churn_prediction.models import drift, simulator
 
 # Globais para baixa latencia (modelo + explainer em memoria)
@@ -43,7 +60,16 @@ LEVEL_NAMES = ["Baixo", "Médio", "Alto", "Crítico"]
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Carrega pipeline + explainer no startup."""
+    """Carrega pipeline + explainer e inicializa banco de dados no startup."""
+    try:
+        from churn_prediction.db.seed import seed_historical_data
+
+        await init_db()
+        await seed_historical_data()
+        print("Banco de dados RetainIQ inicializado")
+    except Exception as e:
+        print(f"Aviso na inicialização do banco: {e}")
+
     try:
         model = joblib.load(settings.model_path)
         ml_models["churn_model"] = model
@@ -388,6 +414,253 @@ def model_info():
         "artifact": str(settings.model_path),
         "metadata": metadata,
     }
+
+
+# ---------------------------------------------------------------------------
+# M6 — Persistência, Playbooks & Closed-Loop Analytics
+# ---------------------------------------------------------------------------
+
+
+@v1.post("/playbooks/apply", response_model=AplicarPlaybookResponse)
+async def apply_playbook(
+    request: AplicarPlaybookRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """Registra formalmente a aplicação de um playbook de retenção para um cliente."""
+    action = RetentionPlaybookAction(
+        customer_id=request.customer_id,
+        playbook=request.playbook,
+        description=request.description,
+        discount_pct=request.discount_pct,
+        estimated_risk_reduction=request.estimated_risk_reduction,
+        expected_annual_savings=request.expected_annual_savings,
+        applied_by=request.applied_by,
+        notes=request.notes,
+        status="applied",
+    )
+    db.add(action)
+    await db.commit()
+    await db.refresh(action)
+
+    return AplicarPlaybookResponse(
+        id=action.id,
+        customer_id=action.customer_id,
+        playbook=action.playbook,
+        status=action.status,
+        applied_at=action.created_at.isoformat(),
+        message=f"Playbook '{action.playbook}' aplicado com sucesso para o cliente {action.customer_id}.",
+    )
+
+
+@v1.get("/playbooks/history", response_model=list[PlaybookHistoricoItem])
+async def get_playbooks_history(
+    customer_id: str | None = None,
+    limit: int = 50,
+    db: AsyncSession = Depends(get_db),
+):
+    """Retorna o histórico de playbooks aplicados com filtros opcionais."""
+    stmt = select(RetentionPlaybookAction).order_by(RetentionPlaybookAction.created_at.desc())
+    if customer_id:
+        stmt = stmt.where(RetentionPlaybookAction.customer_id == customer_id)
+    stmt = stmt.limit(limit)
+    res = await db.execute(stmt)
+    actions = res.scalars().all()
+
+    return [
+        PlaybookHistoricoItem(
+            id=a.id,
+            customer_id=a.customer_id,
+            playbook=a.playbook,
+            discount_pct=a.discount_pct,
+            estimated_risk_reduction=a.estimated_risk_reduction,
+            expected_annual_savings=a.expected_annual_savings,
+            applied_by=a.applied_by,
+            status=a.status,
+            created_at=a.created_at.isoformat(),
+        )
+        for a in actions
+    ]
+
+
+@v1.post("/outcomes/record", response_model=RegistrarOutcomeResponse)
+async def record_customer_outcome(
+    request: RegistrarOutcomeRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """Registra o desfecho real de churn/retenção (ground truth) para fechar o ciclo analítico."""
+    outcome = CustomerOutcome(
+        customer_id=request.customer_id,
+        churn_occurred=request.churn_occurred,
+        observed_months=request.observed_months,
+        actual_revenue_saved=request.actual_revenue_saved,
+        notes=request.notes,
+    )
+    db.add(outcome)
+    await db.commit()
+    await db.refresh(outcome)
+
+    status_str = "Retido" if outcome.churn_occurred == 0 else "Churn Confirmado"
+    return RegistrarOutcomeResponse(
+        id=outcome.id,
+        customer_id=outcome.customer_id,
+        churn_occurred=outcome.churn_occurred,
+        outcome_date=outcome.outcome_date.isoformat(),
+        message=f"Desfecho '{status_str}' registrado com sucesso para {outcome.customer_id}.",
+    )
+
+
+@v1.get("/analytics/temporal-evolution", response_model=EvolucaoTemporalResponse)
+async def get_temporal_evolution(
+    db: AsyncSession = Depends(get_db),
+):
+    """Calcula a evolução temporal agregada por mês das predições, intervenções e retenção real."""
+    preds_res = await db.execute(
+        select(CustomerPrediction).order_by(CustomerPrediction.created_at.asc())
+    )
+    all_preds = preds_res.scalars().all()
+
+    actions_res = await db.execute(
+        select(RetentionPlaybookAction).order_by(RetentionPlaybookAction.created_at.asc())
+    )
+    all_actions = actions_res.scalars().all()
+
+    outcomes_res = await db.execute(
+        select(CustomerOutcome).order_by(CustomerOutcome.outcome_date.asc())
+    )
+    all_outcomes = outcomes_res.scalars().all()
+
+    periodos: dict[str, dict[str, Any]] = {}
+
+    for p in all_preds:
+        chave = p.created_at.strftime("%Y-%m")
+        if chave not in periodos:
+            periodos[chave] = {
+                "periodo": chave,
+                "total_analisado": 0,
+                "total_alto_risco": 0,
+                "total_playbooks_aplicados": 0,
+                "total_retidos_confirmados": 0,
+                "mrr_preservado": 0.0,
+            }
+        periodos[chave]["total_analisado"] += 1
+        if p.risk_level in ("Alto", "Crítico"):
+            periodos[chave]["total_alto_risco"] += 1
+
+    for a in all_actions:
+        chave = a.created_at.strftime("%Y-%m")
+        if chave in periodos:
+            periodos[chave]["total_playbooks_aplicados"] += 1
+
+    for o in all_outcomes:
+        chave = o.outcome_date.strftime("%Y-%m")
+        if chave in periodos:
+            if o.churn_occurred == 0:
+                periodos[chave]["total_retidos_confirmados"] += 1
+                periodos[chave]["mrr_preservado"] += o.actual_revenue_saved
+
+    pontos: list[EvolucaoTemporalPonto] = []
+    for chave in sorted(periodos.keys()):
+        d = periodos[chave]
+        acoes = d["total_playbooks_aplicados"]
+        retidos = d["total_retidos_confirmados"]
+        taxa = round((retidos / acoes * 100), 1) if acoes > 0 else 0.0
+        pontos.append(
+            EvolucaoTemporalPonto(
+                periodo=chave,
+                total_analisado=d["total_analisado"],
+                total_alto_risco=d["total_alto_risco"],
+                total_playbooks_aplicados=acoes,
+                total_retidos_confirmados=retidos,
+                taxa_retencao_pct=taxa,
+                mrr_preservado=round(d["mrr_preservado"], 2),
+            )
+        )
+
+    total_pred = len(all_preds)
+    total_acoes = len(all_actions)
+    total_ret = sum(1 for o in all_outcomes if o.churn_occurred == 0)
+    taxa_global = round((total_ret / len(all_outcomes) * 100), 1) if all_outcomes else 0.0
+    mrr_total_salvo = round(sum(o.actual_revenue_saved for o in all_outcomes), 2)
+
+    return EvolucaoTemporalResponse(
+        pontos=pontos,
+        resumo_global={
+            "total_analisado": total_pred,
+            "total_acoes": total_acoes,
+            "total_retidos": total_ret,
+            "taxa_global_retencao_pct": taxa_global,
+            "mrr_total_preservado": mrr_total_salvo,
+        },
+    )
+
+
+@v1.get("/analytics/retention-efficiency", response_model=EficienciaRetencaoResponse)
+async def get_retention_efficiency(
+    db: AsyncSession = Depends(get_db),
+):
+    """Calcula KPIs de conversão e ROI real por playbook de retenção."""
+    actions_res = await db.execute(select(RetentionPlaybookAction))
+    all_actions = actions_res.scalars().all()
+
+    outcomes_res = await db.execute(select(CustomerOutcome))
+    all_outcomes = outcomes_res.scalars().all()
+    outcomes_by_cust = {o.customer_id: o for o in all_outcomes}
+
+    stats_por_playbook: dict[str, dict[str, Any]] = {}
+
+    for action in all_actions:
+        pb = action.playbook
+        if pb not in stats_por_playbook:
+            stats_por_playbook[pb] = {
+                "playbook": pb,
+                "total_aplicado": 0,
+                "total_retidos": 0,
+                "total_churn": 0,
+                "mrr_total_salvo": 0.0,
+            }
+        stats_por_playbook[pb]["total_aplicado"] += 1
+        outcome = outcomes_by_cust.get(action.customer_id)
+        if outcome:
+            if outcome.churn_occurred == 0:
+                stats_por_playbook[pb]["total_retidos"] += 1
+                stats_por_playbook[pb]["mrr_total_salvo"] += outcome.actual_revenue_saved
+            else:
+                stats_por_playbook[pb]["total_churn"] += 1
+
+    detalhes: list[EficienciaPlaybook] = []
+    for pb, s in stats_por_playbook.items():
+        total_desfechos = s["total_retidos"] + s["total_churn"]
+        taxa = (
+            round((s["total_retidos"] / total_desfechos * 100), 1) if total_desfechos > 0 else 0.0
+        )
+        detalhes.append(
+            EficienciaPlaybook(
+                playbook=pb,
+                total_aplicado=s["total_aplicado"],
+                total_retidos=s["total_retidos"],
+                total_churn=s["total_churn"],
+                taxa_sucesso_pct=taxa,
+                mrr_total_salvo=round(s["mrr_total_salvo"], 2),
+            )
+        )
+
+    total_acoes = len(all_actions)
+    total_retidos = sum(d.total_retidos for d in detalhes)
+    total_desfechos_global = sum(d.total_retidos + d.total_churn for d in detalhes)
+    taxa_global = (
+        round((total_retidos / total_desfechos_global * 100), 1)
+        if total_desfechos_global > 0
+        else 0.0
+    )
+    mrr_global = round(sum(d.mrr_total_salvo for d in detalhes), 2)
+
+    return EficienciaRetencaoResponse(
+        taxa_global_eficiencia_pct=taxa_global,
+        total_acoes_registradas=total_acoes,
+        total_clientes_salvos=total_retidos,
+        mrr_acumulado_salvo=mrr_global,
+        detalhe_por_playbook=detalhes,
+    )
 
 
 app.include_router(v1)

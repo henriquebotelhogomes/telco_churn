@@ -44,16 +44,42 @@ export function Customer360({ linha, onClose }: Customer360Props) {
 
   const [acoes, setAcoes] = useState<AcaoSimulavel[]>([])
   const [debouncedAcoes, setDebouncedAcoes] = useState<AcaoSimulavel[]>([])
+  const [mensagemSucesso, setMensagemSucesso] = useState<string | null>(null)
 
   useEffect(() => {
     setAcoes([])
     setDebouncedAcoes([])
+    setMensagemSucesso(null)
   }, [linha?.indice])
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedAcoes(acoes), 300)
     return () => clearTimeout(timer)
   }, [acoes])
+
+  const historicoQuery = useQuery({
+    queryKey: ['playbooks-history', linha?.customerId],
+    queryFn: () => api.playbooksHistory(linha?.customerId),
+    enabled: !!linha?.customerId,
+  })
+
+  const aplicarMutation = useMutation({
+    mutationFn: (payload: { playbook: string; desc: string; savings: number; delta: number }) => {
+      if (!linha?.customerId) throw new Error('Cliente inválido')
+      return api.applyPlaybook({
+        customer_id: linha.customerId,
+        playbook: payload.playbook,
+        description: payload.desc,
+        estimated_risk_reduction: Math.abs(payload.delta),
+        expected_annual_savings: payload.savings,
+        applied_by: 'analyst_current',
+      })
+    },
+    onSuccess: (res) => {
+      setMensagemSucesso(res.message)
+      historicoQuery.refetch()
+    },
+  })
 
   const simulacao = useMutation({
     mutationFn: (selecionadas: AcaoSimulavel[]) =>
@@ -116,15 +142,36 @@ export function Customer360({ linha, onClose }: Customer360Props) {
                     <div className="space-y-3">
                       <ShapWaterfall fatores={explicacao.data.top_fatores_risco} />
                       {explicacao.data.acao_recomendada && (
-                        <div className="flex items-start gap-2 rounded-md bg-muted p-3 text-sm">
-                          <Lightbulb className="mt-0.5 shrink-0" aria-hidden />
-                          <div>
-                            <strong>{explicacao.data.acao_recomendada.playbook}</strong> —{' '}
-                            {explicacao.data.acao_recomendada.descricao}{' '}
-                            <span className="text-muted-foreground">
-                              (redução estimada{' '}
-                              {formatPercent(explicacao.data.acao_recomendada.reducao_estimada_risco)})
-                            </span>
+                        <div className="space-y-2 rounded-md bg-muted p-3 text-sm">
+                          <div className="flex items-start gap-2">
+                            <Lightbulb className="mt-0.5 shrink-0" aria-hidden />
+                            <div>
+                              <strong>{explicacao.data.acao_recomendada.playbook}</strong> —{' '}
+                              {explicacao.data.acao_recomendada.descricao}{' '}
+                              <span className="text-muted-foreground">
+                                (redução estimada{' '}
+                                {formatPercent(explicacao.data.acao_recomendada.reducao_estimada_risco)})
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex justify-end pt-1">
+                            <Button
+                              size="sm"
+                              disabled={aplicarMutation.isPending}
+                              onClick={() => {
+                                const acao = explicacao.data?.acao_recomendada
+                                if (acao) {
+                                  aplicarMutation.mutate({
+                                    playbook: acao.playbook,
+                                    desc: acao.descricao,
+                                    savings: linha.monthlyCharges * 12 * acao.reducao_estimada_risco,
+                                    delta: -acao.reducao_estimada_risco,
+                                  })
+                                }
+                              }}
+                            >
+                              Aplicar Playbook Recomendado
+                            </Button>
                           </div>
                         </div>
                       )}
@@ -132,6 +179,12 @@ export function Customer360({ linha, onClose }: Customer360Props) {
                   )}
                 </CardContent>
               </Card>
+
+              {mensagemSucesso && (
+                <div className="rounded-md bg-emerald-500/15 p-3 text-sm text-emerald-800 dark:text-emerald-300">
+                  ✅ {mensagemSucesso}
+                </div>
+              )}
 
               <Card>
                 <CardHeader>
@@ -167,7 +220,7 @@ export function Customer360({ linha, onClose }: Customer360Props) {
                       {dadosSimulacao.resultados.map((resultado) => (
                         <li
                           key={resultado.acao}
-                          className="rounded-md border p-3 text-sm"
+                          className="space-y-2 rounded-md border p-3 text-sm"
                           data-melhor={dadosSimulacao.melhor_acao === resultado.acao || undefined}
                         >
                           <div className="flex flex-wrap items-center justify-between gap-2">
@@ -179,24 +232,38 @@ export function Customer360({ linha, onClose }: Customer360Props) {
                               {formatPercent(resultado.simulated_probability)}
                             </span>
                           </div>
-                          <div className="mt-1 flex flex-wrap items-center gap-3 text-muted-foreground">
-                            <span
-                              className={
-                                resultado.delta_risk < 0 ? 'text-emerald-600' : 'text-red-600'
-                              }
+                          <div className="flex flex-wrap items-center justify-between gap-2 text-muted-foreground">
+                            <div className="flex items-center gap-2">
+                              <span
+                                className={
+                                  resultado.delta_risk < 0 ? 'text-emerald-600 font-medium' : 'text-red-600'
+                                }
+                              >
+                                Δ risco {formatPercent(resultado.delta_risk)}
+                              </span>
+                              <Separator orientation="vertical" className="h-3" />
+                              <span>
+                                Economia:{' '}
+                                <strong className="text-foreground">
+                                  {formatBrl(resultado.roi_expected_annual_savings)}
+                                </strong>
+                              </span>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              disabled={aplicarMutation.isPending}
+                              onClick={() => {
+                                aplicarMutation.mutate({
+                                  playbook: resultado.playbook,
+                                  desc: resultado.descricao,
+                                  savings: resultado.roi_expected_annual_savings,
+                                  delta: resultado.delta_risk,
+                                })
+                              }}
                             >
-                              Δ risco {formatPercent(resultado.delta_risk)}
-                            </span>
-                            <Separator orientation="vertical" className="h-3" />
-                            <span>
-                              Economia anual esperada:{' '}
-                              <strong className="text-foreground">
-                                {formatBrl(resultado.roi_expected_annual_savings)}
-                              </strong>
-                            </span>
-                            {dadosSimulacao.melhor_acao === resultado.acao && (
-                              <RiskBadge nivel="Baixo" />
-                            )}
+                              Aplicar Esta Ação
+                            </Button>
                           </div>
                         </li>
                       ))}
@@ -204,6 +271,28 @@ export function Customer360({ linha, onClose }: Customer360Props) {
                   )}
                 </CardContent>
               </Card>
+
+              {historicoQuery.data && historicoQuery.data.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm">Histórico de Playbooks Aplicados</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2 text-xs">
+                      {historicoQuery.data.map((item) => (
+                        <li key={item.id} className="flex items-center justify-between border-b pb-1">
+                          <div>
+                            <span className="font-semibold">{item.playbook}</span> ({item.applied_by})
+                          </div>
+                          <span className="text-muted-foreground">
+                            {new Date(item.created_at).toLocaleDateString('pt-BR')}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           </>
         )}

@@ -218,3 +218,88 @@ class PrevisaoBatchResponse(BaseModel):
     results: list[PrevisaoBatchLinha]
     resumo: ResumoBatch
     linhas_invalidas: list[LinhaInvalida]
+
+
+# ---------------------------------------------------------------------------
+# M6 — Persistência & Closed-Loop Retention Analytics
+# ---------------------------------------------------------------------------
+
+
+class AplicarPlaybookRequest(BaseModel):
+    customer_id: str = Field(..., description="ID do cliente alvo")
+    playbook: str = Field(..., description="Nome do playbook aplicado")
+    discount_pct: float = Field(default=0.0, description="Percentual de desconto concedido")
+    estimated_risk_reduction: float = Field(default=0.0, description="Redução esperada de risco")
+    expected_annual_savings: float = Field(default=0.0, description="Economia anual estimada em R$")
+    description: str | None = Field(default=None, description="Detalhes adicionais da ação")
+    applied_by: str = Field(default="analyst", description="Identificador do usuário que aplicou")
+    notes: str | None = Field(default=None, description="Observações de atendimento")
+
+
+class AplicarPlaybookResponse(BaseModel):
+    id: int
+    customer_id: str
+    playbook: str
+    status: str
+    applied_at: str
+    message: str
+
+
+class PlaybookHistoricoItem(BaseModel):
+    id: int
+    customer_id: str
+    playbook: str
+    discount_pct: float
+    estimated_risk_reduction: float
+    expected_annual_savings: float
+    applied_by: str
+    status: str
+    created_at: str
+
+
+class RegistrarOutcomeRequest(BaseModel):
+    customer_id: str
+    churn_occurred: Literal[0, 1] = Field(..., description="0 para Retido, 1 para Churn")
+    observed_months: int = Field(default=1, ge=1)
+    actual_revenue_saved: float = Field(default=0.0, ge=0.0)
+    notes: str | None = None
+
+
+class RegistrarOutcomeResponse(BaseModel):
+    id: int
+    customer_id: str
+    churn_occurred: int
+    outcome_date: str
+    message: str
+
+
+class EvolucaoTemporalPonto(BaseModel):
+    periodo: str = Field(..., description="Mês/Semana (ex: '2026-03' ou 'Semana 12')")
+    total_analisado: int
+    total_alto_risco: int
+    total_playbooks_aplicados: int
+    total_retidos_confirmados: int
+    taxa_retencao_pct: float
+    mrr_preservado: float
+
+
+class EvolucaoTemporalResponse(BaseModel):
+    pontos: list[EvolucaoTemporalPonto]
+    resumo_global: dict[str, float | int]
+
+
+class EficienciaPlaybook(BaseModel):
+    playbook: str
+    total_aplicado: int
+    total_retidos: int
+    total_churn: int
+    taxa_sucesso_pct: float
+    mrr_total_salvo: float
+
+
+class EficienciaRetencaoResponse(BaseModel):
+    taxa_global_eficiencia_pct: float
+    total_acoes_registradas: int
+    total_clientes_salvos: int
+    mrr_acumulado_salvo: float
+    detalhe_por_playbook: list[EficienciaPlaybook]

@@ -87,4 +87,25 @@ export const api = {
   modelInfo(): Promise<ModelInfo> {
     return request('/api/v1/model/info')
   },
+
+  applyPlaybook(payload: import('@/types').AplicarPlaybookRequest): Promise<import('@/types').AplicarPlaybookResponse> {
+    return request('/api/v1/playbooks/apply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+  },
+
+  playbooksHistory(customerId?: string): Promise<import('@/types').PlaybookHistoricoItem[]> {
+    const qs = customerId ? `?customer_id=${encodeURIComponent(customerId)}` : ''
+    return request(`/api/v1/playbooks/history${qs}`)
+  },
+
+  temporalEvolution(): Promise<import('@/types').EvolucaoTemporalResponse> {
+    return request('/api/v1/analytics/temporal-evolution')
+  },
+
+  retentionEfficiency(): Promise<import('@/types').EficienciaRetencaoResponse> {
+    return request('/api/v1/analytics/retention-efficiency')
+  },
 }

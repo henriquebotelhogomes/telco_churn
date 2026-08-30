@@ -16,6 +16,8 @@ dependencies = [
     "python-multipart>=0.0.9",
     "scikit-learn>=1.4.1.post1",
     "shap>=0.44.1",
+    "sqlalchemy>=2.0.28",
+    "aiosqlite>=0.20.0",
     "uvicorn>=0.27.1",
     "xgboost>=2.0.3",
 ]
@@ -49,14 +51,14 @@ source = ["src"]
 omit = ["tests/*"]
 
 [tool.coverage.report]
-fail_under = 60
+fail_under = 80
 show_missing = true
 skip_covered = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
-addopts = "--cov=churn_prediction --cov-report=term-missing --cov-fail-under=60"
+addopts = "--cov=churn_prediction --cov-report=term-missing --cov-fail-under=80"
 
 [tool.mypy]
 python_version = "3.12"

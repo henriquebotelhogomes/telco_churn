@@ -190,3 +190,78 @@ export interface ModelInfo {
   artifact: string
   metadata: ModelMetadata | null
 }
+
+// ---------------------------------------------------------------------------
+// M6 — Persistência, Playbooks & Closed-Loop Analytics
+// ---------------------------------------------------------------------------
+
+export interface AplicarPlaybookRequest {
+  customer_id: string
+  playbook: string
+  discount_pct?: number
+  estimated_risk_reduction?: number
+  expected_annual_savings?: number
+  description?: string
+  applied_by?: string
+  notes?: string
+}
+
+export interface AplicarPlaybookResponse {
+  id: number
+  customer_id: string
+  playbook: string
+  status: string
+  applied_at: string
+  message: string
+}
+
+export interface PlaybookHistoricoItem {
+  id: number
+  customer_id: string
+  playbook: string
+  discount_pct: number
+  estimated_risk_reduction: number
+  expected_annual_savings: number
+  applied_by: string
+  status: string
+  created_at: string
+}
+
+export interface EvolucaoTemporalPonto {
+  periodo: string
+  total_analisado: number
+  total_alto_risco: number
+  total_playbooks_aplicados: number
+  total_retidos_confirmados: number
+  taxa_retencao_pct: number
+  mrr_preservado: number
+}
+
+export interface EvolucaoTemporalResponse {
+  pontos: EvolucaoTemporalPonto[]
+  resumo_global: {
+    total_analisado: number
+    total_acoes: number
+    total_retidos: number
+    taxa_global_retencao_pct: number
+    mrr_total_preservado: number
+  }
+}
+
+export interface EficienciaPlaybook {
+  playbook: string
+  total_aplicado: number
+  total_retidos: number
+  total_churn: number
+  taxa_sucesso_pct: number
+  mrr_total_salvo: number
+}
+
+export interface EficienciaRetencaoResponse {
+  taxa_global_eficiencia_pct: number
+  total_acoes_registradas: number
+  total_clientes_salvos: number
+  mrr_acumulado_salvo: number
+  detalhe_por_playbook: EficienciaPlaybook[]
+}
+

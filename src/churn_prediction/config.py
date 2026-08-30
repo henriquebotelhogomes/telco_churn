@@ -46,6 +46,10 @@ class Settings(BaseSettings):
     api_key_enabled: bool = False
     api_key: str | None = None
 
+    # RetainIQ M6 - Banco de dados & Persistência (SQLite / PostgreSQL)
+    database_url: str = "sqlite+aiosqlite:///./data/retainiq.db"
+    enable_auto_persistence: bool = True
+
     # Padrão Pydantic V2 para configurações (substitui a antiga 'class Config:')
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 

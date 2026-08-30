@@ -52,6 +52,10 @@ data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
+data/*.db
+data/*.sqlite
+*.db
+*.sqlite3
 
 # Ignora os artefatos de modelo pesados, EXCETO o .gitkeep
 models/*.joblib
