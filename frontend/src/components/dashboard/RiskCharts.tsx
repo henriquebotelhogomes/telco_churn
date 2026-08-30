@@ -16,7 +16,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { TrendingUp, Award, DollarSign, Percent } from 'lucide-react'
+import { TrendingUp, Award, DollarSign, Percent, HelpCircle } from 'lucide-react'
 
 import { api } from '@/api/client'
 import { Badge } from '@/components/ui/badge'
@@ -122,7 +122,15 @@ export function RiskCharts({ resumo, linhas }: RiskChartsProps) {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Distribuição de risco</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base">Distribuição de Risco</CardTitle>
+              <span
+                className="text-muted-foreground hover:text-foreground cursor-help p-1"
+                title="Contagem absoluta e proporção de clientes categorizados nos 4 níveis de risco de churn: Baixo (<30%), Médio (30-60%), Alto (60-80%) e Crítico (>=80%)."
+              >
+                <HelpCircle size={15} />
+              </span>
+            </div>
           </CardHeader>
           <CardContent className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -147,7 +155,15 @@ export function RiskCharts({ resumo, linhas }: RiskChartsProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">MRR esperado por nível de risco</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base">MRR Esperado por Nível de Risco</CardTitle>
+              <span
+                className="text-muted-foreground hover:text-foreground cursor-help p-1"
+                title="MRR (Monthly Recurring Revenue / Receita Recorrente Mensal): É a soma da mensalidade de cada cliente multiplicada pela sua probabilidade calculada de cancelamento (Mensalidade × p(Churn)), agrupada por faixa de risco."
+              >
+                <HelpCircle size={15} />
+              </span>
+            </div>
           </CardHeader>
           <CardContent className="h-64">
             <ResponsiveContainer width="100%" height="100%">
