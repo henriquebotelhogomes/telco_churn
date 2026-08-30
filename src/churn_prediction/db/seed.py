@@ -2,6 +2,7 @@ import asyncio
 import datetime
 import json
 import random
+from typing import Any
 
 from sqlalchemy import func, select
 
@@ -23,16 +24,16 @@ PLAYBOOKS = [
     ),
     (
         "AUTOMATIZACAO_PAGAMENTO",
-        "Oferecer R$ 10 de desconto na fatura para migração para Cartão de Crédito.",
+        "Oferecer R$ 10 de crédito na fatura para ativação de Débito Automático / Cartão.",
     ),
     (
-        "DESCONTO_TEMPORARIO",
+        "DESCONTO_RETENCAO_EMERGENCIAL",
         "Aplicar desconto de 15% nas próximas 3 faturas sem alteração de plano.",
     ),
 ]
 
 
-async def seed_historical_data(force: bool = False) -> dict[str, int]:
+async def seed_historical_data(force: bool = False) -> dict[str, Any]:
     """Popula o banco com histórico de 6 meses para demonstração imediata no dashboard."""
     await init_db()
     session_maker = get_sessionmaker()
