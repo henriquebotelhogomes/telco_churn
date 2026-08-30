@@ -105,25 +105,45 @@ export function ModelRegistryLab() {
               <CardContent className="space-y-3 text-xs">
                 <div className="grid grid-cols-2 gap-2 rounded-md bg-muted/50 p-2.5">
                   <div>
-                    <span className="text-muted-foreground">ROC-AUC:</span>
+                    <span
+                      className="text-muted-foreground cursor-help border-b border-dotted border-muted-foreground/50"
+                      title="ROC-AUC (Receiver Operating Characteristic): Mede a capacidade global do modelo de diferenciar clientes que cancelam dos que permanecem (0.5 = chute aleatório, 1.0 = separação perfeita)."
+                    >
+                      ROC-AUC:
+                    </span>
                     <div className="font-mono text-sm font-bold text-foreground">
                       {model.metrics.roc_auc.toFixed(4)}
                     </div>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">PR-AUC:</span>
+                    <span
+                      className="text-muted-foreground cursor-help border-b border-dotted border-muted-foreground/50"
+                      title="PR-AUC (Precision-Recall Area Under Curve): Métrica de ouro para classes desbalanceadas. Mede o percentual de acertos reais de churn minimizando falsos positivos."
+                    >
+                      PR-AUC:
+                    </span>
                     <div className="font-mono text-sm font-bold text-foreground">
                       {model.metrics.pr_auc.toFixed(4)}
                     </div>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">F1-Score:</span>
+                    <span
+                      className="text-muted-foreground cursor-help border-b border-dotted border-muted-foreground/50"
+                      title="F1-Score: Média harmônica entre Precisão e Recall. Representa o equilíbrio ideal entre não deixar passar clientes em risco e não disparar custos à toa."
+                    >
+                      F1-Score:
+                    </span>
                     <div className="font-mono text-sm font-semibold text-foreground">
                       {model.metrics.f1.toFixed(4)}
                     </div>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Latência:</span>
+                    <span
+                      className="text-muted-foreground cursor-help border-b border-dotted border-muted-foreground/50"
+                      title="Latência de Inferência: Tempo médio (em milissegundos) que o modelo leva para calcular o score e retornar a predição para a aplicação."
+                    >
+                      Latência:
+                    </span>
                     <div className="font-mono text-sm font-semibold text-foreground">
                       {model.metrics.latency_ms.toFixed(3)} ms
                     </div>
@@ -240,13 +260,27 @@ export function ModelRegistryLab() {
                 <tr>
                   <th className="p-2.5 font-medium">Modelo / Algoritmo</th>
                   <th className="p-2.5 font-medium">Papel</th>
-                  <th className="p-2.5 font-medium">ROC-AUC</th>
-                  <th className="p-2.5 font-medium">PR-AUC</th>
-                  <th className="p-2.5 font-medium">F1-Score</th>
-                  <th className="p-2.5 font-medium">Recall</th>
-                  <th className="p-2.5 font-medium">Precision</th>
-                  <th className="p-2.5 font-medium">Brier Score</th>
-                  <th className="p-2.5 font-medium">Latência (ms)</th>
+                  <th className="p-2.5 font-medium cursor-help" title="ROC-AUC: Capacidade global de discriminação entre churn e não-churn (0.5 a 1.0).">
+                    <span className="border-b border-dotted border-muted-foreground/50">ROC-AUC</span>
+                  </th>
+                  <th className="p-2.5 font-medium cursor-help" title="PR-AUC: Precisão versus Recall para a classe minoritária (Churn).">
+                    <span className="border-b border-dotted border-muted-foreground/50">PR-AUC</span>
+                  </th>
+                  <th className="p-2.5 font-medium cursor-help" title="F1-Score: Média harmônica entre Precisão e Recall.">
+                    <span className="border-b border-dotted border-muted-foreground/50">F1-Score</span>
+                  </th>
+                  <th className="p-2.5 font-medium cursor-help" title="Recall (Sensibilidade): Proporção de cancelamentos reais identificados pelo modelo.">
+                    <span className="border-b border-dotted border-muted-foreground/50">Recall</span>
+                  </th>
+                  <th className="p-2.5 font-medium cursor-help" title="Precision: Proporção de acertos entre todos os clientes previstos como churn.">
+                    <span className="border-b border-dotted border-muted-foreground/50">Precision</span>
+                  </th>
+                  <th className="p-2.5 font-medium cursor-help" title="Brier Score: Calibração de probabilidade (menor é melhor; 0.0 é calibração perfeita).">
+                    <span className="border-b border-dotted border-muted-foreground/50">Brier Score</span>
+                  </th>
+                  <th className="p-2.5 font-medium cursor-help" title="Latência: Tempo médio de resposta por inferência em milissegundos.">
+                    <span className="border-b border-dotted border-muted-foreground/50">Latência (ms)</span>
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y font-mono">
