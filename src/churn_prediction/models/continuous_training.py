@@ -55,7 +55,10 @@ class ContinuousTrainingPipeline:
             # 1. Executa retreino dos modelos candidatos
             registry_data = train_all_candidates()
 
-            # 2. Identifica o melhor candidato baseado em PR-AUC
+            # 2. Recarrega os modelos treinados em memoria
+            model_manager.discover_models()
+
+            # 3. Identifica o melhor candidato baseado em PR-AUC
             models = registry_data.get("models", [])
             if not models:
                 raise RuntimeError("Nenhum modelo foi gerado durante o retreino.")
@@ -71,17 +74,14 @@ class ContinuousTrainingPipeline:
             current_pr_auc = current_champ_item["metrics"]["pr_auc"]
             improvement = round(best_pr_auc - current_pr_auc, 4)
 
-            # 3. Quality Gate: PR-AUC do melhor candidato deve ser superior ou tolerância de 0.005
+            # 4. Quality Gate: PR-AUC do melhor candidato deve ser superior ou tolerância de 0.005
             gate_passed = best_pr_auc >= (current_pr_auc - 0.005)
             status = "SUCCESS" if gate_passed else "REJECTED_BY_GATE"
 
             champion_after = champion_before
             if gate_passed and auto_promote and best_name != champion_before:
-                model_manager.promote_model(best_name)
+                model_manager.promote_to_champion(best_name)
                 champion_after = best_name
-            else:
-                # Recarrega os modelos no ModelManager para registrar os novos artefatos
-                model_manager.discover_models()
 
             duration = round(time.perf_counter() - t0, 2)
 

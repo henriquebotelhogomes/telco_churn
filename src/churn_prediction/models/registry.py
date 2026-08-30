@@ -134,6 +134,8 @@ class ModelManager:
             "promoted_at": self._registry_data["updated_at"],
         }
 
+    promote_model = promote_to_champion
+
     def record_shadow_scoring(
         self,
         df_input: pd.DataFrame,
