@@ -101,6 +101,22 @@ curl -X 'POST' \
 }'
 ````
 
+> **M2 — Batch & Simulador (RetainIQ):**
+> - `POST /api/v1/predict/batch` — predição em lote com **ingestão dupla**: array JSON PT-BR (mesmo Adapter do `/predict`) *ou* CSV EN-US cru (campo `file`, validado pelo contrato Pandera). Linhas inválidas não derrubam o lote: voltam em `linhas_invalidas` junto do `resumo` (MRR total em risco e distribuição Baixo/Médio/Alto/Crítico).
+> - `POST /api/v1/simulate` — simulador *What-If*: aplica as 4 ações canônicas de retenção ao estado do cliente e recalcula o risco pelo pipeline, retornando `delta_risk` e `roi_expected_annual_savings`.
+
+```bash
+# Batch via CSV EN-US (cliente com risco alto + linha inválida)
+printf 'gender,SeniorCitizen,Partner,Dependents,tenure,PhoneService,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,TotalCharges\nFemale,0,Yes,No,1,No,No phone service,DSL,No,Yes,No,No,No,No,Month-to-month,Yes,Electronic check,29.85,29.85\n' > clientes.csv
+curl -X 'POST' 'http://localhost:8000/api/v1/predict/batch' \
+  -F 'file=@clientes.csv;type=text/csv'
+
+# What-If: simular fidelização para um cliente PT-BR
+curl -X 'POST' 'http://localhost:8000/api/v1/simulate' \
+  -H 'Content-Type: application/json' \
+  -d '{"cliente": { ...payload PT-BR acima... }, "acoes": ["fidelizacao"]}'
+```
+
 ## 📂 Estrutura do Projeto
 ````
 .

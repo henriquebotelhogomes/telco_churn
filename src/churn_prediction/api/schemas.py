@@ -136,3 +136,85 @@ class PrevisaoChurnResponse(BaseModel):
     acao_recomendada: AcaoRecomendada | None = Field(
         None, description="Playbook com maior redução de risco"
     )
+
+
+# ---------------------------------------------------------------------------
+# M2 — Simulador What-If
+# ---------------------------------------------------------------------------
+
+AcaoSimulavel = Literal["fidelizacao", "protecao", "autopagamento", "desconto_15"]
+
+
+def _todas_acoes() -> list[AcaoSimulavel]:
+    return ["fidelizacao", "protecao", "autopagamento", "desconto_15"]
+
+
+class SimulacaoRequest(BaseModel):
+    cliente: PrevisaoChurnRequest = Field(
+        ..., description="Estado atual do cliente em PT-BR (reusa o Adapter i18n)"
+    )
+    acoes: list[AcaoSimulavel] = Field(
+        default_factory=_todas_acoes,
+        description="Ações a simular; padrão = todas as 4 canônicas",
+    )
+
+
+class SimulacaoResultado(BaseModel):
+    acao: AcaoSimulavel
+    playbook: str = Field(..., description="Identificador do playbook da ação")
+    descricao: str = Field(..., description="Descrição da ação")
+    original_probability: float = Field(..., description="Risco antes da ação")
+    simulated_probability: float = Field(..., description="Risco após a ação")
+    delta_risk: float = Field(..., description="simulated - original; negativo = redução")
+    roi_expected_annual_savings: float = Field(
+        ..., description="MonthlyCharges * 12 * (-delta_risk) quando delta < 0, senão 0"
+    )
+
+
+class SimulacaoResponse(BaseModel):
+    original_probability: float = Field(..., description="Risco atual do cliente")
+    resultados: list[SimulacaoResultado] = Field(..., description="Uma entrada por ação simulada")
+    melhor_acao: AcaoSimulavel | None = Field(
+        None, description="Ação com maior redução de risco entre as simuladas"
+    )
+
+
+# ---------------------------------------------------------------------------
+# M2 — Predição em lote (JSON PT-BR ou CSV EN-US)
+# ---------------------------------------------------------------------------
+
+
+class LinhaInvalida(BaseModel):
+    indice: int = Field(..., description="Posição da linha no lote enviado (-1 = nível de coluna)")
+    motivo: str = Field(..., description="Motivo da rejeição")
+
+
+class PrevisaoBatchLinha(BaseModel):
+    indice: int = Field(..., description="Posição da linha no lote enviado")
+    customer_id: str | None = Field(None, description="customerID quando presente no CSV")
+    previsao_cancelamento: int
+    probabilidade_cancelamento: float
+    nivel_risco: str = Field(..., description="Baixo | Médio | Alto | Crítico")
+    mrr_em_risco: float = Field(..., description="MonthlyCharges * p se Alto/Crítico, senão 0")
+
+
+class DistribuicaoRisco(BaseModel):
+    baixo: int
+    medio: int
+    alto: int
+    critico: int
+
+
+class ResumoBatch(BaseModel):
+    total_analisado: int = Field(..., description="Linhas válidas analisadas")
+    total_em_risco: int = Field(..., description="Clientes com nível Alto ou Crítico")
+    mrr_total_em_risco: float = Field(
+        ..., description="Soma de MonthlyCharges * p(churn) em Alto/Crítico"
+    )
+    distribuicao_risco: DistribuicaoRisco
+
+
+class PrevisaoBatchResponse(BaseModel):
+    results: list[PrevisaoBatchLinha]
+    resumo: ResumoBatch
+    linhas_invalidas: list[LinhaInvalida]
