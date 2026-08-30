@@ -13,6 +13,7 @@
 [![Tests](https://img.shields.io/badge/Tests-72_Passing-success?style=flat&logo=pytest&logoColor=white)](https://docs.pytest.org/)
 [![Coverage](https://img.shields.io/badge/Coverage-90.88%25-brightgreen?style=flat)](https://github.com/henriquebotelhogomes/telco_churn)
 [![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-2088FF?style=flat&logo=github-actions&logoColor=white)](https://github.com/features/actions)
+[![MkDocs Material](https://img.shields.io/badge/Docs-MkDocs_Material-526CFE?style=flat&logo=material-for-mkdocs&logoColor=white)](https://henriquebotelhogomes.github.io/telco_churn/)
 
 > **Plataforma de Inteligência de Retenção e MLOps:** Uma solução completa de Inteligência Artificial aplicada ao negócio que vai além da simples previsão de cancelamento (*churn*). O RetainIQ fecha o ciclo operacional: **Prediz o risco $\rightarrow$ Explica os fatores com TreeSHAP $\rightarrow$ Prescreve ações comerciais com ROI $\rightarrow$ Gera roteiros com GenAI $\rightarrow$ Mede o desfecho real de retenção $\rightarrow$ Retreina os modelos continuamente com Quality Gate**.
 
@@ -458,7 +459,26 @@ npm run dev
 
 ---
 
-## 📚 Documentação e Especificações do Projeto
+## 📖 Documentação Interativa com MkDocs Material
+
+O projeto possui um portal completo de documentação estática interativa construído com **[Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)** e **`mkdocstrings`** para inspeção de código e diagramas de arquitetura.
+
+### Executar a Documentação Localmente:
+```bash
+# Iniciar servidor de documentação com hot reload:
+uv run mkdocs serve
+```
+Acesse no navegador: 👉 **`http://127.0.0.1:8000/`** (ou porta indicada no terminal).
+
+### Gerar os Arquivos Estáticos para Produção:
+```bash
+# Compilar site estático na pasta site/:
+uv run mkdocs build
+```
+
+---
+
+## 📚 Especificações Técnicas e de Produto (Specs)
 
 Para detalhes aprofundados sobre a modelagem técnica, arquitetura de dados e visão de produto, consulte as especificações completas na pasta [`specs/`](specs/):
 

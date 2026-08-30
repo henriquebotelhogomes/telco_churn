@@ -1,0 +1,115 @@
+site_name: RetainIQ — Customer Retention Intelligence & MLOps Platform
+site_description: Documentação técnica e arquitetural da plataforma RetainIQ (Telco Churn Prediction & MLOps).
+site_author: Henrique Botelho Gomes
+site_url: https://henriquebotelhogomes.github.io/telco_churn/
+
+repo_name: henriquebotelhogomes/telco_churn
+repo_url: https://github.com/henriquebotelhogomes/telco_churn
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: pt-BR
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Mudar para modo escuro
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Mudar para modo claro
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - tables
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            show_category_heading: true
+
+extra_javascript:
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Início:
+      - Visão Geral: index.md
+      - Como Iniciar: getting-started.md
+  - Arquitetura & Engenharia:
+      - Arquitetura do Sistema: architecture/overview.md
+      - Escala Global (Tier-1): architecture/scaleup.md
+      - Visão de Produto: architecture/product-vision.md
+  - Ciência de Dados & ML:
+      - Modelagem & Benchmarks: ml-data/modeling-benchmarks.md
+      - Explicabilidade & TreeSHAP: ml-data/explainability.md
+      - Contratos de Dados (Pandera): ml-data/contracts.md
+  - MLOps & Observabilidade:
+      - Continuous Training & Quality Gate: mlops/continuous-training.md
+      - Champion/Challenger & Shadow Scoring: mlops/shadow-scoring.md
+      - Data Drift & Prometheus: mlops/monitoring-drift.md
+  - GenAI & Negociação:
+      - Copilot de Retenção: genai/copilot.md
+  - Referência de API & Código:
+      - Endpoints REST (FastAPI): api/endpoints.md
+      - Módulos Python (Docstrings):
+          - Models Registry: reference/models-registry.md
+          - Continuous Training: reference/continuous-training.md
+          - Explainability: reference/explainability.md
+          - Data Contracts: reference/data-contracts.md
+          - API Server: reference/api-server.md

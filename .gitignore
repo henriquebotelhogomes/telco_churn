@@ -94,7 +94,9 @@ Thumbs.db
 .agentbridge/
 
 # ==============================================================================
-# 🌐 Frontend (React / Vite / Node)
+# 🌐 Frontend & Documentação (React / Vite / MkDocs)
 # ==============================================================================
 frontend/node_modules/
-frontend/dist/
+frontend/dist/
+site/
+.cache/
