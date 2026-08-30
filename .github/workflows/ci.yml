@@ -10,6 +10,8 @@ jobs:
   backend:
     name: Backend Lint, Types & Tests
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: src
 
     steps:
       - name: Checkout do código
@@ -39,7 +41,7 @@ jobs:
 
       - name: Executar testes (Pytest) com cobertura >= 80% (DoD M3/M4/M5)
         run: |
-          uv run python src/churn_prediction/models/train.py
+          uv run python -m churn_prediction.models.train
           uv run pytest tests/ -v --cov=churn_prediction --cov-report=term-missing --cov-report=xml --cov-fail-under=80
 
       - name: Upload coverage XML
