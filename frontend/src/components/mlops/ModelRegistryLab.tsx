@@ -20,6 +20,7 @@ import type { ModelRegistryItem } from '@/types'
 export function ModelRegistryLab() {
   const queryClient = useQueryClient()
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
+  const [refreshFeedback, setRefreshFeedback] = useState(false)
 
   const modelsQuery = useQuery({
     queryKey: ['model-registry'],
@@ -31,6 +32,12 @@ export function ModelRegistryLab() {
     queryFn: () => api.shadowMetrics(),
     refetchInterval: 10_000,
   })
+
+  const handleRefreshShadow = async () => {
+    await shadowQuery.refetch()
+    setRefreshFeedback(true)
+    setTimeout(() => setRefreshFeedback(false), 2000)
+  }
 
   const promoteMutation = useMutation({
     mutationFn: (modelName: string) => api.promoteModel(modelName),
@@ -180,14 +187,27 @@ export function ModelRegistryLab() {
               Inferência paralela não-bloqueante nos Challengers comparada contra o Champion ativo.
             </CardDescription>
           </div>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => shadowQuery.refetch()}
-            disabled={shadowQuery.isFetching}
-          >
-            <RefreshCw size={14} className={shadowQuery.isFetching ? 'animate-spin' : ''} />
-          </Button>
+          <div className="flex items-center gap-2">
+            {refreshFeedback && (
+              <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 animate-in fade-in duration-300">
+                ✓ Atualizado
+              </span>
+            )}
+            <Button
+              size="sm"
+              variant="outline"
+              className="gap-1.5 text-xs hover:bg-accent"
+              title="Recarregar telemetria do Shadow Scoring (concordância e latência dos modelos Challengers em segundo plano)"
+              onClick={handleRefreshShadow}
+              disabled={shadowQuery.isFetching}
+            >
+              <RefreshCw
+                size={13}
+                className={shadowQuery.isFetching ? 'animate-spin text-primary' : ''}
+              />
+              Atualizar Telemetria
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
