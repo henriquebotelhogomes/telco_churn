@@ -6,14 +6,14 @@ __pycache__/
 *$py.class
 *.so
 .Python
-build/
+/build/
 develop-eggs/
-dist/
+/dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+/lib/
+/lib64/
 parts/
 sdist/
 var/
@@ -52,6 +52,10 @@ data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
+data/*.db
+data/*.sqlite
+*.db
+*.sqlite3
 
 # Ignora os artefatos de modelo pesados, EXCETO o .gitkeep
 models/*.joblib
@@ -87,3 +91,12 @@ models/*.model
 .Trashes
 ehthumbs.db
 Thumbs.db
+.agentbridge/
+
+# ==============================================================================
+# 🌐 Frontend & Documentação (React / Vite / MkDocs)
+# ==============================================================================
+frontend/node_modules/
+frontend/dist/
+site/
+.cache/

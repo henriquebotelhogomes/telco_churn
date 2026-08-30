@@ -41,9 +41,20 @@ class Settings(BaseSettings):
     # RetainIQ - Drift & observabilidade
     ring_buffer_maxlen: int = 5000
     drift_ttl_seconds: int = 3600
-    cors_origins: list[str] = []
+    drift_min_samples: int = 50
+    cors_origins: list[str] = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        "http://localhost:3000",
+    ]
     api_key_enabled: bool = False
     api_key: str | None = None
+
+    # RetainIQ M6 - Banco de dados & Persistência (SQLite / PostgreSQL)
+    database_url: str = "sqlite+aiosqlite:///./data/retainiq.db"
+    enable_auto_persistence: bool = True
 
     # Padrão Pydantic V2 para configurações (substitui a antiga 'class Config:')
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")

@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -218,3 +218,215 @@ class PrevisaoBatchResponse(BaseModel):
     results: list[PrevisaoBatchLinha]
     resumo: ResumoBatch
     linhas_invalidas: list[LinhaInvalida]
+
+
+# ---------------------------------------------------------------------------
+# M6 — Persistência & Closed-Loop Retention Analytics
+# ---------------------------------------------------------------------------
+
+
+class AplicarPlaybookRequest(BaseModel):
+    customer_id: str = Field(..., description="ID do cliente alvo")
+    playbook: str = Field(..., description="Nome do playbook aplicado")
+    discount_pct: float = Field(default=0.0, description="Percentual de desconto concedido")
+    estimated_risk_reduction: float = Field(default=0.0, description="Redução esperada de risco")
+    expected_annual_savings: float = Field(default=0.0, description="Economia anual estimada em R$")
+    description: str | None = Field(default=None, description="Detalhes adicionais da ação")
+    applied_by: str = Field(default="analyst", description="Identificador do usuário que aplicou")
+    notes: str | None = Field(default=None, description="Observações de atendimento")
+
+
+class AplicarPlaybookResponse(BaseModel):
+    id: int
+    customer_id: str
+    playbook: str
+    status: str
+    applied_at: str
+    message: str
+
+
+class PlaybookHistoricoItem(BaseModel):
+    id: int
+    customer_id: str
+    playbook: str
+    discount_pct: float
+    estimated_risk_reduction: float
+    expected_annual_savings: float
+    applied_by: str
+    status: str
+    created_at: str
+
+
+class RegistrarOutcomeRequest(BaseModel):
+    customer_id: str
+    churn_occurred: Literal[0, 1] = Field(..., description="0 para Retido, 1 para Churn")
+    observed_months: int = Field(default=1, ge=1)
+    actual_revenue_saved: float = Field(default=0.0, ge=0.0)
+    notes: str | None = None
+
+
+class RegistrarOutcomeResponse(BaseModel):
+    id: int
+    customer_id: str
+    churn_occurred: int
+    outcome_date: str
+    message: str
+
+
+class EvolucaoTemporalPonto(BaseModel):
+    periodo: str = Field(..., description="Mês/Semana (ex: '2026-03' ou 'Semana 12')")
+    total_analisado: int
+    total_alto_risco: int
+    total_playbooks_aplicados: int
+    total_retidos_confirmados: int
+    taxa_retencao_pct: float
+    mrr_preservado: float
+
+
+class EvolucaoTemporalResponse(BaseModel):
+    pontos: list[EvolucaoTemporalPonto]
+    resumo_global: dict[str, float | int]
+
+
+class EficienciaPlaybook(BaseModel):
+    playbook: str
+    total_aplicado: int
+    total_retidos: int
+    total_churn: int
+    taxa_sucesso_pct: float
+    mrr_total_salvo: float
+
+
+class EficienciaRetencaoResponse(BaseModel):
+    taxa_global_eficiencia_pct: float
+    total_acoes_registradas: int
+    total_clientes_salvos: int
+    mrr_acumulado_salvo: float
+    detalhe_por_playbook: list[EficienciaPlaybook]
+
+
+# ---------------------------------------------------------------------------
+# M7 — Champion/Challenger, Model Registry & Shadow Scoring
+# ---------------------------------------------------------------------------
+
+
+class PromoteModelRequest(BaseModel):
+    model_name: str = Field(..., description="Nome do modelo a ser promovido para Champion")
+
+
+class PromoteModelResponse(BaseModel):
+    status: str
+    previous_champion: str
+    new_champion: str
+    promoted_at: str
+
+
+class ModelRegistryItem(BaseModel):
+    model_name: str
+    version: str
+    algo: str
+    role: str = Field(..., description="champion | challenger | baseline | archived")
+    trained_at: str
+    artifact: str
+    metrics: dict[str, Any]
+    dataset: dict[str, Any]
+    git_sha: str | None = None
+
+
+class ModelRegistryResponse(BaseModel):
+    active_champion: str
+    total_models: int
+    updated_at: str | None = None
+    models: list[ModelRegistryItem]
+
+
+class ShadowModelComparison(BaseModel):
+    model_name: str
+    total_samples: int
+    agreement_rate_pct: float
+    avg_latency_ms: float
+    avg_prob_diff: float
+
+
+class ShadowTelemetryResponse(BaseModel):
+    total_shadow_scored: int
+    avg_concordance_pct: float
+    recent_samples_count: int
+    model_comparisons: list[ShadowModelComparison]
+    recent_events: list[dict[str, Any]]
+
+
+# ---------------------------------------------------------------------------
+# M8 — Copilot GenAI de Retenção & Smart Assistant
+# ---------------------------------------------------------------------------
+
+
+class GenerateCopilotScriptRequest(BaseModel):
+    customer_id: str = Field(..., description="Identificador do cliente")
+    canal: Literal["call_center", "whatsapp", "email"] = Field(
+        default="call_center", description="Canal de comunicação"
+    )
+    tom: Literal["empatico", "direto", "consultivo"] = Field(
+        default="empatico", description="Tom de abordagem"
+    )
+    cliente: dict[str, Any] = Field(default_factory=dict, description="Dados cadastrais do cliente")
+    fatores_shap: list[dict[str, Any]] = Field(
+        default_factory=list, description="Top fatores de risco explicados pelo SHAP"
+    )
+    playbook: str = Field(
+        default="MIGRAÇÃO_CONTRATO_ANUAL", description="Playbook de retenção selecionado"
+    )
+    reducao_estimada_risco: float = Field(
+        default=0.0, description="Redução estimada da probabilidade de churn"
+    )
+    economia_esperada: float = Field(default=0.0, description="Economia financeira anual projetada")
+
+
+class GenerateCopilotScriptResponse(BaseModel):
+    customer_id: str
+    canal: str
+    tom: str
+    mensagem_completa: str
+    roteiro_etapas: dict[str, str] | None = None
+    argumentos_chave: list[str] = Field(default_factory=list)
+    playbook_aplicado: str
+    provider_used: str
+    latency_ms: float
+
+
+# ---------------------------------------------------------------------------
+# M9 — Continuous Training (CT) & Self-Healing Pipeline
+# ---------------------------------------------------------------------------
+
+
+class AutoRetrainRequest(BaseModel):
+    trigger_type: str = Field(
+        default="manual_api", description="manual_api | drift_alert | scheduled_cron"
+    )
+    auto_promote: bool = Field(
+        default=False, description="Promover automaticamente se superar o Champion atual"
+    )
+
+
+class AutoRetrainResponse(BaseModel):
+    job_id: str
+    status: str
+    message: str
+
+
+class TrainingJobItem(BaseModel):
+    job_id: str
+    trigger_type: str
+    status: str
+    champion_before: str
+    champion_after: str
+    best_candidate: str | None = None
+    metric_improvement: float
+    created_at: str
+    completed_at: str | None = None
+    duration_seconds: float
+
+
+class TrainingJobsListResponse(BaseModel):
+    total_jobs: int
+    jobs: list[TrainingJobItem]

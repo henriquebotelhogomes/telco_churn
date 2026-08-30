@@ -2,13 +2,16 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "main", "master", "feat/*" ]
   pull_request:
     branches: [ "main", "master" ]
 
 jobs:
-  test-and-lint:
+  backend:
+    name: Backend Lint, Types & Tests
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: src
 
     steps:
       - name: Checkout do código
@@ -36,13 +39,10 @@ jobs:
       - name: Checagem de tipagem estática (Mypy)
         run: uv run mypy src
 
-      - name: Executar testes (Pytest) com cobertura >=60% (M0) -> 80% alvo M3
-        # Nota: O teste precisa do modelo treinado. Em um cenário real de CI,
-        # o modelo seria baixado de um bucket S3/GCS ou DVC.
-        # Aqui, vamos rodar o script de treino rápido antes do teste para gerar o artefato.
+      - name: Executar testes (Pytest) com cobertura >= 80% (DoD M3/M4/M5)
         run: |
-          uv run python src/churn_prediction/models/train.py
-          uv run pytest tests/ -v --cov=churn_prediction --cov-report=term-missing --cov-report=xml --cov-fail-under=60
+          uv run python -m churn_prediction.models.train
+          uv run pytest tests/ -v --cov=churn_prediction --cov-report=term-missing --cov-report=xml --cov-fail-under=80
 
       - name: Upload coverage XML
         if: always()
@@ -50,3 +50,31 @@ jobs:
         with:
           name: coverage-xml
           path: coverage.xml
+
+  frontend:
+    name: Frontend Tests & Build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar o Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Executar testes (Vitest)
+        run: npm test
+
+      - name: Build do Frontend (Vite)
+        run: npm run build
