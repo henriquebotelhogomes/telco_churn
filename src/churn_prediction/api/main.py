@@ -7,7 +7,7 @@ from typing import Any, cast
 import joblib
 import numpy as np
 import pandas as pd
-from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException, Request
+from fastapi import APIRouter, BackgroundTasks, Depends, FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -22,6 +22,8 @@ from churn_prediction.api.schemas import (
     AcaoSimulavel,
     AplicarPlaybookRequest,
     AplicarPlaybookResponse,
+    AutoRetrainRequest,
+    AutoRetrainResponse,
     DistribuicaoRisco,
     EficienciaPlaybook,
     EficienciaRetencaoResponse,
@@ -45,16 +47,19 @@ from churn_prediction.api.schemas import (
     SimulacaoRequest,
     SimulacaoResponse,
     SimulacaoResultado,
+    TrainingJobItem,
+    TrainingJobsListResponse,
 )
 from churn_prediction.config import settings
 from churn_prediction.data.contracts import MissingColumnsError, validate_customer_batch
 from churn_prediction.db.models import (
     CustomerOutcome,
     CustomerPrediction,
+    ModelTrainingJob,
     RetentionPlaybookAction,
 )
 from churn_prediction.db.session import get_db, init_db
-from churn_prediction.models import copilot, drift, simulator
+from churn_prediction.models import continuous_training, copilot, drift, simulator
 from churn_prediction.models.registry import model_manager
 
 # Globais para baixa latencia (modelo + explainer em memoria)
@@ -743,6 +748,62 @@ def generate_copilot_script(request: GenerateCopilotScriptRequest):
         reducao_estimada_risco=request.reducao_estimada_risco,
         economia_esperada=request.economia_esperada,
     )
+
+
+# ---------------------------------------------------------------------------
+# M9 — Continuous Training (CT) & Self-Healing Pipeline
+# ---------------------------------------------------------------------------
+
+
+@v1.post("/admin/train/auto-retrain", response_model=AutoRetrainResponse)
+async def trigger_auto_retrain(
+    request: AutoRetrainRequest,
+    background_tasks: BackgroundTasks,
+):
+    """Dispara pipeline de Continuous Training de forma assíncrona com benchmarking e gate."""
+    job_id = await continuous_training.ct_pipeline.start_job(
+        trigger_type=request.trigger_type,
+        auto_promote=request.auto_promote,
+    )
+    background_tasks.add_task(
+        continuous_training.ct_pipeline.execute_job,
+        job_id=job_id,
+        trigger_type=request.trigger_type,
+        auto_promote=request.auto_promote,
+    )
+    return AutoRetrainResponse(
+        job_id=job_id,
+        status="QUEUED",
+        message="Pipeline de Continuous Training (CT) iniciado em background com sucesso.",
+    )
+
+
+@v1.get("/admin/train/jobs", response_model=TrainingJobsListResponse)
+async def list_training_jobs(
+    limit: int = 20,
+    db: AsyncSession = Depends(get_db),
+):
+    """Lista o histórico de execuções do pipeline de Continuous Training."""
+    stmt = select(ModelTrainingJob).order_by(ModelTrainingJob.created_at.desc()).limit(limit)
+    result = await db.execute(stmt)
+    rows = result.scalars().all()
+
+    items = [
+        TrainingJobItem(
+            job_id=r.job_id,
+            trigger_type=r.trigger_type,
+            status=r.status,
+            champion_before=r.champion_before,
+            champion_after=r.champion_after,
+            best_candidate=r.best_candidate,
+            metric_improvement=r.metric_improvement,
+            created_at=r.created_at.isoformat() if r.created_at else "",
+            completed_at=r.completed_at.isoformat() if r.completed_at else None,
+            duration_seconds=r.duration_seconds,
+        )
+        for r in rows
+    ]
+    return TrainingJobsListResponse(total_jobs=len(items), jobs=items)
 
 
 app.include_router(v1)

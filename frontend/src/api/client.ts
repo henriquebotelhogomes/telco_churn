@@ -134,4 +134,18 @@ export const api = {
       body: JSON.stringify(payload),
     })
   },
+
+  triggerAutoRetrain(
+    payload?: import('@/types').AutoRetrainRequest,
+  ): Promise<import('@/types').AutoRetrainResponse> {
+    return request('/api/v1/admin/train/auto-retrain', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload ?? {}),
+    })
+  },
+
+  listTrainingJobs(): Promise<import('@/types').TrainingJobsListResponse> {
+    return request('/api/v1/admin/train/jobs')
+  },
 }

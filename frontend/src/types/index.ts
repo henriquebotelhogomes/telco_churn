@@ -377,5 +377,39 @@ export interface GenerateCopilotScriptResponse {
   latency_ms: number
 }
 
+// ---------------------------------------------------------------------------
+// M9 — Continuous Training (CT) & Self-Healing Pipeline
+// ---------------------------------------------------------------------------
+
+export interface AutoRetrainRequest {
+  trigger_type?: string
+  auto_promote?: boolean
+}
+
+export interface AutoRetrainResponse {
+  job_id: string
+  status: string
+  message: string
+}
+
+export interface TrainingJobItem {
+  job_id: string
+  trigger_type: string
+  status: string
+  champion_before: string
+  champion_after: string
+  best_candidate?: string | null
+  metric_improvement: number
+  created_at: string
+  completed_at?: string | null
+  duration_seconds: number
+}
+
+export interface TrainingJobsListResponse {
+  total_jobs: number
+  jobs: TrainingJobItem[]
+}
+
+
 
 

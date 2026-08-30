@@ -1,13 +1,13 @@
 {
   "active_champion": "churn-xgboost",
-  "updated_at": "2026-08-30T15:31:05.824598+00:00",
+  "updated_at": "2026-08-30T22:40:03.239817+00:00",
   "models": [
     {
       "model_name": "churn-xgboost",
       "version": "1.0.0",
       "algo": "XGBoost",
       "role": "champion",
-      "trained_at": "2026-08-30T13:33:33.464959+00:00",
+      "trained_at": "2026-08-30T22:39:54.189607+00:00",
       "framework_versions": {
         "xgboost": "3.4.1",
         "scikit-learn": "1.9.0"
@@ -50,7 +50,7 @@
         "precision": 0.5159,
         "recall": 0.6497,
         "brier_score": 0.169,
-        "latency_ms": 0.035,
+        "latency_ms": 0.038,
         "confusion_matrix": [
           [
             807,
@@ -69,14 +69,14 @@
         "critico": 0.8
       },
       "artifact": "D:\\telco_churn\\models\\churn_model_pipeline.joblib",
-      "git_sha": "c5f245fd5aa1bf7819941870cd7c1457c5500933"
+      "git_sha": "0aa628ef3ba38271830b0f362348b172a4505ad9"
     },
     {
       "model_name": "churn-random-forest",
       "version": "1.0.0",
       "algo": "Random Forest",
       "role": "challenger",
-      "trained_at": "2026-08-30T13:33:34.254690+00:00",
+      "trained_at": "2026-08-30T22:39:55.426297+00:00",
       "framework_versions": {
         "xgboost": "3.4.1",
         "scikit-learn": "1.9.0"
@@ -119,7 +119,7 @@
         "precision": 0.5461,
         "recall": 0.6176,
         "brier_score": 0.157,
-        "latency_ms": 0.059,
+        "latency_ms": 0.101,
         "confusion_matrix": [
           [
             843,
@@ -138,14 +138,14 @@
         "critico": 0.8
       },
       "artifact": "D:\\telco_churn\\models\\churn_random_forest.joblib",
-      "git_sha": "c5f245fd5aa1bf7819941870cd7c1457c5500933"
+      "git_sha": "0aa628ef3ba38271830b0f362348b172a4505ad9"
     },
     {
       "model_name": "churn-gradient-boosting",
       "version": "1.0.0",
       "algo": "HistGradientBoosting",
       "role": "challenger",
-      "trained_at": "2026-08-30T13:33:37.922890+00:00",
+      "trained_at": "2026-08-30T22:39:56.773673+00:00",
       "framework_versions": {
         "xgboost": "3.4.1",
         "scikit-learn": "1.9.0"
@@ -207,14 +207,14 @@
         "critico": 0.8
       },
       "artifact": "D:\\telco_churn\\models\\churn_gradient_boosting.joblib",
-      "git_sha": "c5f245fd5aa1bf7819941870cd7c1457c5500933"
+      "git_sha": "0aa628ef3ba38271830b0f362348b172a4505ad9"
     },
     {
       "model_name": "churn-logistic-regression",
       "version": "1.0.0",
       "algo": "Logistic Regression",
       "role": "baseline",
-      "trained_at": "2026-08-30T13:33:38.083096+00:00",
+      "trained_at": "2026-08-30T22:39:57.030691+00:00",
       "framework_versions": {
         "xgboost": "3.4.1",
         "scikit-learn": "1.9.0"
@@ -257,7 +257,7 @@
         "precision": 0.5043,
         "recall": 0.7834,
         "brier_score": 0.1688,
-        "latency_ms": 0.023,
+        "latency_ms": 0.057,
         "confusion_matrix": [
           [
             747,
@@ -276,7 +276,7 @@
         "critico": 0.8
       },
       "artifact": "D:\\telco_churn\\models\\churn_logistic_regression.joblib",
-      "git_sha": "c5f245fd5aa1bf7819941870cd7c1457c5500933"
+      "git_sha": "0aa628ef3ba38271830b0f362348b172a4505ad9"
     }
   ]
 }

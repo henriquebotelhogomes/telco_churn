@@ -82,3 +82,30 @@ class AuditLog(Base):
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), default=utc_now, index=True
     )
+
+
+class ModelTrainingJob(Base):
+    """Registro e auditoria de jobs de Continuous Training (CT) automatizado."""
+
+    __tablename__ = "model_training_jobs"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    job_id: Mapped[str] = mapped_column(String(64), unique=True, index=True, nullable=False)
+    trigger_type: Mapped[str] = mapped_column(
+        String(64), default="manual_api"
+    )  # manual_api, drift_alert, scheduled_cron
+    status: Mapped[str] = mapped_column(
+        String(32), default="RUNNING", index=True
+    )  # RUNNING, SUCCESS, REJECTED_BY_GATE, FAILED
+    champion_before: Mapped[str] = mapped_column(String(64), default="churn-xgboost")
+    champion_after: Mapped[str] = mapped_column(String(64), default="churn-xgboost")
+    best_candidate: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    metric_improvement: Mapped[float] = mapped_column(Float, default=0.0)
+    details_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), default=utc_now, index=True
+    )
+    completed_at: Mapped[datetime.datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    duration_seconds: Mapped[float] = mapped_column(Float, default=0.0)

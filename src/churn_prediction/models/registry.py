@@ -63,6 +63,14 @@ class ModelManager:
             except Exception as e:
                 print(f"[REGISTRY] Falha no fallback do champion: {e}")
 
+    @property
+    def active_champion(self) -> str:
+        return self._active_champion
+
+    def discover_models(self) -> None:
+        """Alias para initialize() recarregando modelos e metadados."""
+        self.initialize()
+
     def get_champion(self) -> tuple[str, Pipeline | None]:
         """Retorna o nome e o pipeline do Champion ativo atual."""
         pipeline = self._models.get(self._active_champion)

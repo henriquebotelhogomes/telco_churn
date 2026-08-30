@@ -392,3 +392,41 @@ class GenerateCopilotScriptResponse(BaseModel):
     playbook_aplicado: str
     provider_used: str
     latency_ms: float
+
+
+# ---------------------------------------------------------------------------
+# M9 — Continuous Training (CT) & Self-Healing Pipeline
+# ---------------------------------------------------------------------------
+
+
+class AutoRetrainRequest(BaseModel):
+    trigger_type: str = Field(
+        default="manual_api", description="manual_api | drift_alert | scheduled_cron"
+    )
+    auto_promote: bool = Field(
+        default=False, description="Promover automaticamente se superar o Champion atual"
+    )
+
+
+class AutoRetrainResponse(BaseModel):
+    job_id: str
+    status: str
+    message: str
+
+
+class TrainingJobItem(BaseModel):
+    job_id: str
+    trigger_type: str
+    status: str
+    champion_before: str
+    champion_after: str
+    best_candidate: str | None = None
+    metric_improvement: float
+    created_at: str
+    completed_at: str | None = None
+    duration_seconds: float
+
+
+class TrainingJobsListResponse(BaseModel):
+    total_jobs: int
+    jobs: list[TrainingJobItem]

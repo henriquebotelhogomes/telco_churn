@@ -162,5 +162,7 @@ def train() -> dict[str, Any]:
     return registry_data
 
 
+train_all_candidates = train
+
 if __name__ == "__main__":
     train()
