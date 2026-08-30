@@ -41,6 +41,35 @@ def test_copilot_deterministic_call_center():
     assert res["latency_ms"] >= 0.0
 
 
+def test_copilot_tone_variations_differ():
+    copilot = RetentionCopilot()
+    cliente = {"tenure": 12, "MonthlyCharges": 80.0}
+    fatores = [{"fator": "Contrato: Mensal", "direcao": "aumenta_churn"}]
+    playbook = "FIDELIZACAO_CONTRATO_ANUAL"
+
+    res_emp = copilot.generate_script(
+        "CUST-1", "call_center", "empatico", cliente, fatores, playbook, 0.2, 100.0
+    )
+    res_dir = copilot.generate_script(
+        "CUST-1", "call_center", "direto", cliente, fatores, playbook, 0.2, 100.0
+    )
+    res_con = copilot.generate_script(
+        "CUST-1", "call_center", "consultivo", cliente, fatores, playbook, 0.2, 100.0
+    )
+
+    assert (
+        res_emp["roteiro_etapas"]["etapa_1_abertura"]
+        != res_dir["roteiro_etapas"]["etapa_1_abertura"]
+    )
+    assert (
+        res_dir["roteiro_etapas"]["etapa_1_abertura"]
+        != res_con["roteiro_etapas"]["etapa_1_abertura"]
+    )
+    assert "Cuidado ao Cliente" in res_emp["roteiro_etapas"]["etapa_1_abertura"]
+    assert "Negociação RetainIQ" in res_dir["roteiro_etapas"]["etapa_1_abertura"]
+    assert "Estratégicas RetainIQ" in res_con["roteiro_etapas"]["etapa_1_abertura"]
+
+
 def test_copilot_deterministic_whatsapp():
     copilot = RetentionCopilot()
     res = copilot.generate_script(

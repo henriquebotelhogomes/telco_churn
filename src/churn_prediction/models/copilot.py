@@ -28,7 +28,7 @@ class RetentionCopilot:
         economia_esperada: float = 0.0,
     ) -> dict[str, Any]:
         """
-        Gera roteiro e comunicação de retenção sob medida.
+        Gera roteiro e comunicação de retenção sob medida com variação semântica por Tom e Canal.
         """
         t0 = time.perf_counter()
 
@@ -75,76 +75,150 @@ class RetentionCopilot:
     ) -> dict[str, Any]:
         meses = cliente.get("meses_permanencia") or cliente.get("tenure") or 12
         mensalidade = cliente.get("cobranca_mensal") or cliente.get("MonthlyCharges") or 75.0
-        nome_cliente = f"Cliente ({customer_id})"
 
-        # Identifica dores a partir dos fatores SHAP
+        # Identifica dores a partir dos fatores SHAP com DEDUPLICAÇÃO
         dores_detectadas = []
-        for f in fatores_shap[:3]:
+        for f in fatores_shap[:4]:
             fator_nome = f.get("fator", "")
             if "Contrato" in fator_nome:
-                dores_detectadas.append(
-                    "flexibilidade vs. previsibilidade de custo do plano mensal"
-                )
+                dores_detectadas.append("previsibilidade e estabilidade contratual")
             elif "Internet" in fator_nome or "Fibra" in fator_nome:
-                dores_detectadas.append("estabilidade e velocidade máxima da conexão de internet")
+                dores_detectadas.append("velocidade e estabilidade da internet fibra")
             elif "Suporte" in fator_nome:
-                dores_detectadas.append(
-                    "agilidade e disponibilidade de atendimento técnico especializado"
-                )
+                dores_detectadas.append("agilidade e disponibilidade do suporte técnico")
             elif "Segurança" in fator_nome or "Proteção" in fator_nome:
-                dores_detectadas.append(
-                    "segurança digital e proteção contra ameaças para a família"
-                )
+                dores_detectadas.append("segurança digital e antivírus para a família")
             elif "Pagamento" in fator_nome or "Cobrança" in fator_nome:
-                dores_detectadas.append(
-                    "praticidade e pontualidade na forma de pagamento da fatura"
-                )
+                dores_detectadas.append("praticidade e automatização da forma de pagamento")
 
-        dores_str = (
-            ", ".join(dores_detectadas) if dores_detectadas else "otimização do pacote de serviços"
-        )
+        # Deduplicação preservando a ordem
+        dores_unicas = list(dict.fromkeys(dores_detectadas))
+        dores_str = ", ".join(dores_unicas) if dores_unicas else "otimização do pacote de serviços"
 
-        # Roteiro de Call Center estruturado
-        etapas_call_center = {
-            "etapa_1_abertura": (
-                f"Olá! Aqui é da equipe de relacionamento VIP RetainIQ. Gostaria de falar com o responsável pela conta {customer_id}? "
-                f"Primeiramente, muito obrigado por estar conosco há {meses} meses. Você é um cliente prioritário para nós!"
-            ),
-            "etapa_2_sondagem": (
-                f"Estou entrando em contato exclusivamente para entender como tem sido sua experiência com nossos serviços. "
-                f"Notamos uma oportunidade de aprimorar sua experiência em relação a {dores_str}. Como tem sido seu uso recente?"
-            ),
-            "etapa_3_proposta_valor": (
-                f"Para valorizar sua fidelidade de {meses} meses, temos uma condição exclusiva autorizada hoje: "
-                f"o plano com a estratégia '{playbook}'. Com essa proposta, você garante uma economia anual projetada de até "
-                f"R$ {economia:.2f} com upgrade de benefícios imediatos."
-            ),
-            "etapa_4_fechamento": (
-                "Podemos confirmar a ativação desta condição especial agora mesmo na sua fatura para que você já aproveite os benefícios a partir deste ciclo?"
-            ),
-        }
+        # -----------------------------------------------------------------------
+        # ROTEIRO DE CALL CENTER COM VARIAÇÃO EXPLÍCITA POR TOM
+        # -----------------------------------------------------------------------
+        if tom == "direto":
+            etapas_call_center = {
+                "etapa_1_abertura": (
+                    f"Olá! Sou da equipe de Negociação RetainIQ. Falo com o titular da conta {customer_id}? "
+                    f"Identifiquei que você é cliente há {meses} meses e tenho uma oportunidade de otimização direta para seu plano hoje."
+                ),
+                "etapa_2_sondagem": (
+                    f"Analisando seus dados, notamos pontos de ganho imediato de eficiência em {dores_str}. "
+                    f"Qual o principal ponto que você gostaria de melhorar hoje?"
+                ),
+                "etapa_3_proposta_valor": (
+                    f"Liberamos para você a ativação imediata do plano '{playbook}'. "
+                    f"Essa proposta reduz custos e gera uma economia líquida projetada de R$ {economia:.2f} ao ano."
+                ),
+                "etapa_4_fechamento": (
+                    "Podemos aplicar este benefício agora mesmo para já valer na sua próxima fatura?"
+                ),
+            }
+        elif tom == "consultivo":
+            etapas_call_center = {
+                "etapa_1_abertura": (
+                    f"Olá! Aqui é da Consultoria de Contas Estratégicas RetainIQ. Gostaria de falar com o responsável pela conta {customer_id}? "
+                    f"Como você possui um relacionamento consolidado de {meses} meses conosco, realizamos um diagnóstico executivo do seu perfil."
+                ),
+                "etapa_2_sondagem": (
+                    f"Nosso mapeamento identificou oportunidades de modernização técnica com foco em {dores_str}. "
+                    f"Faz sentido avaliarmos como otimizar essa estrutura?"
+                ),
+                "etapa_3_proposta_valor": (
+                    f"Nossa recomendação estratégica para sua conta é a implementação do playbook '{playbook}'. "
+                    f"Além de blindar a estabilidade dos serviços, essa ação resulta em uma otimização financeira de R$ {economia:.2f} anuais."
+                ),
+                "etapa_4_fechamento": (
+                    "Podemos formalizar este novo acordo de serviços na sua conta para garantirmos essas condições?"
+                ),
+            }
+        else:  # tom == "empatico" (padrão)
+            etapas_call_center = {
+                "etapa_1_abertura": (
+                    f"Olá! Aqui é da equipe de Cuidado ao Cliente RetainIQ. É um prazer falar com você! Gostaria de falar com o titular da conta {customer_id}? "
+                    f"Primeiramente, muito obrigado por estar conosco há {meses} meses. Você é uma pessoa muito especial para nós!"
+                ),
+                "etapa_2_sondagem": (
+                    f"Estou te ligando porque sua satisfação é a nossa maior prioridade. Notamos que podemos cuidar melhor do seu dia a dia em relação a {dores_str}. "
+                    f"Como tem sido sua experiência recente? Queremos muito te ouvir!"
+                ),
+                "etapa_3_proposta_valor": (
+                    f"Para retribuir seu carinho e sua confiança de {meses} meses, preparei com muito carinho uma condição exclusiva: "
+                    f"a estratégia '{playbook}'. Você terá máxima tranquilidade e uma economia anual estimada de até R$ {economia:.2f}."
+                ),
+                "etapa_4_fechamento": (
+                    "Gostaria que eu já ativasse esse benefício agora mesmo para você ter essa tranquilidade na sua próxima fatura?"
+                ),
+            }
 
-        # Mensagem formatada por canal
+        # -----------------------------------------------------------------------
+        # MENSAGENS DIRETAS (WHATSAPP E E-MAIL) POR TOM
+        # -----------------------------------------------------------------------
         if canal == "whatsapp":
-            mensagem_formatada = (
-                f"👋 Olá! Aqui é do setor de Relacionamento RetainIQ.\n\n"
-                f"Como você já é nosso cliente há *{meses} meses*, selecionamos uma condição exclusiva para a sua conta `{customer_id}`:\n\n"
-                f"✨ *Oferta Especial:* {playbook}\n"
-                f"💰 *Economia Anual Estimada:* R$ {economia:.2f}\n"
-                f"🛡️ *Garantia:* Upgrade de qualidade e suporte dedicado.\n\n"
-                f"Podemos aplicar esse benefício diretamente na sua próxima fatura? Responda *SIM* para confirmar! 🚀"
-            )
+            if tom == "direto":
+                mensagem_formatada = (
+                    f"⚡ *RetainIQ | Oportunidade Direta de Economia*\n\n"
+                    f"Titular da conta `{customer_id}` (Cliente há {meses} meses):\n\n"
+                    f"🎯 *Proposta:* {playbook}\n"
+                    f"💵 *Economia Anual:* R$ {economia:.2f}\n"
+                    f"🚀 *Otimização:* Resolução focada em {dores_str}.\n\n"
+                    f"Responda *1* para ativar agora na sua fatura."
+                )
+            elif tom == "consultivo":
+                mensagem_formatada = (
+                    f"👔 *RetainIQ Consultoria VIP | Conta {customer_id}*\n\n"
+                    f"Prezado(a), concluímos a revisão do seu plano de {meses} meses de relacionamento.\n\n"
+                    f"📋 *Recomendação Executiva:* {playbook}\n"
+                    f"💼 *Impacto Financeiro:* R$ {economia:.2f}/ano de otimização\n"
+                    f"🛡️ *Garantia de Qualidade:* {dores_str}\n\n"
+                    f"Podemos confirmar a aplicação deste novo modelo de serviço? Responda *CONFIRMAR* para prosseguir."
+                )
+            else:  # empatico
+                mensagem_formatada = (
+                    f"👋 Olá! Aqui é do setor de Cuidado ao Cliente RetainIQ.\n\n"
+                    f"Como você já é nosso cliente parceiro há *{meses} meses*, preparamos um carinho especial para a conta `{customer_id}`:\n\n"
+                    f"✨ *Oferta Exclusiva:* {playbook}\n"
+                    f"💰 *Economia Anual Estimada:* R$ {economia:.2f}\n"
+                    f"❤️ *Benefício:* Mais tranquilidade em {dores_str}.\n\n"
+                    f"Podemos aplicar esse benefício diretamente na sua próxima fatura? Responda *SIM* para confirmar! 🚀"
+                )
         elif canal == "email":
-            mensagem_formatada = (
-                f"Assunto: Condição Exclusiva de Fidelidade para a sua conta {customer_id}\n\n"
-                f"Olá,\n\n"
-                f"Agradecemos por ter você como nosso cliente há {meses} meses. Queremos garantir que você continue tendo a melhor experiência conosco.\n\n"
-                f"Com base no seu perfil de uso, aprovamos a liberação do benefício: {playbook}.\n"
-                f"Esta condição garante maior estabilidade e uma economia estimada em até R$ {economia:.2f} ao longo do ano.\n\n"
-                f"Para ativar sem custos adicionais, basta responder a este e-mail ou clicar no link de confirmação.\n\n"
-                f"Atenciosamente,\n"
-                f"Equipe de Sucesso do Cliente RetainIQ"
-            )
+            if tom == "direto":
+                mensagem_formatada = (
+                    f"Assunto: [Ação Rápida] Otimização e Economia de R$ {economia:.2f} na conta {customer_id}\n\n"
+                    f"Prezado(a),\n\n"
+                    f"Identificamos uma oportunidade de redução direta de custos no seu plano de {meses} meses.\n\n"
+                    f"• Proposta: {playbook}\n"
+                    f"• Economia Projetada: R$ {economia:.2f}/ano\n"
+                    f"• Foco de Melhoria: {dores_str}\n\n"
+                    f"Para aprovar a mudança com efeito na próxima fatura, responda com 'APROVADO'.\n\n"
+                    f"Atenciosamente,\n"
+                    f"Equipe de Negociação RetainIQ"
+                )
+            elif tom == "consultivo":
+                mensagem_formatada = (
+                    f"Assunto: Parecer Executivo de Retenção e Otimização para a conta {customer_id}\n\n"
+                    f"Prezado(a),\n\n"
+                    f"Agradecemos pela parceria continuada de {meses} meses com a nossa plataforma.\n\n"
+                    f"Após análise detalhada do histórico de utilização, o Comitê Estratégico RetainIQ aprovou a implementação da solução '{playbook}'. "
+                    f"Esta reestruturação resolve gargalos em {dores_str} e proporciona um ganho financeiro estimado em R$ {economia:.2f} ao longo de 12 meses.\n\n"
+                    f"Permanecemos à disposição para formalizar a transição.\n\n"
+                    f"Cordialmente,\n"
+                    f"Gestão de Contas Corporativas | RetainIQ"
+                )
+            else:  # empatico
+                mensagem_formatada = (
+                    f"Assunto: Condição Especial de Cuidado e Fidelidade para a sua conta {customer_id}\n\n"
+                    f"Olá,\n\n"
+                    f"Agradecemos muito por ter você como nosso cliente há {meses} meses. Queremos garantir que você continue tendo a melhor experiência conosco.\n\n"
+                    f"Com base no seu perfil, aprovamos a liberação do benefício especial: {playbook}.\n"
+                    f"Esta condição garante maior carinho no atendimento, tranquilidade em {dores_str} e uma economia estimada em até R$ {economia:.2f} ao longo do ano.\n\n"
+                    f"Para ativar sem custos adicionais, basta responder a este e-mail.\n\n"
+                    f"Com carinho,\n"
+                    f"Equipe de Sucesso do Cliente RetainIQ"
+                )
         else:  # call_center
             mensagem_formatada = (
                 f"[ROTEIRO DE LIGAÇÃO - {tom.upper()}]\n\n"
@@ -155,7 +229,7 @@ class RetentionCopilot:
             )
 
         argumentos = [
-            f"Fidelidade de {meses} meses como âncora de valor para tratamento VIP",
+            f"Fidelidade de {meses} meses como âncora de valor e tratamento diferenciado",
             f"Foco na solução das dores identificadas: {dores_str}",
             f"Benefício financeiro explícito: R$ {economia:.2f} de economia anual estimada",
             f"Aplicação direta do playbook recomendado '{playbook}'",
