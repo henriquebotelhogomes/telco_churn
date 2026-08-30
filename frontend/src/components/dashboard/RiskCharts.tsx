@@ -194,7 +194,9 @@ export function RiskCharts({ resumo, linhas }: RiskChartsProps) {
                 <Tooltip
                   formatter={(val: any, nome: any) => [
                     val,
-                    nome === 'total_analisado' ? 'Clientes Analisados' : 'Retenções Confirmadas',
+                    nome === 'total_analisado' || nome === 'Clientes Analisados'
+                      ? 'Clientes Analisados'
+                      : 'Retenções Confirmadas',
                   ]}
                 />
                 <Legend />
