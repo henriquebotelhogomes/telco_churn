@@ -37,6 +37,8 @@ Avaliação no conjunto de teste (20% dos dados invisíveis ao modelo):
 
 
 *  "Nota: A análise exploratória de dados (EDA) que originou as decisões de feature engineering encontra-se na pasta `/notebooks`."*
+> **M0 — Higiene (RetainIQ):** `__init__.py` corrigido, `pytest-cov` ≥80% no CI, caminhos reais documentados e `HEALTHCHECK` em `/health`.
+
 ---
 
 ## 🚀 Como Executar
@@ -68,10 +70,12 @@ make api
 Com a API rodando, acesse a documentação interativa (Swagger UI) gerada automaticamente:
 👉 http://localhost:8000/docs 
 
+> **Versionamento (RetainIQ M0):** Todas as rotas de negócio vivem sob `/api/v1` (ex.: `/api/v1/predict`). `GET /health` permanece na raiz como liveness probe para Docker/K8s. A rota legada `/predict` foi removida.
+
 Ou faça uma requisição de teste via cURL (Payload validado estritamente em Português):
 ````
 curl -X 'POST' \
-  'http://localhost:8000/predict' \
+  'http://localhost:8000/api/v1/predict' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -97,22 +101,41 @@ curl -X 'POST' \
 }'
 ````
 
+> **M2 — Batch & Simulador (RetainIQ):**
+> - `POST /api/v1/predict/batch` — predição em lote com **ingestão dupla**: array JSON PT-BR (mesmo Adapter do `/predict`) *ou* CSV EN-US cru (campo `file`, validado pelo contrato Pandera). Linhas inválidas não derrubam o lote: voltam em `linhas_invalidas` junto do `resumo` (MRR total em risco e distribuição Baixo/Médio/Alto/Crítico).
+> - `POST /api/v1/simulate` — simulador *What-If*: aplica as 4 ações canônicas de retenção ao estado do cliente e recalcula o risco pelo pipeline, retornando `delta_risk` e `roi_expected_annual_savings`.
+
+```bash
+# Batch via CSV EN-US (cliente com risco alto + linha inválida)
+printf 'gender,SeniorCitizen,Partner,Dependents,tenure,PhoneService,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,TotalCharges\nFemale,0,Yes,No,1,No,No phone service,DSL,No,Yes,No,No,No,No,Month-to-month,Yes,Electronic check,29.85,29.85\n' > clientes.csv
+curl -X 'POST' 'http://localhost:8000/api/v1/predict/batch' \
+  -F 'file=@clientes.csv;type=text/csv'
+
+# What-If: simular fidelização para um cliente PT-BR
+curl -X 'POST' 'http://localhost:8000/api/v1/simulate' \
+  -H 'Content-Type: application/json' \
+  -d '{"cliente": { ...payload PT-BR acima... }, "acoes": ["fidelizacao"]}'
+```
+
 ## 📂 Estrutura do Projeto
 ````
 .
-├── .github/workflows/   # Pipeline de CI/CD (Lint, Types, Tests)
-├── data/                # Dados brutos e processados (ignorados no git)
-├── models/              # Artefatos do modelo treinado (.joblib)
+├── .github/workflows/   # Pipeline de CI/CD (Lint, Types, Tests + coverage ≥80%)
+├── data/
+│   └── raw/WA_Fn-UseC_-Telco-Customer-Churn.csv  # Dataset canônico (7.032 clientes)
+├── models/
+│   ├── churn_model_pipeline.joblib  # Pipeline scikit-learn + XGBoost (trackado via joblib)
+│   └── model_metadata.json          # Gerado no treino (M3, exposto em /api/v1/model/info)
 ├── src/
 │   └── churn_prediction/
-│       ├── api/         # FastAPI, Schemas (Pydantic V2) e rotas
-│       ├── data/        # Scripts de pré-processamento (scikit-learn)
-│       ├── models/      # Scripts de treinamento e avaliação
-│       └── config.py    # Configurações globais (Pydantic Settings)
-├── tests/               # Testes unitários e de integração (Pytest)
-├── Dockerfile           # Configuração da imagem Docker (Non-root)
+│       ├── api/         # FastAPI, Schemas (Pydantic V2) e rotas sob /api/v1
+│       ├── data/        # Pipeline Anti-Leakage + Pandera contracts (M2)
+│       ├── models/      # train/evaluate + explainability/simulator/drift (M1-M3)
+│       └── config.py    # Settings (RISK_THRESHOLDS, CORS, drift TTL)
+├── tests/               # Pytest + httpx + coverage
+├── Dockerfile           # Multi-stage (futuro: node+python) + HEALTHCHECK /health + Non-root
 ├── Makefile             # Atalhos para comandos comuns
-└── pyproject.toml       # Configuração de dependências (uv) e ferramentas
+└── pyproject.toml       # uv + Ruff + Mypy + coverage
 ````
 
 Desenvolvido por Henrique Botelho Gomes - Engenheiro de Software Sênior & Especialista em IA.

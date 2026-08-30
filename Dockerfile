@@ -59,7 +59,13 @@ RUN chown -R appuser:appgroup /app
 USER appuser
 
 # ==============================================================================
-# 7. Execução
+# 7. Healthcheck (M0 - RetainIQ)
+# ==============================================================================
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD python -c "import urllib.request, sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/health', timeout=2).getcode()==200 else 1)"
+
+# ==============================================================================
+# 8. Execução
 # ==============================================================================
 # Expõe a porta que o FastAPI vai utilizar
 EXPOSE 8000
