@@ -2,12 +2,13 @@ import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import {
   Area,
-  AreaChart,
   Bar,
   BarChart,
   CartesianGrid,
   Cell,
+  ComposedChart,
   Legend,
+  Line,
   Pie,
   PieChart,
   ResponsiveContainer,
@@ -15,9 +16,10 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { TrendingUp, Award, DollarSign } from 'lucide-react'
+import { TrendingUp, Award, DollarSign, Percent } from 'lucide-react'
 
 import { api } from '@/api/client'
+import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { NIVEIS, NIVEL_CHART_COLOR, formatBrl, formatPercent } from '@/lib/format'
 import type { LinhaRisco } from '@/api/queries'
@@ -170,53 +172,126 @@ export function RiskCharts({ resumo, linhas }: RiskChartsProps) {
 
       {dadosTemporal.length > 0 && (
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <TrendingUp size={18} /> Evolução Temporal de Churn & Ações de Retenção
-            </CardTitle>
+          <CardHeader className="pb-2">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <TrendingUp size={18} className="text-indigo-500" /> Evolução Temporal de Churn & Ações de Retenção
+                </CardTitle>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Volume histórico de clientes analisados, retenções confirmadas e taxa de eficácia percentual (%)
+                </p>
+              </div>
+              {temporalQuery.data?.resumo_global && (
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge variant="outline" className="text-[11px] border-blue-500/30 text-blue-700 dark:text-blue-300">
+                    Analisados: {temporalQuery.data.resumo_global.total_analisado.toLocaleString('pt-BR')}
+                  </Badge>
+                  <Badge variant="outline" className="text-[11px] border-emerald-500/30 text-emerald-700 dark:text-emerald-300">
+                    Retidos: {temporalQuery.data.resumo_global.total_retidos.toLocaleString('pt-BR')}
+                  </Badge>
+                  <Badge className="bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-semibold gap-1">
+                    <Percent size={11} />
+                    Taxa Global: {temporalQuery.data.resumo_global.taxa_global_retencao_pct}%
+                  </Badge>
+                </div>
+              )}
+            </div>
           </CardHeader>
-          <CardContent className="h-72">
+          <CardContent className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={dadosTemporal} margin={{ left: 8, right: 8, top: 10, bottom: 4 }}>
+              <ComposedChart data={dadosTemporal} margin={{ left: 8, right: 12, top: 12, bottom: 4 }}>
                 <defs>
                   <linearGradient id="corAnalisado" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4} />
+                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.35} />
                     <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.0} />
                   </linearGradient>
                   <linearGradient id="corRetidos" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.5} />
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.45} />
                     <stop offset="95%" stopColor="#10b981" stopOpacity={0.0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="periodo" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip
-                  formatter={(val: any, nome: any) => [
-                    val,
-                    nome === 'total_analisado' || nome === 'Clientes Analisados'
-                      ? 'Clientes Analisados'
-                      : 'Retenções Confirmadas',
-                  ]}
+                {/* Eixo Y Esquerdo: Volumes Absolutos */}
+                <YAxis
+                  yAxisId="left"
+                  tick={{ fontSize: 12 }}
+                  tickFormatter={(v: number) => (v >= 1000 ? `${(v / 1000).toFixed(1)}k` : `${v}`)}
                 />
-                <Legend />
+                {/* Eixo Y Direito: Taxa Percentual (%) */}
+                <YAxis
+                  yAxisId="right"
+                  orientation="right"
+                  domain={[0, 100]}
+                  tick={{ fontSize: 12, fill: '#8b5cf6' }}
+                  tickFormatter={(v: number) => `${v}%`}
+                />
+                <Tooltip
+                  content={({ active, payload, label }) => {
+                    if (active && payload && payload.length) {
+                      const d = payload[0].payload
+                      return (
+                        <div className="rounded-lg border bg-background/95 p-3 shadow-lg backdrop-blur-sm text-xs space-y-1.5 min-w-[210px]">
+                          <p className="font-semibold text-foreground border-b pb-1">
+                            Período: <span className="font-mono text-indigo-600 dark:text-indigo-400">{label}</span>
+                          </p>
+                          <div className="flex items-center justify-between gap-3 text-blue-600 dark:text-blue-400">
+                            <span>🔵 Clientes Analisados:</span>
+                            <span className="font-bold font-mono">{d.total_analisado?.toLocaleString('pt-BR')}</span>
+                          </div>
+                          <div className="flex items-center justify-between gap-3 text-emerald-600 dark:text-emerald-400">
+                            <span>🟢 Retenções Confirmadas:</span>
+                            <span className="font-bold font-mono">{d.total_retidos_confirmados?.toLocaleString('pt-BR')}</span>
+                          </div>
+                          <div className="flex items-center justify-between gap-3 text-purple-600 dark:text-purple-400 font-semibold border-t pt-1">
+                            <span>🟣 Taxa de Retenção:</span>
+                            <span className="font-bold font-mono">{d.taxa_retencao_pct}%</span>
+                          </div>
+                          {d.mrr_preservado > 0 && (
+                            <div className="flex items-center justify-between gap-3 text-emerald-700 dark:text-emerald-300 text-[11px]">
+                              <span>💰 MRR Salvo:</span>
+                              <span className="font-mono font-bold">{formatBrl(d.mrr_preservado)}</span>
+                            </div>
+                          )}
+                        </div>
+                      )
+                    }
+                    return null
+                  }}
+                />
+                <Legend verticalAlign="bottom" height={36} />
                 <Area
+                  yAxisId="left"
                   type="monotone"
                   dataKey="total_analisado"
                   name="Clientes Analisados"
                   stroke="#3b82f6"
+                  strokeWidth={2}
                   fillOpacity={1}
                   fill="url(#corAnalisado)"
                 />
                 <Area
+                  yAxisId="left"
                   type="monotone"
                   dataKey="total_retidos_confirmados"
                   name="Retenções Confirmadas"
                   stroke="#10b981"
+                  strokeWidth={2}
                   fillOpacity={1}
                   fill="url(#corRetidos)"
                 />
-              </AreaChart>
+                <Line
+                  yAxisId="right"
+                  type="monotone"
+                  dataKey="taxa_retencao_pct"
+                  name="Taxa de Retenção (%)"
+                  stroke="#8b5cf6"
+                  strokeWidth={2.5}
+                  dot={{ r: 4, fill: '#8b5cf6' }}
+                  activeDot={{ r: 6 }}
+                />
+              </ComposedChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
