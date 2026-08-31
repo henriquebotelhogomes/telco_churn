@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "algo": "XGBoost",
   "role": "champion",
-  "trained_at": "2026-08-30T23:48:04.475488+00:00",
+  "trained_at": "2026-08-31T12:11:17.509444+00:00",
   "framework_versions": {
     "xgboost": "3.4.1",
     "scikit-learn": "1.9.0"
@@ -46,7 +46,7 @@
     "precision": 0.5159,
     "recall": 0.6497,
     "brier_score": 0.169,
-    "latency_ms": 0.037,
+    "latency_ms": 0.036,
     "confusion_matrix": [
       [
         807,
@@ -65,5 +65,5 @@
     "critico": 0.8
   },
   "artifact": "D:\\telco_churn\\models\\churn_model_pipeline.joblib",
-  "git_sha": "88a703e95bcd218a8c64e31cd1601d8313e7d940"
+  "git_sha": "98c73d23f39666bc6de5fad96e1d86ba5c1e3811"
 }
