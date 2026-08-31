@@ -103,6 +103,8 @@ nav:
       - Continuous Training & Quality Gate: mlops/continuous-training.md
       - Champion/Challenger & Shadow Scoring: mlops/shadow-scoring.md
       - Data Drift & Prometheus: mlops/monitoring-drift.md
+  - Streaming & Tempo Real (Fase 2):
+      - Gerador Contínuo de Eventos: streaming/event-generator.md
   - GenAI & Negociação:
       - Copilot de Retenção: genai/copilot.md
   - Referência de API & Código:

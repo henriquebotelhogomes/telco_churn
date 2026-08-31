@@ -24,6 +24,7 @@ from churn_prediction.api.schemas import (
     AplicarPlaybookResponse,
     AutoRetrainRequest,
     AutoRetrainResponse,
+    ChaosInjectionRequest,
     DistribuicaoRisco,
     EficienciaPlaybook,
     EficienciaRetencaoResponse,
@@ -47,6 +48,8 @@ from churn_prediction.api.schemas import (
     SimulacaoRequest,
     SimulacaoResponse,
     SimulacaoResultado,
+    StreamingStartRequest,
+    StreamingStatusResponse,
     TrainingJobItem,
     TrainingJobsListResponse,
 )
@@ -61,6 +64,7 @@ from churn_prediction.db.models import (
 from churn_prediction.db.session import get_db, init_db
 from churn_prediction.models import continuous_training, copilot, drift, reporting, simulator
 from churn_prediction.models.registry import model_manager
+from churn_prediction.streaming.generator import generator_instance
 
 # Globais para baixa latencia (modelo + explainer em memoria)
 ml_models: dict[str, Any] = {}
@@ -828,6 +832,38 @@ async def download_executive_report():
             "Content-Disposition": "inline; filename=retainiq_executive_dossier.html",
         },
     )
+
+
+# ---------------------------------------------------------------------------
+# M11 — Streaming & Continuous Event Generation (Fase 2)
+# ---------------------------------------------------------------------------
+
+
+@v1.post("/streaming/start", response_model=StreamingStatusResponse)
+async def start_streaming(payload: StreamingStartRequest) -> dict[str, Any]:
+    """Inicia a geração assíncrona contínua de eventos em streaming."""
+    generator_instance.start(events_per_second=payload.events_per_second)
+    return generator_instance.get_status()
+
+
+@v1.post("/streaming/stop", response_model=StreamingStatusResponse)
+async def stop_streaming() -> dict[str, Any]:
+    """Pausa a geração de eventos em streaming."""
+    generator_instance.stop()
+    return generator_instance.get_status()
+
+
+@v1.get("/streaming/status", response_model=StreamingStatusResponse)
+async def get_streaming_status() -> dict[str, Any]:
+    """Retorna o status, vazão e últimos eventos gerados em tempo real."""
+    return generator_instance.get_status()
+
+
+@v1.post("/streaming/chaos/inject", response_model=StreamingStatusResponse)
+async def inject_streaming_chaos(payload: ChaosInjectionRequest) -> dict[str, Any]:
+    """Ativa ou desativa injeção de anomalias/degradação massiva de rede e billing."""
+    generator_instance.chaos_mode = payload.enable_chaos
+    return generator_instance.get_status()
 
 
 app.include_router(v1)

@@ -152,4 +152,31 @@ export const api = {
   getExecutiveReportData(): Promise<Record<string, unknown>> {
     return request('/api/v1/analytics/executive-report/data')
   },
+
+  getStreamingStatus(): Promise<import('@/types').StreamingStatusResponse> {
+    return request('/api/v1/streaming/status')
+  },
+
+  startStreaming(payload?: import('@/types').StreamingStartRequest): Promise<import('@/types').StreamingStatusResponse> {
+    return request('/api/v1/streaming/start', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload ?? {}),
+    })
+  },
+
+  stopStreaming(): Promise<import('@/types').StreamingStatusResponse> {
+    return request('/api/v1/streaming/stop', {
+      method: 'POST',
+    })
+  },
+
+  injectStreamingChaos(payload: import('@/types').ChaosInjectionRequest): Promise<import('@/types').StreamingStatusResponse> {
+    return request('/api/v1/streaming/chaos/inject', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+  },
 }
+

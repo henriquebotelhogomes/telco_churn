@@ -410,6 +410,28 @@ export interface TrainingJobsListResponse {
   jobs: TrainingJobItem[]
 }
 
+// ---------------------------------------------------------------------------
+// M11 — Streaming & Continuous Event Generation (Fase 2)
+// ---------------------------------------------------------------------------
+
+export interface StreamingStatusResponse {
+  is_running: boolean
+  events_per_second: number
+  chaos_mode: boolean
+  buffer_size: number
+  total_generated: Record<string, number>
+  recent_events: Array<Record<string, unknown>>
+}
+
+export interface StreamingStartRequest {
+  events_per_second?: number
+}
+
+export interface ChaosInjectionRequest {
+  enable_chaos: boolean
+}
+
+
 
 
 

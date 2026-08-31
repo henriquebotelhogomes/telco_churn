@@ -430,3 +430,27 @@ class TrainingJobItem(BaseModel):
 class TrainingJobsListResponse(BaseModel):
     total_jobs: int
     jobs: list[TrainingJobItem]
+
+
+# ==============================================================================
+# 📡 Schemas de Streaming & Event Generation (Marco M11)
+# ==============================================================================
+
+class StreamingStartRequest(BaseModel):
+    events_per_second: float = Field(
+        default=5.0, ge=0.5, le=500.0, description="Taxa de emissão contínua em eventos por segundo"
+    )
+
+
+class ChaosInjectionRequest(BaseModel):
+    enable_chaos: bool = Field(..., description="Ativar ou desativar injeção de anomalias/degradação massiva")
+
+
+class StreamingStatusResponse(BaseModel):
+    is_running: bool
+    events_per_second: float
+    chaos_mode: bool
+    buffer_size: int
+    total_generated: dict[str, int]
+    recent_events: list[dict[str, Any]]
+
