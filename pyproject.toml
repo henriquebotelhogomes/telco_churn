@@ -20,6 +20,7 @@ dependencies = [
     "aiosqlite>=0.20.0",
     "uvicorn>=0.27.1",
     "xgboost>=2.0.3",
+    "aiokafka>=0.14.0",
 ]
 
 [project.optional-dependencies]

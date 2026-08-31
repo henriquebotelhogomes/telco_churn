@@ -154,6 +154,8 @@ class StreamingEventGenerator:
 
     async def _run_loop(self) -> None:
         """Loop contínuo de geração assíncrona."""
+        from churn_prediction.streaming.producer import producer_router
+
         sample_customers = [f"CLI-{i:05d}" for i in range(1, 1001)]
         while self.is_running:
             delay = 1.0 / max(self.events_per_second, 0.1)
@@ -164,9 +166,7 @@ class StreamingEventGenerator:
             )[0]
 
             event = self.generate_single_event(cid, profile=profile)
-            evt_dict = event.model_dump()
-            self.recent_events.append(evt_dict)
-            self.total_generated[event.topic] = self.total_generated.get(event.topic, 0) + 1
+            await producer_router.publish_event(event)
 
             await asyncio.sleep(delay)
 
