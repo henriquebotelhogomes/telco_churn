@@ -1,4 +1,5 @@
 import { ContinuousTrainingPanel } from '@/components/mlops/ContinuousTrainingPanel'
+import { FeatureCatalogPanel } from '@/components/features/FeatureCatalogPanel'
 import { MlopsHealth } from '@/components/mlops/MlopsHealth'
 import { ModelRegistryLab } from '@/components/mlops/ModelRegistryLab'
 import { StreamingControlPanel } from '@/components/streaming/StreamingControlPanel'
@@ -9,6 +10,7 @@ export function MlopsPage() {
     <div className="space-y-8">
       <StreamingControlPanel />
       <StreamingWindowInspector />
+      <FeatureCatalogPanel />
       <ModelRegistryLab />
       <ContinuousTrainingPanel />
       <div className="border-t pt-6">

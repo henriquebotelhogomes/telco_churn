@@ -473,6 +473,65 @@ export interface AcknowledgeAlertResponse {
   message: string
 }
 
+// ---------------------------------------------------------------------------
+// M13 — Feature Store Unificada em Tempo Real (Feast + Redis Architecture)
+// ---------------------------------------------------------------------------
+
+export interface FeatureField {
+  name: string
+  dtype: 'INT' | 'FLOAT' | 'STRING' | 'BOOLEAN'
+  description: string
+  default_value?: unknown
+}
+
+export interface FeatureViewMetadata {
+  name: string
+  entity_key: string
+  source_type: 'BATCH' | 'STREAM'
+  ttl_seconds: number
+  description: string
+  features: FeatureField[]
+}
+
+export interface FeatureCatalogResponse {
+  total_views: number
+  feature_views: FeatureViewMetadata[]
+}
+
+export interface FeatureStoreStatsResponse {
+  total_feature_views: number
+  total_features_registered: number
+  online_entities_count: number
+  historical_log_records: number
+  last_materialization: string | null
+  redis_connected: boolean
+  online_store_type: string
+}
+
+export interface OnlineFeaturesRequest {
+  customer_ids: string[]
+  feature_refs?: string[]
+}
+
+export interface OnlineFeaturesResponse {
+  total_entities: number
+  features: Array<Record<string, unknown>>
+  retrieval_latency_ms: number
+}
+
+export interface MaterializeFeaturesRequest {
+  limit?: number
+}
+
+export interface MaterializeFeaturesResponse {
+  status: string
+  entities_materialized: number
+  total_online_entities: number
+  materialized_at: string
+  storage_backend: string
+}
+
+
 
 
 

@@ -106,6 +106,7 @@ nav:
   - Streaming & Tempo Real (Fase 2):
       - Gerador Contínuo de Eventos: streaming/event-generator.md
       - Processamento em Tempo Real (Flink): streaming/real-time-flink.md
+      - Feature Store Unificada (Feast): features/feature-store.md
   - GenAI & Negociação:
       - Copilot de Retenção: genai/copilot.md
   - Referência de API & Código:

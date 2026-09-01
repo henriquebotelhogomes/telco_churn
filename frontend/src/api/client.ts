@@ -198,6 +198,31 @@ export const api = {
       body: JSON.stringify({ acknowledged_by: acknowledgedBy }),
     })
   },
+
+  getFeatureCatalog(): Promise<import('@/types').FeatureCatalogResponse> {
+    return request('/api/v1/features/catalog')
+  },
+
+  getFeatureStoreStats(): Promise<import('@/types').FeatureStoreStatsResponse> {
+    return request('/api/v1/features/stats')
+  },
+
+  getOnlineFeatures(payload: import('@/types').OnlineFeaturesRequest): Promise<import('@/types').OnlineFeaturesResponse> {
+    return request('/api/v1/features/online', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+  },
+
+  materializeFeatures(payload?: import('@/types').MaterializeFeaturesRequest): Promise<import('@/types').MaterializeFeaturesResponse> {
+    return request('/api/v1/features/materialize', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload ?? {}),
+    })
+  },
 }
+
 
 

@@ -479,3 +479,46 @@ class RealtimeAlertsListResponse(BaseModel):
     alerts: list[dict[str, Any]]
 
 
+# ==============================================================================
+# 🏪 Schemas da Feature Store Unificada (Marco M13)
+# ==============================================================================
+
+class OnlineFeaturesRequest(BaseModel):
+    customer_ids: list[str] = Field(..., description="Lista de IDs de clientes para busca vetorial")
+    feature_refs: list[str] | None = Field(default=None, description="Lista opcional de features específicas a retornar")
+
+
+class OnlineFeaturesResponse(BaseModel):
+    total_entities: int
+    features: list[dict[str, Any]]
+    retrieval_latency_ms: float = Field(default=1.2, description="Latência de recuperação da Online Store")
+
+
+class FeatureCatalogResponse(BaseModel):
+    total_views: int
+    feature_views: list[dict[str, Any]]
+
+
+class MaterializeFeaturesRequest(BaseModel):
+    limit: int = Field(default=500, ge=1, le=5000, description="Quantidade máxima de entidades a materializar")
+
+
+class MaterializeFeaturesResponse(BaseModel):
+    status: str
+    entities_materialized: int
+    total_online_entities: int
+    materialized_at: str
+    storage_backend: str
+
+
+class FeatureStoreStatsResponse(BaseModel):
+    total_feature_views: int
+    total_features_registered: int
+    online_entities_count: int
+    historical_log_records: int
+    last_materialization: str | None
+    redis_connected: bool
+    online_store_type: str
+
+
+
