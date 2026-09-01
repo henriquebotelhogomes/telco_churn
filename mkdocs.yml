@@ -105,6 +105,7 @@ nav:
       - Data Drift & Prometheus: mlops/monitoring-drift.md
   - Streaming & Tempo Real (Fase 2):
       - Gerador Contínuo de Eventos: streaming/event-generator.md
+      - Processamento em Tempo Real (Flink): streaming/real-time-flink.md
   - GenAI & Negociação:
       - Copilot de Retenção: genai/copilot.md
   - Referência de API & Código:

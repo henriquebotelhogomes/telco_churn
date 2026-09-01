@@ -20,6 +20,8 @@ from churn_prediction.api import telemetry
 from churn_prediction.api.schemas import (
     AcaoRecomendada,
     AcaoSimulavel,
+    AcknowledgeAlertRequest,
+    AcknowledgeAlertResponse,
     AplicarPlaybookRequest,
     AplicarPlaybookResponse,
     AutoRetrainRequest,
@@ -41,6 +43,7 @@ from churn_prediction.api.schemas import (
     PrevisaoChurnResponse,
     PromoteModelRequest,
     PromoteModelResponse,
+    RealtimeAlertsListResponse,
     RegistrarOutcomeRequest,
     RegistrarOutcomeResponse,
     ResumoBatch,
@@ -50,6 +53,7 @@ from churn_prediction.api.schemas import (
     SimulacaoResultado,
     StreamingStartRequest,
     StreamingStatusResponse,
+    StreamingWindowsListResponse,
     TrainingJobItem,
     TrainingJobsListResponse,
 )
@@ -64,7 +68,7 @@ from churn_prediction.db.models import (
 from churn_prediction.db.session import get_db, init_db
 from churn_prediction.models import continuous_training, copilot, drift, reporting, simulator
 from churn_prediction.models.registry import model_manager
-from churn_prediction.streaming.generator import generator_instance
+from churn_prediction.streaming import consumer_worker, generator_instance, window_processor
 
 # Globais para baixa latencia (modelo + explainer em memoria)
 ml_models: dict[str, Any] = {}
@@ -105,7 +109,20 @@ async def lifespan(app: FastAPI):
             ml_models["churn_model"] = model
     except Exception as e:
         print(f"Erro ao carregar modelo: {e}")
+
+    try:
+        consumer_worker.start()
+    except Exception as e:
+        print(f"Aviso ao iniciar consumidor streaming: {e}")
+
     yield
+
+    try:
+        consumer_worker.stop()
+        generator_instance.stop()
+    except Exception:
+        pass
+
     ml_models.clear()
     ml_explainers.clear()
 
@@ -864,6 +881,63 @@ async def inject_streaming_chaos(payload: ChaosInjectionRequest) -> dict[str, An
     """Ativa ou desativa injeção de anomalias/degradação massiva de rede e billing."""
     generator_instance.chaos_mode = payload.enable_chaos
     return generator_instance.get_status()
+
+
+# ---------------------------------------------------------------------------
+# M12 — Stateful Sliding Windows & Alertas Reativos (Flink Engine)
+# ---------------------------------------------------------------------------
+
+
+@v1.get("/streaming/windows", response_model=StreamingWindowsListResponse)
+async def list_streaming_windows(limit: int = 50) -> dict[str, Any]:
+    """Retorna métricas agregadas em janelas deslizantes (15m, 1h, 24h, 7d)."""
+    windows = window_processor.get_all_windows(limit=limit)
+    return {
+        "total_customers_tracked": len(windows),
+        "windows": [w.model_dump() for w in windows],
+    }
+
+
+@v1.get("/streaming/windows/{customer_id}")
+async def get_customer_streaming_window(customer_id: str) -> dict[str, Any]:
+    """Retorna as métricas em janelas deslizantes de um cliente específico."""
+    metrics = window_processor.get_customer_windows(customer_id)
+    if metrics is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Cliente {customer_id} não encontrado nas janelas recentes de streaming",
+        )
+    return metrics.model_dump()
+
+
+@v1.get("/streaming/alerts", response_model=RealtimeAlertsListResponse)
+async def list_realtime_alerts(limit: int = 50) -> dict[str, Any]:
+    """Retorna a fila de alertas críticos de churn emitidos em tempo real pelo motor de streaming."""
+    alerts = window_processor.get_active_alerts(limit=limit)
+    return {
+        "total_alerts": len(alerts),
+        "alerts": [a.model_dump() for a in alerts],
+    }
+
+
+@v1.post(
+    "/streaming/alerts/{alert_id}/acknowledge",
+    response_model=AcknowledgeAlertResponse,
+)
+async def acknowledge_streaming_alert(
+    alert_id: str, payload: AcknowledgeAlertRequest
+) -> dict[str, Any]:
+    """Marca um alerta de risco em tempo real como tratado pelo operador."""
+    success = window_processor.acknowledge_alert(
+        alert_id, acknowledged_by=payload.acknowledged_by
+    )
+    if not success:
+        raise HTTPException(status_code=404, detail=f"Alerta {alert_id} não encontrado")
+    return {
+        "success": True,
+        "alert_id": alert_id,
+        "message": f"Alerta {alert_id} marcado como tratado por {payload.acknowledged_by}.",
+    }
 
 
 app.include_router(v1)

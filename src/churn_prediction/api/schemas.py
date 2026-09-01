@@ -454,3 +454,28 @@ class StreamingStatusResponse(BaseModel):
     total_generated: dict[str, int]
     recent_events: list[dict[str, Any]]
 
+
+# ==============================================================================
+# 🌊 Schemas de Processamento de Janelas e Alertas em Tempo Real (Marco M12)
+# ==============================================================================
+
+class AcknowledgeAlertRequest(BaseModel):
+    acknowledged_by: str = Field(default="operador", description="Nome/ID do operador ou sistema")
+
+
+class AcknowledgeAlertResponse(BaseModel):
+    success: bool
+    alert_id: str
+    message: str
+
+
+class StreamingWindowsListResponse(BaseModel):
+    total_customers_tracked: int
+    windows: list[dict[str, Any]]
+
+
+class RealtimeAlertsListResponse(BaseModel):
+    total_alerts: int
+    alerts: list[dict[str, Any]]
+
+

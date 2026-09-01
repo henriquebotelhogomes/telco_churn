@@ -411,7 +411,7 @@ export interface TrainingJobsListResponse {
 }
 
 // ---------------------------------------------------------------------------
-// M11 — Streaming & Continuous Event Generation (Fase 2)
+// M11 & M12 — Streaming, Sliding Windows & Alertas Reativos (Fase 2)
 // ---------------------------------------------------------------------------
 
 export interface StreamingStatusResponse {
@@ -430,6 +430,49 @@ export interface StreamingStartRequest {
 export interface ChaosInjectionRequest {
   enable_chaos: boolean
 }
+
+export interface CustomerWindowMetrics {
+  customer_id: string
+  tenant_id: string
+  avg_latency_15min: number
+  avg_packet_loss_15min: number
+  disconnect_count_1h: number
+  failed_payment_count_24h: number
+  negative_crm_count_7d: number
+  avg_sentiment_7d: number
+  realtime_instability_score: number
+  last_event_timestamp: string
+  total_events_processed: number
+}
+
+export interface RealtimeRiskAlert {
+  alert_id: string
+  customer_id: string
+  severity: 'CRITICA' | 'ALTA' | 'MEDIA'
+  trigger_reason: string
+  recommended_intervention: string
+  instability_score: number
+  created_at: string
+  acknowledged: boolean
+  acknowledged_by?: string | null
+}
+
+export interface StreamingWindowsListResponse {
+  total_customers_tracked: number
+  windows: CustomerWindowMetrics[]
+}
+
+export interface RealtimeAlertsListResponse {
+  total_alerts: number
+  alerts: RealtimeRiskAlert[]
+}
+
+export interface AcknowledgeAlertResponse {
+  success: boolean
+  alert_id: string
+  message: string
+}
+
 
 
 

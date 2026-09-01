@@ -178,5 +178,26 @@ export const api = {
       body: JSON.stringify(payload),
     })
   },
+
+  listStreamingWindows(limit: number = 50): Promise<import('@/types').StreamingWindowsListResponse> {
+    return request(`/api/v1/streaming/windows?limit=${limit}`)
+  },
+
+  getCustomerStreamingWindow(customerId: string): Promise<import('@/types').CustomerWindowMetrics> {
+    return request(`/api/v1/streaming/windows/${encodeURIComponent(customerId)}`)
+  },
+
+  listRealtimeAlerts(limit: number = 50): Promise<import('@/types').RealtimeAlertsListResponse> {
+    return request(`/api/v1/streaming/alerts?limit=${limit}`)
+  },
+
+  acknowledgeAlert(alertId: string, acknowledgedBy: string = 'operador'): Promise<import('@/types').AcknowledgeAlertResponse> {
+    return request(`/api/v1/streaming/alerts/${encodeURIComponent(alertId)}/acknowledge`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ acknowledged_by: acknowledgedBy }),
+    })
+  },
 }
+
 

@@ -2,11 +2,13 @@ import { ContinuousTrainingPanel } from '@/components/mlops/ContinuousTrainingPa
 import { MlopsHealth } from '@/components/mlops/MlopsHealth'
 import { ModelRegistryLab } from '@/components/mlops/ModelRegistryLab'
 import { StreamingControlPanel } from '@/components/streaming/StreamingControlPanel'
+import { StreamingWindowInspector } from '@/components/streaming/StreamingWindowInspector'
 
 export function MlopsPage() {
   return (
     <div className="space-y-8">
       <StreamingControlPanel />
+      <StreamingWindowInspector />
       <ModelRegistryLab />
       <ContinuousTrainingPanel />
       <div className="border-t pt-6">

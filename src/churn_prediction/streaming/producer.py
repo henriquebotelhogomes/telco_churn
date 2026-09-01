@@ -19,7 +19,7 @@ class StreamingProducerRouter:
     async def _get_producer(self) -> Any:
         if not self._initialized:
             try:
-                from aiokafka import AIOKafkaProducer  # type: ignore
+                from aiokafka import AIOKafkaProducer
 
                 producer = AIOKafkaProducer(
                     bootstrap_servers=self.bootstrap_servers,
@@ -50,6 +50,14 @@ class StreamingProducerRouter:
         generator_instance.total_generated[topic] = (
             generator_instance.total_generated.get(topic, 0) + 1
         )
+
+        # Atualiza o processador de janelas em tempo real
+        try:
+            from churn_prediction.streaming.window_processor import window_processor
+
+            window_processor.process_event(event_dict)
+        except Exception as e:
+            logger.debug(f"[STREAMING] Erro ao alimentar window_processor: {e}")
 
         # Tenta enviar para o Kafka/Redpanda
         producer = await self._get_producer()
