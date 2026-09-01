@@ -37,6 +37,8 @@ from churn_prediction.api.schemas import (
     FeatureStoreStatsResponse,
     GenerateCopilotScriptRequest,
     GenerateCopilotScriptResponse,
+    K8sClusterTopologyResponse,
+    K8sManifestValidationResponse,
     LinhaInvalida,
     MaterializeFeaturesRequest,
     MaterializeFeaturesResponse,
@@ -79,6 +81,7 @@ from churn_prediction.db.session import get_db, init_db
 from churn_prediction.features import feature_store
 from churn_prediction.models import continuous_training, copilot, drift, reporting, simulator
 from churn_prediction.models.registry import model_manager
+from churn_prediction.ops import k8s_validator
 from churn_prediction.streaming import consumer_worker, generator_instance, window_processor
 from churn_prediction.tenancy import (
     TenantContextMiddleware,
@@ -1032,6 +1035,23 @@ async def provision_tenant(payload: CreateTenantRequest) -> dict[str, Any]:
 async def get_tenant_summary(tenant_id: str) -> dict[str, Any]:
     """Retorna o resumo operacional e volumetria de um tenant específico."""
     return tenant_manager.get_tenant_summary(tenant_id)
+
+
+# ---------------------------------------------------------------------------
+# M15 — Kubernetes & KEDA Autoscaling (HPA / Event-Driven)
+# ---------------------------------------------------------------------------
+
+
+@v1.get("/ops/k8s/topology", response_model=K8sClusterTopologyResponse)
+async def get_k8s_cluster_topology() -> dict[str, Any]:
+    """Retorna a topologia declarativa do cluster K8s, pods, HPA e KEDA ScaledObjects."""
+    return k8s_validator.get_cluster_topology()
+
+
+@v1.get("/ops/k8s/validate", response_model=K8sManifestValidationResponse)
+async def validate_k8s_manifests() -> dict[str, Any]:
+    """Executa análise estática de conformidade e sintaxe em todos os manifestos K8s."""
+    return k8s_validator.validate_manifests()
 
 
 app.include_router(v1)

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: retainiq-stream-worker
+  namespace: retainiq-system
+  labels:
+    app.kubernetes.io/name: retainiq-stream-worker
+    app.kubernetes.io/component: stream-processor
+    app.kubernetes.io/part-of: retainiq-platform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: retainiq-stream-worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: retainiq-stream-worker
+        app.kubernetes.io/component: stream-processor
+    spec:
+      containers:
+        - name: stream-worker
+          image: ghcr.io/henriquebotelhogomes/telco_churn:v0.2.0
+          imagePullPolicy: IfNotPresent
+          command:
+            - "python"
+            - "-m"
+            - "churn_prediction.streaming.consumer"
+          envFrom:
+            - configMapRef:
+                name: retainiq-config
+            - secretRef:
+                name: retainiq-secrets
+          resources:
+            requests:
+              cpu: "150m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "768Mi"

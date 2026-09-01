@@ -1,0 +1,31 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: retainiq-stream-worker-scaledobject
+  namespace: retainiq-system
+  labels:
+    app.kubernetes.io/name: retainiq-stream-worker
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: retainiq-stream-worker
+  minReplicaCount: 1
+  maxReplicaCount: 20
+  pollingInterval: 15
+  cooldownPeriod: 60
+  triggers:
+    - type: kafka
+      metadata:
+        bootstrapServers: redpanda.retainiq-system.svc.cluster.local:9092
+        consumerGroup: retainiq-stream-window-processor
+        topic: telemetry.network.events
+        lagThreshold: "500"
+        offsetResetPolicy: latest
+    - type: kafka
+      metadata:
+        bootstrapServers: redpanda.retainiq-system.svc.cluster.local:9092
+        consumerGroup: retainiq-stream-window-processor
+        topic: billing.payment.events
+        lagThreshold: "500"
+        offsetResetPolicy: latest

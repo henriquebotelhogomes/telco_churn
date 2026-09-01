@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: retainiq-config
+  namespace: retainiq-system
+  labels:
+    app.kubernetes.io/name: retainiq
+data:
+  APP_ENV: "production"
+  LOG_LEVEL: "INFO"
+  KAFKA_BOOTSTRAP_SERVERS: "redpanda.retainiq-system.svc.cluster.local:9092"
+  REDIS_URL: "redis://redis.retainiq-system.svc.cluster.local:6379"
+  DATABASE_URL: "sqlite+aiosqlite:////data/retainiq.db"
+  MODEL_PATH: "models/churn_pipeline.joblib"
+  METRICS_ENABLED: "true"

@@ -571,6 +571,72 @@ export interface TenantSummaryResponse {
   data_isolation_level: string
 }
 
+// ---------------------------------------------------------------------------
+// M15 — Kubernetes & KEDA Autoscaling (HPA / Event-Driven)
+// ---------------------------------------------------------------------------
+
+export interface K8sHpaInfo {
+  min_replicas: number
+  max_replicas: number
+  target_cpu_utilization: string
+  current_cpu_utilization: string
+  target_memory_utilization: string
+  current_memory_utilization: string
+}
+
+export interface K8sKedaInfo {
+  min_replicas: number
+  max_replicas: number
+  lag_threshold: number
+  current_kafka_lag: number
+  topics_monitored: string[]
+  cooldown_period_seconds: number
+}
+
+export interface K8sDeploymentTopology {
+  name: string
+  component: string
+  replicas_current: number
+  replicas_desired: number
+  cpu_limit: string
+  memory_limit: string
+  autoscaling_mode: 'HPA' | 'KEDA_EVENT_DRIVEN' | string
+  hpa?: K8sHpaInfo
+  keda?: K8sKedaInfo
+}
+
+export interface K8sClusterTopologyResponse {
+  namespace: string
+  cluster_status: string
+  environment: string
+  deployments: K8sDeploymentTopology[]
+  ingress: {
+    name: string
+    class: string
+    host: string
+    tls_enabled: boolean
+  }
+  services: Array<{
+    name: string
+    type: string
+    port: number
+    target_port: number
+  }>
+}
+
+export interface K8sManifestValidationResponse {
+  valid: boolean
+  total_manifests: number
+  manifests: Array<{
+    filename: string
+    relative_path: string
+    valid: boolean
+    size_bytes: number
+  }>
+  errors: string[]
+}
+
+
 
 
 

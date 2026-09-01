@@ -561,5 +561,56 @@ class TenantSummaryResponse(BaseModel):
     data_isolation_level: str
 
 
+# ==============================================================================
+# ☸️ Schemas de Kubernetes & KEDA Autoscaling (Marco M15)
+# ==============================================================================
+
+class K8sHpaInfo(BaseModel):
+    min_replicas: int
+    max_replicas: int
+    target_cpu_utilization: str
+    current_cpu_utilization: str
+    target_memory_utilization: str
+    current_memory_utilization: str
+
+
+class K8sKedaInfo(BaseModel):
+    min_replicas: int
+    max_replicas: int
+    lag_threshold: int
+    current_kafka_lag: int
+    topics_monitored: list[str]
+    cooldown_period_seconds: int
+
+
+class K8sDeploymentTopology(BaseModel):
+    name: str
+    component: str
+    replicas_current: int
+    replicas_desired: int
+    cpu_limit: str
+    memory_limit: str
+    autoscaling_mode: str
+    hpa: K8sHpaInfo | None = None
+    keda: K8sKedaInfo | None = None
+
+
+class K8sClusterTopologyResponse(BaseModel):
+    namespace: str
+    cluster_status: str
+    environment: str
+    deployments: list[K8sDeploymentTopology]
+    ingress: dict[str, Any]
+    services: list[dict[str, Any]]
+
+
+class K8sManifestValidationResponse(BaseModel):
+    valid: bool
+    total_manifests: int
+    manifests: list[dict[str, Any]]
+    errors: list[str]
+
+
+
 
 

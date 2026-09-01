@@ -1,5 +1,6 @@
 import { ContinuousTrainingPanel } from '@/components/mlops/ContinuousTrainingPanel'
 import { FeatureCatalogPanel } from '@/components/features/FeatureCatalogPanel'
+import { K8sClusterTopology } from '@/components/ops/K8sClusterTopology'
 import { MlopsHealth } from '@/components/mlops/MlopsHealth'
 import { ModelRegistryLab } from '@/components/mlops/ModelRegistryLab'
 import { StreamingControlPanel } from '@/components/streaming/StreamingControlPanel'
@@ -13,6 +14,7 @@ export function MlopsPage() {
       <FeatureCatalogPanel />
       <ModelRegistryLab />
       <ContinuousTrainingPanel />
+      <K8sClusterTopology />
       <div className="border-t pt-6">
         <h2 className="text-lg font-bold mb-4">Observabilidade & Saúde Operacional</h2>
         <MlopsHealth />
@@ -20,6 +22,7 @@ export function MlopsPage() {
     </div>
   )
 }
+
 
 
 

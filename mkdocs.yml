@@ -95,6 +95,7 @@ nav:
       - Arquitetura do Sistema: architecture/overview.md
       - Escala Global (Tier-1): architecture/scaleup.md
       - Multi-Tenancy & RLS (B2B): architecture/multitenancy.md
+      - Kubernetes & KEDA Autoscaling: architecture/kubernetes-keda.md
       - Visão de Produto: architecture/product-vision.md
   - Ciência de Dados & ML:
       - Modelagem & Benchmarks: ml-data/modeling-benchmarks.md

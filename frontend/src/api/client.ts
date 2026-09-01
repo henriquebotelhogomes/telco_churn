@@ -251,7 +251,16 @@ export const api = {
   getTenantSummary(tenantId: string): Promise<import('@/types').TenantSummaryResponse> {
     return request(`/api/v1/tenants/${encodeURIComponent(tenantId)}/summary`)
   },
+
+  getK8sClusterTopology(): Promise<import('@/types').K8sClusterTopologyResponse> {
+    return request('/api/v1/ops/k8s/topology')
+  },
+
+  validateK8sManifests(): Promise<import('@/types').K8sManifestValidationResponse> {
+    return request('/api/v1/ops/k8s/validate')
+  },
 }
+
 
 
 
