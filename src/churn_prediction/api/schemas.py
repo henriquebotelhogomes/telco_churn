@@ -611,6 +611,51 @@ class K8sManifestValidationResponse(BaseModel):
     errors: list[str]
 
 
+# ==============================================================================
+# 🛡️ Schemas de AI Safety Guardrails & Ragas Evaluation (Marco M16)
+# ==============================================================================
+
+class GuardrailCheckRequest(BaseModel):
+    text: str = Field(..., description="Texto do prompt ou resposta para validação")
+    check_type: str = Field(default="INPUT", description="INPUT | OUTPUT")
+    max_discount_allowed: float = Field(default=35.0, description="Teto máximo de desconto em %")
+
+
+class GuardrailCheckResponse(BaseModel):
+    is_safe: bool
+    blocked: bool
+    sanitized_text: str
+    violations: list[str]
+    redacted_entities: list[str]
+    risk_level: str
+
+
+class RagasEvalRequest(BaseModel):
+    num_samples: int = Field(default=5, ge=1, le=25, description="Quantidade de casos de teste a avaliar")
+
+
+class RagasEvalResponse(BaseModel):
+    total_evaluated: int
+    mean_faithfulness: float
+    mean_answer_relevance: float
+    mean_safety_alignment: float
+    quality_gate_passed: bool
+    samples: list[dict[str, Any]]
+    evaluated_at: str
+
+
+class SafetySummaryMetricsResponse(BaseModel):
+    ragas_faithfulness_avg: float
+    ragas_answer_relevance_avg: float
+    ragas_safety_alignment_avg: float
+    prompt_injections_blocked_count: int
+    pii_entities_sanitized_count: int
+    hallucination_rate: float
+    quality_gate_status: str
+    evaluator_engine: str
+
+
+
 
 
 

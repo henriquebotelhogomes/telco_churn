@@ -3,6 +3,7 @@ import { FeatureCatalogPanel } from '@/components/features/FeatureCatalogPanel'
 import { K8sClusterTopology } from '@/components/ops/K8sClusterTopology'
 import { MlopsHealth } from '@/components/mlops/MlopsHealth'
 import { ModelRegistryLab } from '@/components/mlops/ModelRegistryLab'
+import { SafetyObservatoryPanel } from '@/components/safety/SafetyObservatoryPanel'
 import { StreamingControlPanel } from '@/components/streaming/StreamingControlPanel'
 import { StreamingWindowInspector } from '@/components/streaming/StreamingWindowInspector'
 
@@ -12,6 +13,7 @@ export function MlopsPage() {
       <StreamingControlPanel />
       <StreamingWindowInspector />
       <FeatureCatalogPanel />
+      <SafetyObservatoryPanel />
       <ModelRegistryLab />
       <ContinuousTrainingPanel />
       <K8sClusterTopology />
@@ -22,6 +24,7 @@ export function MlopsPage() {
     </div>
   )
 }
+
 
 
 

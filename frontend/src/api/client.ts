@@ -259,7 +259,28 @@ export const api = {
   validateK8sManifests(): Promise<import('@/types').K8sManifestValidationResponse> {
     return request('/api/v1/ops/k8s/validate')
   },
+
+  checkGuardrails(payload: import('@/types').GuardrailCheckRequest): Promise<import('@/types').GuardrailCheckResponse> {
+    return request('/api/v1/safety/guardrails/check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+  },
+
+  evaluateWithRagas(payload?: import('@/types').RagasEvalRequest): Promise<import('@/types').RagasEvalResponse> {
+    return request('/api/v1/safety/eval/ragas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload ?? { num_samples: 4 }),
+    })
+  },
+
+  getSafetyMetrics(): Promise<import('@/types').SafetySummaryMetricsResponse> {
+    return request('/api/v1/safety/metrics')
+  },
 }
+
 
 
 

@@ -111,6 +111,7 @@ nav:
       - Feature Store Unificada (Feast): features/feature-store.md
   - GenAI & Negociação:
       - Copilot de Retenção: genai/copilot.md
+      - AI Safety & Avaliação Ragas: ai-safety/ragas-guardrails.md
   - Referência de API & Código:
       - Endpoints REST (FastAPI): api/endpoints.md
       - Módulos Python (Docstrings):

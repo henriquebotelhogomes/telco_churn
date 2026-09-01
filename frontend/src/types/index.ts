@@ -636,6 +636,63 @@ export interface K8sManifestValidationResponse {
   errors: string[]
 }
 
+// ---------------------------------------------------------------------------
+// M16 — AI Safety Guardrails & Avaliação Contínua com Ragas (Fase 2)
+// ---------------------------------------------------------------------------
+
+export interface GuardrailCheckRequest {
+  text: string
+  check_type?: 'INPUT' | 'OUTPUT'
+  max_discount_allowed?: number
+}
+
+export interface GuardrailCheckResponse {
+  is_safe: boolean
+  blocked: boolean
+  sanitized_text: string
+  violations: string[]
+  redacted_entities: string[]
+  risk_level: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
+}
+
+export interface RagasEvalRequest {
+  num_samples?: number
+}
+
+export interface RagasEvalResponse {
+  total_evaluated: number
+  mean_faithfulness: number
+  mean_answer_relevance: number
+  mean_safety_alignment: number
+  quality_gate_passed: boolean
+  samples: Array<{
+    sample_id: string
+    context: string
+    generated_script: string
+    metrics: {
+      faithfulness: number
+      answer_relevance: number
+      safety_alignment: number
+      hallucination_score: number
+      passed_quality_gate: boolean
+      evaluation_notes: string[]
+    }
+  }>
+  evaluated_at: string
+}
+
+export interface SafetySummaryMetricsResponse {
+  ragas_faithfulness_avg: number
+  ragas_answer_relevance_avg: number
+  ragas_safety_alignment_avg: number
+  prompt_injections_blocked_count: number
+  pii_entities_sanitized_count: number
+  hallucination_rate: number
+  quality_gate_status: string
+  evaluator_engine: string
+}
+
+
 
 
 

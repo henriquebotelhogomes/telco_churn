@@ -37,6 +37,8 @@ from churn_prediction.api.schemas import (
     FeatureStoreStatsResponse,
     GenerateCopilotScriptRequest,
     GenerateCopilotScriptResponse,
+    GuardrailCheckRequest,
+    GuardrailCheckResponse,
     K8sClusterTopologyResponse,
     K8sManifestValidationResponse,
     LinhaInvalida,
@@ -52,10 +54,13 @@ from churn_prediction.api.schemas import (
     PrevisaoChurnResponse,
     PromoteModelRequest,
     PromoteModelResponse,
+    RagasEvalRequest,
+    RagasEvalResponse,
     RealtimeAlertsListResponse,
     RegistrarOutcomeRequest,
     RegistrarOutcomeResponse,
     ResumoBatch,
+    SafetySummaryMetricsResponse,
     ShadowTelemetryResponse,
     SimulacaoRequest,
     SimulacaoResponse,
@@ -82,6 +87,7 @@ from churn_prediction.features import feature_store
 from churn_prediction.models import continuous_training, copilot, drift, reporting, simulator
 from churn_prediction.models.registry import model_manager
 from churn_prediction.ops import k8s_validator
+from churn_prediction.safety import ragas_evaluator, safety_guardrails
 from churn_prediction.streaming import consumer_worker, generator_instance, window_processor
 from churn_prediction.tenancy import (
     TenantContextMiddleware,
@@ -1052,6 +1058,35 @@ async def get_k8s_cluster_topology() -> dict[str, Any]:
 async def validate_k8s_manifests() -> dict[str, Any]:
     """Executa análise estática de conformidade e sintaxe em todos os manifestos K8s."""
     return k8s_validator.validate_manifests()
+
+
+# ---------------------------------------------------------------------------
+# M16 — AI Safety Guardrails & Avaliação Contínua com Ragas (LLM-as-a-Judge)
+# ---------------------------------------------------------------------------
+
+
+@v1.post("/safety/guardrails/check", response_model=GuardrailCheckResponse)
+async def check_safety_guardrails(payload: GuardrailCheckRequest) -> dict[str, Any]:
+    """Verifica e sanitiza texto contra Prompt Injection, PII e violações de política."""
+    if payload.check_type.upper() == "INPUT":
+        result = safety_guardrails.check_input(payload.text)
+    else:
+        result = safety_guardrails.check_output(
+            payload.text, max_discount=payload.max_discount_allowed
+        )
+    return result.model_dump()
+
+
+@v1.post("/safety/eval/ragas", response_model=RagasEvalResponse)
+async def evaluate_copilot_with_ragas(payload: RagasEvalRequest) -> dict[str, Any]:
+    """Executa avaliação contínua do Copilot com métricas Ragas e LLM-as-a-Judge."""
+    return ragas_evaluator.run_synthetic_evaluation_suite(num_samples=payload.num_samples)
+
+
+@v1.get("/safety/metrics", response_model=SafetySummaryMetricsResponse)
+async def get_safety_summary_metrics() -> dict[str, Any]:
+    """Retorna o sumário consolidado de métricas de AI Safety, bloqueios e Ragas."""
+    return ragas_evaluator.get_safety_summary_metrics()
 
 
 app.include_router(v1)
