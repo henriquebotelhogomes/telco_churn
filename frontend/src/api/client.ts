@@ -14,6 +14,7 @@ import type {
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? ''
 
 const API_KEY_STORAGE = 'retainiq_api_key'
+const TENANT_STORAGE = 'retainiq_tenant_id'
 
 export function getApiKey(): string | null {
   return localStorage.getItem(API_KEY_STORAGE)
@@ -22,6 +23,15 @@ export function getApiKey(): string | null {
 export function setApiKey(chave: string): void {
   if (chave.trim() === '') localStorage.removeItem(API_KEY_STORAGE)
   else localStorage.setItem(API_KEY_STORAGE, chave.trim())
+}
+
+export function getTenantId(): string {
+  return localStorage.getItem(TENANT_STORAGE) || 'tenant-default'
+}
+
+export function setTenantId(tenantId: string): void {
+  if (tenantId.trim() === '') localStorage.setItem(TENANT_STORAGE, 'tenant-default')
+  else localStorage.setItem(TENANT_STORAGE, tenantId.trim())
 }
 
 export class ApiError extends Error {
@@ -38,6 +48,9 @@ async function request<T>(caminho: string, init?: RequestInit): Promise<T> {
   const headers = new Headers(init?.headers)
   const chave = getApiKey()
   if (chave) headers.set('X-API-Key', chave)
+
+  // Injeta automaticamente o Tenant ID ativo
+  headers.set('X-Tenant-ID', getTenantId())
 
   const resposta = await fetch(`${API_BASE}${caminho}`, { ...init, headers })
   if (!resposta.ok) {
@@ -222,7 +235,24 @@ export const api = {
       body: JSON.stringify(payload ?? {}),
     })
   },
+
+  listTenants(): Promise<import('@/types').TenantListResponse> {
+    return request('/api/v1/tenants')
+  },
+
+  provisionTenant(payload: import('@/types').CreateTenantRequest): Promise<import('@/types').TenantItem> {
+    return request('/api/v1/tenants', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+  },
+
+  getTenantSummary(tenantId: string): Promise<import('@/types').TenantSummaryResponse> {
+    return request(`/api/v1/tenants/${encodeURIComponent(tenantId)}/summary`)
+  },
 }
+
 
 
 

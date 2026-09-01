@@ -27,6 +27,7 @@ from churn_prediction.api.schemas import (
     AutoRetrainRequest,
     AutoRetrainResponse,
     ChaosInjectionRequest,
+    CreateTenantRequest,
     DistribuicaoRisco,
     EficienciaPlaybook,
     EficienciaRetencaoResponse,
@@ -60,6 +61,9 @@ from churn_prediction.api.schemas import (
     StreamingStartRequest,
     StreamingStatusResponse,
     StreamingWindowsListResponse,
+    TenantItem,
+    TenantListResponse,
+    TenantSummaryResponse,
     TrainingJobItem,
     TrainingJobsListResponse,
 )
@@ -76,6 +80,10 @@ from churn_prediction.features import feature_store
 from churn_prediction.models import continuous_training, copilot, drift, reporting, simulator
 from churn_prediction.models.registry import model_manager
 from churn_prediction.streaming import consumer_worker, generator_instance, window_processor
+from churn_prediction.tenancy import (
+    TenantContextMiddleware,
+    tenant_manager,
+)
 
 # Globais para baixa latencia (modelo + explainer em memoria)
 ml_models: dict[str, Any] = {}
@@ -149,6 +157,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Multi-Tenancy: isolamento estrito de contexto por requisição (X-Tenant-ID)
+app.add_middleware(TenantContextMiddleware)
 
 # Prometheus: métricas http_* + contadores de negócio em GET /metrics
 Instrumentator().instrument(app).expose(app, endpoint="/metrics", include_in_schema=False)
@@ -987,6 +998,40 @@ async def trigger_feature_materialization(payload: MaterializeFeaturesRequest) -
     """Dispara materialização da Offline Store para a Online Store."""
     result = feature_store.materialize(limit=payload.limit)
     return result
+
+
+# ---------------------------------------------------------------------------
+# M14 — Multi-Tenancy & Row-Level Security (RLS)
+# ---------------------------------------------------------------------------
+
+
+@v1.get("/tenants", response_model=TenantListResponse)
+async def list_tenants() -> dict[str, Any]:
+    """Retorna a lista de operadoras/tenants cadastradas na plataforma."""
+    tenants = tenant_manager.list_tenants()
+    return {
+        "total_tenants": len(tenants),
+        "tenants": [t.model_dump() for t in tenants],
+    }
+
+
+@v1.post("/tenants", response_model=TenantItem)
+async def provision_tenant(payload: CreateTenantRequest) -> dict[str, Any]:
+    """Provisiona uma nova operadora com limites de taxa e isolamento RLS."""
+    tenant = tenant_manager.create_tenant(
+        tenant_id=payload.tenant_id,
+        name=payload.name,
+        plan=payload.plan,
+        rate_limit_rps=payload.rate_limit_rps,
+        custom_model_enabled=payload.custom_model_enabled,
+    )
+    return tenant.model_dump()
+
+
+@v1.get("/tenants/{tenant_id}/summary", response_model=TenantSummaryResponse)
+async def get_tenant_summary(tenant_id: str) -> dict[str, Any]:
+    """Retorna o resumo operacional e volumetria de um tenant específico."""
+    return tenant_manager.get_tenant_summary(tenant_id)
 
 
 app.include_router(v1)

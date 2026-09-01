@@ -4,6 +4,7 @@ import { Activity, LayoutDashboard, ShieldCheck, Users } from 'lucide-react'
 import { CustomersPage } from '@/pages/CustomersPage'
 import { DashboardPage } from '@/pages/DashboardPage'
 import { MlopsPage } from '@/pages/MlopsPage'
+import { TenantSwitcher } from '@/components/tenancy/TenantSwitcher'
 
 const NAV = [
   { para: '/', rotulo: 'Dashboard Executivo', icone: LayoutDashboard, fim: true },
@@ -43,9 +44,12 @@ export default function App() {
         <div className="flex min-w-0 flex-1 flex-col">
           <header className="flex h-14 items-center justify-between border-b px-4 md:px-6">
             <h1 className="text-sm font-medium text-muted-foreground">
-              Inteligência de Retenção · Telco (vertical de referência)
+              Inteligência de Retenção · Multi-Tenant (B2B SaaS)
             </h1>
-            <span className="text-xs text-muted-foreground">/api/v1</span>
+            <div className="flex items-center gap-3">
+              <TenantSwitcher />
+              <span className="text-xs text-muted-foreground font-mono hidden sm:inline">/api/v1</span>
+            </div>
           </header>
           <main className="flex-1 p-4 md:p-6">
             <Routes>

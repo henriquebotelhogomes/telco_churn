@@ -521,4 +521,45 @@ class FeatureStoreStatsResponse(BaseModel):
     online_store_type: str
 
 
+# ==============================================================================
+# 🏢 Schemas de Multi-Tenancy & Row-Level Security (Marco M14)
+# ==============================================================================
+
+class TenantItem(BaseModel):
+    tenant_id: str
+    name: str
+    plan: str
+    rate_limit_rps: int
+    status: str
+    created_at: str
+    custom_model_enabled: bool
+
+
+class TenantListResponse(BaseModel):
+    total_tenants: int
+    tenants: list[TenantItem]
+
+
+class CreateTenantRequest(BaseModel):
+    tenant_id: str = Field(..., description="Identificador único (ex: tenant-vivo)")
+    name: str = Field(..., description="Nome corporativo da operadora")
+    plan: str = Field(default="ENTERPRISE", description="STANDARD | ENTERPRISE | DEDICATED")
+    rate_limit_rps: int = Field(default=200, ge=10, le=5000)
+    custom_model_enabled: bool = Field(default=False)
+
+
+class TenantSummaryResponse(BaseModel):
+    tenant_id: str
+    name: str
+    plan: str
+    status: str
+    rate_limit_rps: int
+    custom_model_enabled: bool
+    active_customers_count: int
+    high_risk_customers_count: int
+    monthly_retention_roi_brl: float
+    data_isolation_level: str
+
+
+
 

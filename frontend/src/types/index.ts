@@ -531,6 +531,47 @@ export interface MaterializeFeaturesResponse {
   storage_backend: string
 }
 
+// ---------------------------------------------------------------------------
+// M14 — Multi-Tenancy & Row-Level Security (RLS)
+// ---------------------------------------------------------------------------
+
+export interface TenantItem {
+  tenant_id: string
+  name: string
+  plan: string
+  rate_limit_rps: number
+  status: string
+  created_at: string
+  custom_model_enabled: boolean
+}
+
+export interface TenantListResponse {
+  total_tenants: number
+  tenants: TenantItem[]
+}
+
+export interface CreateTenantRequest {
+  tenant_id: string
+  name: string
+  plan?: string
+  rate_limit_rps?: number
+  custom_model_enabled?: boolean
+}
+
+export interface TenantSummaryResponse {
+  tenant_id: string
+  name: string
+  plan: string
+  status: string
+  rate_limit_rps: number
+  custom_model_enabled: boolean
+  active_customers_count: number
+  high_risk_customers_count: number
+  monthly_retention_roi_brl: number
+  data_isolation_level: string
+}
+
+
 
 
 
