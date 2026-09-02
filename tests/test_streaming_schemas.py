@@ -1,14 +1,16 @@
-﻿import pytest
+import pytest
 from pydantic import ValidationError
+
 from churn_prediction.streaming.schemas import (
-    NetworkTelemetryEvent,
-    NetworkEventType,
-    BillingPaymentEvent,
     BillingEventType,
-    CrmInteractionEvent,
+    BillingPaymentEvent,
     CrmChannel,
+    CrmInteractionEvent,
     CrmReason,
+    NetworkEventType,
+    NetworkTelemetryEvent,
 )
+
 
 def test_network_telemetry_event_valid():
     evt = NetworkTelemetryEvent(
@@ -27,6 +29,7 @@ def test_network_telemetry_event_valid():
     assert evt.tenant_id == "telecom_sp"
     assert evt.latency_ms == 185.4
 
+
 def test_network_telemetry_event_invalid_packet_loss():
     with pytest.raises(ValidationError):
         NetworkTelemetryEvent(
@@ -38,6 +41,7 @@ def test_network_telemetry_event_invalid_packet_loss():
             latency_ms=50.0,
             packet_loss_pct=150.0,  # Max 100.0%
         )
+
 
 def test_billing_payment_event_valid():
     evt = BillingPaymentEvent(
@@ -53,6 +57,7 @@ def test_billing_payment_event_valid():
     assert evt.topic == "billing.payment.events"
     assert evt.invoice_amount == 4250.0
 
+
 def test_crm_interaction_event_valid():
     evt = CrmInteractionEvent(
         event_id="evt_crm_001",
@@ -65,6 +70,7 @@ def test_crm_interaction_event_valid():
     )
     assert evt.topic == "crm.interaction.events"
     assert evt.sentiment_score == -0.85
+
 
 def test_crm_interaction_event_invalid_sentiment():
     with pytest.raises(ValidationError):
