@@ -53,9 +53,43 @@ class StreamingKafkaConsumerWorker:
                         for msg in messages:
                             try:
                                 payload = json.loads(msg.value.decode("utf-8"))
-                                window_processor.process_event(payload)
+                                alert = window_processor.process_event(payload)
+
+                                customer_id = payload.get("customer_id")
+                                tenant_id = payload.get("tenant_id", "tenant-default")
+
+                                # 1. Re-avalia o risco em tempo real
+                                if customer_id:
+                                    from churn_prediction.features.live_scorer import live_scorer
+                                    live_scorer.re_score_customer(customer_id, tenant_id)
+
+                                # 2. Transmite o evento bruto para o SSE
+                                from churn_prediction.streaming.broadcaster import (
+                                    LiveEventMessage,
+                                    sse_broadcaster,
+                                )
+
+                                sse_broadcaster.publish(
+                                    LiveEventMessage(
+                                        event_type=payload.get("event_type", "TELEMETRY"),
+                                        tenant_id=tenant_id,
+                                        customer_id=customer_id,
+                                        data=payload,
+                                    )
+                                )
+
+                                # 3. Se um alerta reativo foi disparado, transmite imediatamente
+                                if alert:
+                                    sse_broadcaster.publish(
+                                        LiveEventMessage(
+                                            event_type="ALERT",
+                                            tenant_id=alert.tenant_id,
+                                            customer_id=alert.customer_id,
+                                            data=alert.model_dump(),
+                                        )
+                                    )
                             except Exception as e:
-                                logger.debug(f"[STREAMING CONSUMER] Erro ao deserializar evento: {e}")
+                                logger.debug(f"[STREAMING CONSUMER] Erro ao processar evento: {e}")
                 except asyncio.CancelledError:
                     break
                 except Exception as e:

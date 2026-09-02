@@ -188,6 +188,86 @@ class StreamingEventGenerator:
         if self._task and not self._task.done():
             self._task.cancel()
 
+    def inject_chaos(
+        self,
+        target_customer_id: str | None = None,
+        chaos_type: str = "NETWORK_OUTAGE",
+        tenant_id: str = "tenant-default",
+    ) -> list[dict[str, Any]]:
+        """Injeta eventos anômalos deliberados para simulação em tempo real."""
+        self.chaos_mode = True
+        cids = [target_customer_id] if target_customer_id else ["5575-GNVDE", "7590-VHVEG", "3668-QPYBK"]
+        injected = []
+
+        from churn_prediction.features.live_scorer import live_scorer
+        from churn_prediction.streaming.broadcaster import LiveEventMessage, sse_broadcaster
+        from churn_prediction.streaming.window_processor import window_processor
+
+        for cid in cids:
+            if chaos_type == "NETWORK_OUTAGE":
+                for _ in range(3):
+                    evt = NetworkTelemetryEvent(
+                        event_id=f"chaos_net_{uuid.uuid4().hex[:8]}",
+                        customer_id=cid,
+                        tenant_id=tenant_id,
+                        timestamp=datetime.now(UTC).isoformat(),
+                        event_type=NetworkEventType.FIBER_DISCONNECT,
+                        download_speed_mbps=1.2,
+                        upload_speed_mbps=0.2,
+                        latency_ms=280.0,
+                        packet_loss_pct=22.5,
+                        disconnect_count_last_hour=4,
+                    )
+                    payload = evt.model_dump()
+                    window_processor.process_event(payload)
+                    injected.append(payload)
+            elif chaos_type == "PAYMENT_FAILURE":
+                for _ in range(2):
+                    evt = BillingPaymentEvent(
+                        event_id=f"chaos_pay_{uuid.uuid4().hex[:8]}",
+                        customer_id=cid,
+                        tenant_id=tenant_id,
+                        timestamp=datetime.now(UTC).isoformat(),
+                        event_type=BillingEventType.PAYMENT_FAILED,
+                        invoice_amount=149.90,
+                        payment_method="PIX",
+                        error_code="PIX_GATEWAY_TIMEOUT",
+                        retry_count=3,
+                    )
+                    payload = evt.model_dump()
+                    window_processor.process_event(payload)
+                    injected.append(payload)
+            else:
+                for _ in range(2):
+                    evt = CrmInteractionEvent(
+                        event_id=f"chaos_crm_{uuid.uuid4().hex[:8]}",
+                        customer_id=cid,
+                        tenant_id=tenant_id,
+                        timestamp=datetime.now(UTC).isoformat(),
+                        channel=CrmChannel.WHATSAPP,
+                        reason=CrmReason.LENTIDAO_INTERNET,
+                        sentiment_score=-0.85,
+                        duration_seconds=420,
+                    )
+                    payload = evt.model_dump()
+                    window_processor.process_event(payload)
+                    injected.append(payload)
+
+            # Re-avalia o score dinâmico do cliente
+            live_scorer.re_score_customer(cid, tenant_id)
+
+            # Transmite para o SSE
+            sse_broadcaster.publish(
+                LiveEventMessage(
+                    event_type="TELEMETRY" if chaos_type == "NETWORK_OUTAGE" else "PAYMENT" if chaos_type == "PAYMENT_FAILURE" else "CRM",
+                    tenant_id=tenant_id,
+                    customer_id=cid,
+                    data={"chaos_type": chaos_type, "status": "ANOMALY_INJECTED"},
+                )
+            )
+
+        return injected
+
     def get_status(self) -> dict[str, Any]:
         """Retorna as métricas de telemetria e o estado do gerador."""
         return {
@@ -198,6 +278,7 @@ class StreamingEventGenerator:
             "total_generated": self.total_generated,
             "recent_events": list(self.recent_events)[-10:],
         }
+
 
 
 # Instância Singleton

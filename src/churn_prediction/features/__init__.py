@@ -10,6 +10,11 @@ from churn_prediction.features.definitions import (
     FeatureType,
     FeatureViewMetadata,
 )
+from churn_prediction.features.live_scorer import (
+    LiveCustomerScoreUpdate,
+    LiveScorerEngine,
+    live_scorer,
+)
 from churn_prediction.features.store import (
     UnifiedFeatureStore,
     feature_store,
@@ -24,6 +29,10 @@ __all__ = [
     "FeatureSourceType",
     "FeatureType",
     "FeatureViewMetadata",
+    "LiveCustomerScoreUpdate",
+    "LiveScorerEngine",
     "UnifiedFeatureStore",
     "feature_store",
+    "live_scorer",
 ]
+

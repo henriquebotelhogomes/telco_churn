@@ -968,6 +968,73 @@ async def acknowledge_streaming_alert(
 
 
 # ---------------------------------------------------------------------------
+# Fase 3 — Live Streaming Broadcast Hub (SSE) & Real-Time Dynamic Re-Scorer
+# ---------------------------------------------------------------------------
+
+
+@v1.get("/streaming/live-feed")
+async def stream_live_feed(
+    request: Request,
+    tenant_id: str = "tenant-default",
+):
+    """Canal Server-Sent Events (SSE) transmitindo telemetria, re-scoring e alertas em tempo real."""
+    from fastapi.responses import StreamingResponse
+
+    from churn_prediction.streaming.broadcaster import sse_broadcaster
+
+    return StreamingResponse(
+        sse_broadcaster.event_generator(request, tenant_id=tenant_id),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
+
+
+@v1.get("/streaming/live-scores")
+async def get_live_scores(tenant_id: str = "tenant-default", limit: int = 20) -> dict[str, Any]:
+    """Retorna os clientes com maior risco dinâmico atualizado pela Feature Store Online."""
+    from churn_prediction.features.live_scorer import live_scorer
+
+    scores = live_scorer.get_top_live_risk_customers(tenant_id=tenant_id, limit=limit)
+    return {
+        "total_customers": len(scores),
+        "scores": [s.model_dump() for s in scores],
+    }
+
+
+@v1.post("/streaming/chaos/scenarios/{scenario_id}")
+async def trigger_chaos_scenario(scenario_id: str) -> dict[str, Any]:
+    """Dispara cenários pré-configurados de falha corporativa (fiber_cut, payment_gateway_down, crm_crisis)."""
+    if scenario_id == "fiber_cut":
+        generator_instance.inject_chaos(target_customer_id="5575-GNVDE", chaos_type="NETWORK_OUTAGE")
+        generator_instance.inject_chaos(target_customer_id="7590-VHVEG", chaos_type="NETWORK_OUTAGE")
+        generator_instance.inject_chaos(target_customer_id="3668-QPYBK", chaos_type="NETWORK_OUTAGE")
+        name = "Rompimento de Fibra Ótica Regional (SP)"
+    elif scenario_id == "payment_gateway_down":
+        generator_instance.inject_chaos(target_customer_id="9237-HQITU", chaos_type="PAYMENT_FAILURE")
+        generator_instance.inject_chaos(target_customer_id="9305-CDSKC", chaos_type="PAYMENT_FAILURE")
+        name = "Instabilidade no Gateway de Pagamento PIX"
+    elif scenario_id == "crm_crisis":
+        generator_instance.inject_chaos(target_customer_id="5575-GNVDE", chaos_type="CRM_ESCALATION")
+        generator_instance.inject_chaos(target_customer_id="7590-VHVEG", chaos_type="CRM_ESCALATION")
+        name = "Crise de Fila no Atendimento e Reclamações no WhatsApp"
+    else:
+        generator_instance.inject_chaos()
+        name = "Instabilidade Geral"
+
+    return {
+        "status": "INJECTED",
+        "scenario_id": scenario_id,
+        "scenario_name": name,
+        "events_injected": 15,
+    }
+
+
+
+# ---------------------------------------------------------------------------
 # M13 — Feature Store Unificada em Tempo Real (Feast + Redis Architecture)
 # ---------------------------------------------------------------------------
 

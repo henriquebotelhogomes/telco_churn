@@ -4,6 +4,7 @@ import { juntarLinhas } from '@/api/queries'
 import { AnalysisGate } from '@/components/dashboard/AnalysisGate'
 import { KpiCards } from '@/components/dashboard/KpiCards'
 import { RiskCharts } from '@/components/dashboard/RiskCharts'
+import { LiveEventTicker } from '@/components/streaming/LiveEventTicker'
 import { Button } from '@/components/ui/button'
 
 export function DashboardPage() {
@@ -33,6 +34,9 @@ export function DashboardPage() {
               <Download size={12} className="opacity-60" />
             </Button>
           </div>
+
+          {/* Live Ingestion & Chaos Studio Ticker */}
+          <LiveEventTicker />
 
           <KpiCards resumo={resultado.resposta.resumo} />
           <RiskCharts

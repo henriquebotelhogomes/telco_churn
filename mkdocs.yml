@@ -93,6 +93,7 @@ nav:
       - Como Iniciar: getting-started.md
   - Arquitetura & Engenharia:
       - Arquitetura do Sistema: architecture/overview.md
+      - PRD Live Streaming (Fase 3): PRD_LIVE_STREAMING_REALTIME.md
       - Escala Global (Tier-1): architecture/scaleup.md
       - Multi-Tenancy & RLS (B2B): architecture/multitenancy.md
       - Kubernetes & KEDA Autoscaling: architecture/kubernetes-keda.md
@@ -105,7 +106,8 @@ nav:
       - Continuous Training & Quality Gate: mlops/continuous-training.md
       - Champion/Challenger & Shadow Scoring: mlops/shadow-scoring.md
       - Data Drift & Prometheus: mlops/monitoring-drift.md
-  - Streaming & Tempo Real (Fase 2):
+  - Streaming & Tempo Real (Fases 2 e 3):
+      - Live Streaming & Cockpit Reativo: streaming/live-streaming-architecture.md
       - Gerador Contínuo de Eventos: streaming/event-generator.md
       - Processamento em Tempo Real (Flink): streaming/real-time-flink.md
       - Feature Store Unificada (Feast): features/feature-store.md

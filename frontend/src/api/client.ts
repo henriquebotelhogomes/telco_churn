@@ -279,6 +279,16 @@ export const api = {
   getSafetyMetrics(): Promise<import('@/types').SafetySummaryMetricsResponse> {
     return request('/api/v1/safety/metrics')
   },
+
+  triggerChaosScenario(scenarioId: string): Promise<Record<string, unknown>> {
+    return request(`/api/v1/streaming/chaos/scenarios/${encodeURIComponent(scenarioId)}`, {
+      method: 'POST',
+    })
+  },
+
+  getLiveScores(tenantId: string = 'tenant-default'): Promise<{ total_customers: number; scores: import('@/hooks/useLiveStream').LiveCustomerScore[] }> {
+    return request(`/api/v1/streaming/live-scores?tenant_id=${encodeURIComponent(tenantId)}`)
+  },
 }
 
 
