@@ -188,7 +188,7 @@ Para eliminar qualquer ambiguidade de integração entre Produtor, Motor de Stre
 
 - [x] **Tarefa 1.1: Validação do Broker Redpanda & Tópicos Kafka**
   - [x] *Micro-tarefa 1.1.1:* Ajustar `docker-compose.streaming.yml` garantindo inicialização de Redpanda e Redis com healthchecks automáticos.
-  - [ ] *Micro-tarefa 1.1.2:* Criar script de provisionamento automático de tópicos: `telemetry.network.events`, `billing.payment.events`, `crm.interaction.events` com partição única para dev local.
+  - [x] *Micro-tarefa 1.1.2:* Criar script de provisionamento automático de tópicos: `telemetry.network.events`, `billing.payment.events`, `crm.interaction.events` com partição única para dev local.
   - 🎯 **Checkpoint 1.1:** Subir containers com `docker compose -f docker-compose.streaming.yml up -d` e verificar tópicos no console Redpanda em `http://localhost:8085`.
 
 - [x] **Tarefa 1.2: Implementar o Gerador de Eventos e Simulador de Caos**
