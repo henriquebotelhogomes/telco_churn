@@ -258,10 +258,10 @@ Para eliminar qualquer ambiguidade de integração entre Produtor, Motor de Stre
 ### 🟢 ÉPICO 5: Suíte de Testes Automatizados & Qualidade de Código
 **Objetivo:** Garantir robustez industrial, cobertura $> 85\%$ e validação ponta a ponta da pipeline de streaming.
 
-- [ ] **Tarefa 5.1: Testes Unitários e de Integração da Pipeline**
+- [x] **Tarefa 5.1: Testes Unitários e de Integração da Pipeline**
   - [x] *Micro-tarefa 5.1.1:* Criar `tests/test_streaming_schemas.py` validando integridade e coerência de validação dos contratos Pydantic.
-  - [ ] *Micro-tarefa 5.1.2:* Criar `tests/test_live_scorer.py` validando cálculo determinístico de deltas de risco e limiares de alerta.
-  - [ ] *Micro-tarefa 5.1.3:* Criar `tests/test_sse_broadcaster.py` validando enfileiramento e isolamento de mensagens por `tenant_id`.
+  - [x] *Micro-tarefa 5.1.2:* Criar `tests/test_live_scorer.py` validando cálculo determinístico de deltas de risco e limiares de alerta.
+  - [x] *Micro-tarefa 5.1.3:* Criar `tests/test_sse_broadcaster.py` validando enfileiramento e isolamento de mensagens por `tenant_id`.
   - 🎯 **Checkpoint 5.1:** Executar `pytest tests/test_streaming*.py` e obter 100% de sucesso.
 
 - [ ] **Tarefa 5.2: Teste de Resiliência e Latência E2E**
