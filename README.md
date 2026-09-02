@@ -28,9 +28,8 @@
 8. [Benchmarks de Modelos & TreeSHAP](#-benchmarks-de-modelos--treeshap)
 9. [Copilot GenAI, AI Safety Guardrails & Ragas Eval](#-copilot-genai-ai-safety-guardrails--ragas-eval)
 10. [Kubernetes, KEDA Autoscaling & MLOps](#-kubernetes-keda-autoscaling--mlops)
-11. [🎙️ Como Apresentar Este Projeto em Entrevistas Técnicas (Pitch Script)](#-como-apresentar-este-projeto-em-entrevistas-técnicas-pitch-script)
-12. [Qualidade de Código & Bateria de Testes](#-qualidade-de-código--bateria-de-testes)
-13. [Como Executar o Projeto Localmente e com Docker](#-como-executar-o-projeto-localmente-e-com-docker)
+11. [Qualidade de Código & Bateria de Testes](#-qualidade-de-código--bateria-de-testes)
+12. [Como Executar o Projeto Localmente e com Docker](#-como-executar-o-projeto-localmente-e-com-docker)
 
 ---
 
@@ -147,16 +146,6 @@ Em conformidade rigorosa com a **LGPD** e sigilo de telecomunicações, o Retain
 - **Manifestos K8s Prontos para Produção:** `Deployment`, `Service`, `HPA`, `ScaledObject` (KEDA) e `ConfigMap`.
 - **KEDA ScaledObject:** Escala horizontal de pods baseada na taxa de requisições por segundo e no tamanho da fila Kafka.
 - **Monitoramento de Drift com Evidently & Prometheus:** Exportador de métricas para Grafana com alertas de desvio de distribuição de dados.
-
----
-
-## 🎙️ Como Apresentar Este Projeto em Entrevistas Técnicas (Pitch Script)
-
-> *"O RetainIQ é uma plataforma de Inteligência de Retenção e MLOps desenvolvida para o setor de telecomunicações. Ao invés de ser apenas um modelo preditivo isolado, ele cobre todo o ciclo de vida analítico e operacional.*
->
-> *Na ingestão, conectamos um pipeline de streaming com Kafka e Flink para capturar telemetria de rede e sentimento de CRM em tempo real, servidos por uma Feature Store Feast sobre Redis. O motor de inferência utiliza CatBoost com explicabilidade TreeSHAP em milissegundos e prioriza a fila de atendimento por MRR em Risco monetário (R$).*
->
-> *Na ponta da ação comercial, integramos um Copilot GenAI protegido por Guardrails de AI Safety e avaliado via Ragas. A plataforma suporta Multi-Tenancy com Row-Level Security, retreino contínuo com Quality Gate e orquestração em Kubernetes com KEDA, contando com 100% de testes automatizados e mais de 90% de cobertura de código."*
 
 ---
 
