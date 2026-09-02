@@ -78,7 +78,7 @@ export function StreamingControlPanel() {
             <div>
               <div className="flex items-center gap-2">
                 <Radio className={`h-5 w-5 ${status?.is_running ? 'text-emerald-500 animate-pulse' : 'text-muted-foreground'}`} />
-                <CardTitle className="text-lg font-bold">Gerador Contínuo de Eventos em Streaming (Fase 2)</CardTitle>
+                <CardTitle className="text-lg font-bold">Gerador Contínuo de Eventos em Streaming (Fase 3)</CardTitle>
                 {status?.is_running ? (
                   <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-500/30">
                     ● Streaming Ativo ({status.events_per_second} evt/s)
