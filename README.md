@@ -23,18 +23,50 @@
 
 ## 📌 Índice
 
-1. [Visão Executiva e Problema de Negócio](#-visão-executiva-e-problema-de-negócio)
-2. [Arquitetura Geral do Sistema (Tier-1 Scale-Up)](#-arquitetura-geral-do-sistema-tier-1-scale-up)
-3. [Diferenciais de Engenharia de Dados & ML](#-diferenciais-de-engenharia-de-dados--ml)
-4. [Live Streaming Engine & Cockpit Reativo](#-live-streaming-engine--cockpit-reativo)
-5. [Feature Store Unificada (Feast + Redis)](#-feature-store-unificada-feast--redis)
-6. [Multi-Tenancy & Row-Level Security (B2B SaaS)](#-multi-tenancy--row-level-security-b2b-saas)
-7. [Engenharia de Dados Sintéticos (Telco 360 Enterprise)](#-engenharia-de-dados-sintéticos-telco-360-enterprise)
-8. [Benchmarks de Modelos & TreeSHAP](#-benchmarks-de-modelos--treeshap)
-9. [Copilot GenAI, AI Safety Guardrails & Ragas Eval](#-copilot-genai-ai-safety-guardrails--ragas-eval)
-10. [Kubernetes, KEDA Autoscaling & MLOps](#-kubernetes-keda-autoscaling--mlops)
-11. [Qualidade de Código & Bateria de Testes](#-qualidade-de-código--bateria-de-testes)
-12. [Como Executar o Projeto Localmente e com Docker](#-como-executar-o-projeto-localmente-e-com-docker)
+1. [Demonstração Visual da Plataforma](#-demonstração-visual-da-plataforma)
+2. [Visão Executiva e Problema de Negócio](#-visão-executiva-e-problema-de-negócio)
+3. [Arquitetura Geral do Sistema (Tier-1 Scale-Up)](#-arquitetura-geral-do-sistema-tier-1-scale-up)
+4. [Diferenciais de Engenharia de Dados & ML](#-diferenciais-de-engenharia-de-dados--ml)
+5. [Live Streaming Engine & Cockpit Reativo](#-live-streaming-engine--cockpit-reativo)
+6. [Feature Store Unificada (Feast + Redis)](#-feature-store-unificada-feast--redis)
+7. [Multi-Tenancy & Row-Level Security (B2B SaaS)](#-multi-tenancy--row-level-security-b2b-saas)
+8. [Engenharia de Dados Sintéticos (Telco 360 Enterprise)](#-engenharia-de-dados-sintéticos-telco-360-enterprise)
+9. [Benchmarks de Modelos & TreeSHAP](#-benchmarks-de-modelos--treeshap)
+10. [Copilot GenAI, AI Safety Guardrails & Ragas Eval](#-copilot-genai-ai-safety-guardrails--ragas-eval)
+11. [Kubernetes, KEDA Autoscaling & MLOps](#-kubernetes-keda-autoscaling--mlops)
+12. [Qualidade de Código & Bateria de Testes](#-qualidade-de-código--bateria-de-testes)
+13. [Como Executar o Projeto Localmente e com Docker](#-como-executar-o-projeto-localmente-e-com-docker)
+
+---
+
+## 📸 Demonstração Visual da Plataforma
+
+<div align="center">
+
+### 🖥️ 1. Cockpit Executivo de Retenção & Live Ingestion (SSE)
+![RetainIQ Cockpit Dashboard](screenshots/01_cockpit_dashboard.png)
+
+<br>
+
+### 👥 2. Fila de Risco Priorizada por MRR em Risco (R$) & Explicabilidade
+![RetainIQ Risk Queue](screenshots/02_risk_queue_table.png)
+
+<br>
+
+### 📖 3. Portal de Documentação Técnica Interativo (MkDocs Material)
+![Portal de Documentação Técnica](screenshots/04_mkdocs_portal.png)
+
+<br>
+
+### ⚡ 4. Arquitetura de Live Streaming (Kafka / Flink / Feast Feature Store)
+![Arquitetura de Streaming](screenshots/05_streaming_architecture.png)
+
+<br>
+
+### 🔌 5. API RESTful & Contratos OpenAPI (Swagger)
+![Swagger OpenAPI Docs](screenshots/06_swagger_api_docs.png)
+
+</div>
 
 ---
 
