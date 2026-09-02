@@ -1,8 +1,8 @@
-// Estado de análise em lote (MVP stateless): uma chamada POST /api/v1/predict/batch
+// queries.tsx — hook unificado de análise em lote (AnalysisProvider)
 // alimenta Dashboard, Risk Queue e Customer 360 via TanStack Query.
 
 import { createContext, useContext, useMemo, useState, type ReactNode } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { api, getTenantId } from '@/api/client'
 import { parseCsv } from '@/lib/csv'
@@ -53,9 +53,14 @@ export function juntarLinhas(analise: AnalysisResult): LinhaRisco[] {
 type AnalysisInput = { tipo: 'bundled' } | { tipo: 'arquivo'; arquivo: File }
 
 async function carregarDatasetBundled(): Promise<File> {
-  let resposta = await fetch(`${import.meta.env.BASE_URL}telco_enterprise_customers.csv`)
+  const cacheBuster = `?t=${Date.now()}`
+  let resposta = await fetch(`${import.meta.env.BASE_URL}telco_enterprise_customers.csv${cacheBuster}`, {
+    cache: 'no-cache',
+  })
   if (!resposta.ok) {
-    resposta = await fetch(`${import.meta.env.BASE_URL}telco_customers.csv`)
+    resposta = await fetch(`${import.meta.env.BASE_URL}telco_customers.csv${cacheBuster}`, {
+      cache: 'no-cache',
+    })
   }
   if (!resposta.ok) throw new Error('Dataset de exemplo indisponível (telco_enterprise_customers.csv).')
   const texto = await resposta.text()
@@ -129,16 +134,20 @@ interface AnalysisContextValue {
   isIdle: boolean
   analisarBundled: () => void
   analisarUpload: (arquivo: File) => void
+  carregarDatasetTexto: (nome: string, textoCsv: string) => void
 }
 
 const AnalysisContext = createContext<AnalysisContextValue | null>(null)
 
 export function AnalysisProvider({ children }: { children: ReactNode }) {
+  const queryClient = useQueryClient()
+  const [version, setVersion] = useState(1)
   const [input, setInput] = useState<AnalysisInput | null>({ tipo: 'bundled' })
 
   const query = useQuery({
     queryKey: [
       'batch-analysis',
+      version,
       input === null
         ? 'idle'
         : input.tipo === 'bundled'
@@ -151,7 +160,8 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
       return analisarArquivo(arquivo)
     },
     enabled: input !== null,
-    staleTime: Infinity,
+    staleTime: 0,
+    gcTime: 0,
     retry: false,
   })
 
@@ -161,10 +171,22 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
       carregando: input !== null && query.isPending,
       erro: query.error instanceof Error ? query.error : null,
       isIdle: input === null,
-      analisarBundled: () => setInput({ tipo: 'bundled' }),
-      analisarUpload: (arquivo: File) => setInput({ tipo: 'arquivo', arquivo }),
+      analisarBundled: () => {
+        setVersion((v) => v + 1)
+        setInput({ tipo: 'bundled' })
+        queryClient.invalidateQueries({ queryKey: ['batch-analysis'] })
+      },
+      analisarUpload: (arquivo: File) => {
+        setVersion((v) => v + 1)
+        setInput({ tipo: 'arquivo', arquivo })
+      },
+      carregarDatasetTexto: (nome: string, textoCsv: string) => {
+        setVersion((v) => v + 1)
+        const file = new File([textoCsv], nome, { type: 'text/csv' })
+        setInput({ tipo: 'arquivo', arquivo: file })
+      },
     }),
-    [query.data, query.isPending, query.error, input],
+    [query.data, query.isPending, query.error, input, queryClient],
   )
 
   return <AnalysisContext.Provider value={valor}>{children}</AnalysisContext.Provider>

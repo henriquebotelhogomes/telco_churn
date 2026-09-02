@@ -1200,10 +1200,36 @@ async def synthesize_enterprise_dataset_endpoint(
         "chaos_count": chaos_count,
         "created_at": datetime.now(UTC).isoformat(),
         "csv_sample_preview": df.head(5).to_dict(orient="records"),
+        "csv_content": df.to_csv(index=False),
     }
 
 
 app.include_router(v1)
+
+# Roteamento de arquivos estáticos de demonstração
+@app.get("/telco_customers.csv", include_in_schema=False)
+def demo_csv():
+    for cand in [
+        Path("frontend/dist/telco_customers.csv"),
+        Path("frontend/public/telco_customers.csv"),
+        Path("data/raw/telco_customers.csv"),
+    ]:
+        if cand.exists():
+            return FileResponse(cand)
+    raise HTTPException(status_code=404, detail="Demo CSV not found")
+
+
+@app.get("/telco_enterprise_customers.csv", include_in_schema=False)
+def demo_enterprise_csv():
+    for cand in [
+        Path("frontend/dist/telco_enterprise_customers.csv"),
+        Path("frontend/public/telco_enterprise_customers.csv"),
+        Path("data/raw/telco_enterprise_customers.csv"),
+    ]:
+        if cand.exists():
+            return FileResponse(cand)
+    raise HTTPException(status_code=404, detail="Enterprise CSV not found")
+
 
 # Se os arquivos estáticos do frontend (Vite) existirem, serve na raiz /
 _dist_path: Path | None = None
@@ -1232,26 +1258,10 @@ if _dist_path is not None:
         if fav.exists():
             return FileResponse(fav)
         raise HTTPException(status_code=404, detail="Favicon not found")
-
-    @app.get("/telco_customers.csv", include_in_schema=False)
-    def demo_csv():
-        csv_file = _dist_path / "telco_customers.csv"
-        if csv_file.exists():
-            return FileResponse(csv_file)
-        raise HTTPException(status_code=404, detail="Demo CSV not found")
-
-    @app.get("/telco_enterprise_customers.csv", include_in_schema=False)
-    def demo_enterprise_csv():
-        csv_file = _dist_path / "telco_enterprise_customers.csv"
-        if csv_file.exists():
-            return FileResponse(csv_file)
-        raw_file = Path("data/raw/telco_enterprise_customers.csv")
-        if raw_file.exists():
-            return FileResponse(raw_file)
-        raise HTTPException(status_code=404, detail="Enterprise CSV not found")
 else:
 
     @app.get("/", include_in_schema=False)
     def root():
         return RedirectResponse(url="/docs")
+
 

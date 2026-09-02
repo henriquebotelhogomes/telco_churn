@@ -674,6 +674,8 @@ class SynthesizeDatasetResponse(BaseModel):
     chaos_count: int
     created_at: str
     csv_sample_preview: list[dict[str, Any]]
+    csv_content: str | None = None
+
 
 
 

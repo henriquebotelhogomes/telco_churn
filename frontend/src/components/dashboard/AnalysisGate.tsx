@@ -13,7 +13,7 @@ interface AnalysisGateProps {
 
 /** Estados idle/loading/erro da análise em lote; renderiza children com o resultado. */
 export function AnalysisGate({ children }: AnalysisGateProps) {
-  const { resultado, carregando, erro, isIdle, analisarBundled, analisarUpload } = useAnalysis()
+  const { resultado, carregando, erro, isIdle, analisarBundled, analisarUpload, carregarDatasetTexto } = useAnalysis()
   const [synthesizing, setSynthesizing] = useState(false)
   const [showSynthModal, setShowSynthModal] = useState(false)
   const [sampleSize, setSampleSize] = useState(7043)
@@ -29,10 +29,13 @@ export function AnalysisGate({ children }: AnalysisGateProps) {
         chaos_ratio: chaosRatio,
         save_as_default: true,
       })
-      setSynthFeedback(`Base Telco 360 gerada: ${res.total_records} clientes com 40 colunas de telemetria!`)
+      setSynthFeedback(`Base Telco 360 gerada: ${res.total_records} clientes com ${res.total_columns} colunas de telemetria!`)
       setShowSynthModal(false)
-      // Recarrega a análise em lote com a nova base
-      analisarBundled()
+      if (res.csv_content) {
+        carregarDatasetTexto(`telco_enterprise_${res.total_records}_clientes.csv`, res.csv_content)
+      } else {
+        analisarBundled()
+      }
     } catch (err) {
       console.error(err)
       setSynthFeedback('Erro ao gerar base sintética.')

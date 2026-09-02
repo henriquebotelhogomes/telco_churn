@@ -707,7 +707,9 @@ export interface SynthesizeDatasetResponse {
   chaos_count: number
   created_at: string
   csv_sample_preview: Record<string, unknown>[]
+  csv_content?: string
 }
+
 
 
 
