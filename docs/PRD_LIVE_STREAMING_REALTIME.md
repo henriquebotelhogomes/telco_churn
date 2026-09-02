@@ -237,20 +237,20 @@ Para eliminar qualquer ambiguidade de integração entre Produtor, Motor de Stre
 ### 🟢 ÉPICO 4: Cockpit Reativo no Frontend (React 19 / Vite)
 **Objetivo:** Atualizar dinamicamente o Dashboard de Churn sem necessidade de recarregar a página, integrando reatividade visual e ações 1-click.
 
-- [ ] **Tarefa 4.1: Hook de Conexão SSE (`useLiveStream`)**
-  - [ ] *Micro-tarefa 4.1.1:* Implementar `frontend/src/hooks/useLiveStream.ts` utilizando a API padrão `EventSource` com reconexão automática exponencial e cleanup no unmount.
-  - [ ] *Micro-tarefa 4.1.2:* Integrar estado global ou reducer local para gerenciar o feed de eventos recentes e a lista de deltas de risco.
+- [x] **Tarefa 4.1: Hook de Conexão SSE (`useLiveStream`)**
+  - [x] *Micro-tarefa 4.1.1:* Implementar `frontend/src/hooks/useLiveStream.ts` utilizando a API padrão `EventSource` com reconexão automática exponencial e cleanup no unmount.
+  - [x] *Micro-tarefa 4.1.2:* Integrar estado global ou reducer local para gerenciar o feed de eventos recentes e a lista de deltas de risco.
   - 🎯 **Checkpoint 4.1:** Ativar a conexão na aplicação web e validar recepção de eventos no console do browser sem re-renders em loop.
 
-- [ ] **Tarefa 4.2: Ticker de Eventos e Painel de Injeção de Caos**
-  - [ ] *Micro-tarefa 4.2.1:* Criar `frontend/src/components/streaming/LiveEventTicker.tsx` no topo do Dashboard exibindo alertas animados (ex: *"⚡ VIVO-5575: 3 quedas de fibra ➔ Risco subiu para 84%"*).
-  - [ ] *Micro-tarefa 4.2.2:* Criar o componente `StreamingChaosControl.tsx` com botões de disparo de cenários de teste para demonstrações ao vivo.
+- [x] **Tarefa 4.2: Ticker de Eventos e Painel de Injeção de Caos**
+  - [x] *Micro-tarefa 4.2.1:* Criar `frontend/src/components/streaming/LiveEventTicker.tsx` no topo do Dashboard exibindo alertas animados (ex: *"⚡ VIVO-5575: 3 quedas de fibra ➔ Risco subiu para 84%"*).
+  - [x] *Micro-tarefa 4.2.2:* Criar o componente `StreamingChaosControl.tsx` com botões de disparo de cenários de teste para demonstrações ao vivo.
   - 🎯 **Checkpoint 4.2:** Acionar botão de Caos no painel e observar o ticker exibir instantaneamente as notificações em cascata.
 
-- [ ] **Tarefa 4.3: Atualização Dinâmica dos Indicadores Executivos e Fila de Risco**
-  - [ ] *Micro-tarefa 4.3.1:* Atualizar os cards de KPI (**MRR em Risco Total**, **Clientes em Risco Crítico**, **Taxa Média de Churn**) recalculando os valores em tela conforme eventos chegam.
-  - [ ] *Micro-tarefa 4.3.2:* Reordenar a tabela de **Fila de Risco** automaticamente: clientes que sofrem alteração de risco sobem para o topo com destaque visual (*badge* pulsante *"🔥 Risco Elevado Agora"*).
-  - [ ] *Micro-tarefa 4.3.3:* Integrar botão direto *"Acionar Copilot"* na linha do cliente afetado, preenchendo o contexto do assistente de retenção com o motivo da instabilidade.
+- [x] **Tarefa 4.3: Atualização Dinâmica dos Indicadores Executivos e Fila de Risco**
+  - [x] *Micro-tarefa 4.3.1:* Atualizar os cards de KPI (**MRR em Risco Total**, **Clientes em Risco Crítico**, **Taxa Média de Churn**) recalculando os valores em tela conforme eventos chegam.
+  - [x] *Micro-tarefa 4.3.2:* Reordenar a tabela de **Fila de Risco** automaticamente: clientes que sofrem alteração de risco sobem para o topo com destaque visual (*badge* pulsante *"🔥 Risco Elevado Agora"*).
+  - [x] *Micro-tarefa 4.3.3:* Integrar botão direto *"Acionar Copilot"* na linha do cliente afetado, preenchendo o contexto do assistente de retenção com o motivo da instabilidade.
   - 🎯 **Checkpoint 4.3:** Realizar teste completo: disparar caos de rompimento de fibra na UI e observar reordenação imediata da tabela e atualização dos cards de MRR.
 
 ---
