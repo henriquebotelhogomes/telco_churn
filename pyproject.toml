@@ -5,7 +5,7 @@ description = "Modelo de predição de churn de clientes para produção"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "evidently>=0.4.19",
+    "evidently>=0.7.21",
     "fastapi>=0.110.0",
     "joblib>=1.3.2",
     "pandas>=2.2.1",
