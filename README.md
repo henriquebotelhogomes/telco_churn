@@ -53,17 +53,22 @@
 
 <br>
 
-### 📖 3. Portal de Documentação Técnica Interativo (MkDocs Material)
+### 🦹 3. Tópicos de Streaming em Tempo Real no Redpanda Console (Kafka C++)
+![Tópicos no Redpanda Console](screenshots/08_redpanda_topics.png)
+
+<br>
+
+### 📖 4. Portal de Documentação Técnica Interativo (MkDocs Material)
 ![Portal de Documentação Técnica](screenshots/04_mkdocs_portal.png)
 
 <br>
 
-### ⚡ 4. Arquitetura de Live Streaming (Kafka / Flink / Feast Feature Store)
+### ⚡ 5. Arquitetura de Live Streaming (Kafka / Flink / Feast Feature Store)
 ![Arquitetura de Streaming](screenshots/05_streaming_architecture.png)
 
 <br>
 
-### 🔌 5. API RESTful & Contratos OpenAPI (Swagger)
+### 🔌 6. API RESTful & Contratos OpenAPI (Swagger)
 ![Swagger OpenAPI Docs](screenshots/06_swagger_api_docs.png)
 
 </div>
