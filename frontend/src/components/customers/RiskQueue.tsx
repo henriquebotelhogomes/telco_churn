@@ -9,7 +9,7 @@ import {
   type ColumnDef,
   type SortingState,
 } from '@tanstack/react-table'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, HelpCircle } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -28,6 +28,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { RiskBadge } from '@/components/ui/risk-badge'
 import { NIVEIS, formatBrl, formatPercent } from '@/lib/format'
 import type { LinhaRisco } from '@/api/queries'
@@ -37,45 +43,101 @@ interface RiskQueueProps {
   onSelect: (linha: LinhaRisco) => void
 }
 
+function ColumnHeaderWithTooltip({ label, tooltip }: { label: string; tooltip: string }) {
+  return (
+    <TooltipProvider delayDuration={100}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span className="inline-flex items-center gap-1 cursor-help hover:text-foreground transition-colors group">
+            <span>{label}</span>
+            <HelpCircle size={12} className="opacity-40 group-hover:opacity-100 text-muted-foreground transition-opacity" />
+          </span>
+        </TooltipTrigger>
+        <TooltipContent side="top" className="max-w-xs text-xs p-2.5 leading-relaxed font-normal normal-case">
+          {tooltip}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  )
+}
+
 const colunas: ColumnDef<LinhaRisco>[] = [
   {
     accessorKey: 'customerId',
-    header: 'Cliente',
+    header: () => (
+      <ColumnHeaderWithTooltip
+        label="Cliente"
+        tooltip="Identificador único do contrato ou assinante na base de dados da operadora."
+      />
+    ),
     cell: ({ getValue }) => (
       <span className="font-medium">{getValue<string>()}</span>
     ),
   },
   {
     accessorKey: 'tenure',
-    header: 'Tenure',
+    header: () => (
+      <ColumnHeaderWithTooltip
+        label="Tenure"
+        tooltip="Tempo de permanência do cliente na operadora em meses (tempo de casa / fidelidade acumulada)."
+      />
+    ),
     cell: ({ getValue }) => (
       <span className="font-mono tabular-nums">{getValue<number>()} m</span>
     ),
   },
-  { accessorKey: 'contract', header: 'Contrato' },
+  {
+    accessorKey: 'contract',
+    header: () => (
+      <ColumnHeaderWithTooltip
+        label="Contrato"
+        tooltip="Tipo de vigência contratual do plano: Mês a Mês (Month-to-month), 1 Ano (One year) ou 2 Anos (Two year)."
+      />
+    ),
+  },
   {
     accessorKey: 'monthlyCharges',
-    header: 'Mensalidade',
+    header: () => (
+      <ColumnHeaderWithTooltip
+        label="Mensalidade"
+        tooltip="Valor bruto recorrente cobrado mensalmente na fatura do cliente em Reais (R$)."
+      />
+    ),
     cell: ({ getValue }) => (
       <span className="font-mono tabular-nums">{formatBrl(getValue<number>())}</span>
     ),
   },
   {
     accessorKey: 'probabilidade',
-    header: 'p(churn)',
+    header: () => (
+      <ColumnHeaderWithTooltip
+        label="p(churn)"
+        tooltip="Probabilidade percentual (%) estimada pelo modelo de Machine Learning de o cliente cancelar o plano nos próximos 30 dias."
+      />
+    ),
     cell: ({ getValue }) => (
       <span className="font-mono tabular-nums">{formatPercent(getValue<number>())}</span>
     ),
   },
   {
     accessorKey: 'nivel',
-    header: 'Nível',
+    header: () => (
+      <ColumnHeaderWithTooltip
+        label="Nível"
+        tooltip="Faixa de classificação de risco de cancelamento: Baixo (< 30%), Médio (30-50%), Alto (50-70%) ou Crítico (≥ 70%)."
+      />
+    ),
     filterFn: 'equals',
     cell: ({ getValue }) => <RiskBadge nivel={getValue<string>()} />,
   },
   {
     accessorKey: 'mrrEmRisco',
-    header: 'MRR em risco',
+    header: () => (
+      <ColumnHeaderWithTooltip
+        label="MRR em risco"
+        tooltip="A sigla MRR vem de Monthly Recurring Revenue (Receita Recorrente Mensal). Por ser uma métrica financeira de faturamento, o MRR em Risco representa o valor monetário esperado em Reais (R$) que a empresa pode perder por mês com aquele cliente (calculado como Mensalidade × p(churn))."
+      />
+    ),
     cell: ({ getValue }) => (
       <span className="font-mono tabular-nums">{formatBrl(getValue<number>())}</span>
     ),
