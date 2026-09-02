@@ -102,7 +102,12 @@ class K8sTopologyValidator:
                 "tls_enabled": True,
             },
             "services": [
-                {"name": "retainiq-api-service", "type": "ClusterIP", "port": 80, "target_port": 8000}
+                {
+                    "name": "retainiq-api-service",
+                    "type": "ClusterIP",
+                    "port": 80,
+                    "target_port": 8000,
+                }
             ],
         }
 

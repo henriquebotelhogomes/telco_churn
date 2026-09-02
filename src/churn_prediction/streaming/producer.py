@@ -29,9 +29,7 @@ class StreamingProducerRouter:
                 await producer.start()
                 self._producer = producer
                 self._initialized = True
-                logger.info(
-                    f"[STREAMING] Conectado ao Redpanda/Kafka em {self.bootstrap_servers}"
-                )
+                logger.info(f"[STREAMING] Conectado ao Redpanda/Kafka em {self.bootstrap_servers}")
             except Exception as e:
                 logger.info(
                     f"[STREAMING] Kafka em {self.bootstrap_servers} indisponível ({e}). Usando buffer in-memory."

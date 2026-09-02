@@ -9,8 +9,13 @@ from pydantic import BaseModel, Field
 
 class LiveEventMessage(BaseModel):
     """Mensagem de evento transmitida em tempo real via Server-Sent Events (SSE)."""
-    event_type: str = Field(..., description="TELEMETRY | PAYMENT | CRM | RE_SCORE | ALERT | HEARTBEAT")
-    tenant_id: str = Field(default="tenant-default", description="Identificador do tenant/operadora")
+
+    event_type: str = Field(
+        ..., description="TELEMETRY | PAYMENT | CRM | RE_SCORE | ALERT | HEARTBEAT"
+    )
+    tenant_id: str = Field(
+        default="tenant-default", description="Identificador do tenant/operadora"
+    )
     customer_id: str | None = Field(default=None, description="Identificador do cliente afetado")
     data: dict[str, Any] = Field(default_factory=dict, description="Payload de métricas e estado")
     timestamp: str = Field(default_factory=lambda: datetime.datetime.now(datetime.UTC).isoformat())
@@ -28,7 +33,9 @@ class SSEBroadcaster:
         self._subscribers.add((queue, tenant_id))
         return queue
 
-    def unsubscribe(self, queue: asyncio.Queue[LiveEventMessage], tenant_id: str = "tenant-default") -> None:
+    def unsubscribe(
+        self, queue: asyncio.Queue[LiveEventMessage], tenant_id: str = "tenant-default"
+    ) -> None:
         """Remove a inscrição do cliente SSE."""
         self._subscribers.discard((queue, tenant_id))
 
@@ -36,7 +43,11 @@ class SSEBroadcaster:
         """Publica um evento para todos os clientes conectados respeitando o tenant."""
         for queue, sub_tenant in list(self._subscribers):
             # Se for tenant-default (Global) ou se o tenant do assinante corresponder ao evento
-            if sub_tenant == "tenant-default" or sub_tenant == message.tenant_id or message.tenant_id == "tenant-default":
+            if (
+                sub_tenant == "tenant-default"
+                or sub_tenant == message.tenant_id
+                or message.tenant_id == "tenant-default"
+            ):
                 try:
                     queue.put_nowait(message)
                 except asyncio.QueueFull:

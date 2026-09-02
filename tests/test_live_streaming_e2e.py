@@ -57,15 +57,17 @@ def test_live_scorer_re_score_with_instability():
 
     # Injeta eventos caóticos de rede nas janelas do Flink
     for _ in range(4):
-        window_processor.process_event({
-            "event_type": "FIBER_DISCONNECT",
-            "topic": "telemetry.network.events",
-            "tenant_id": tid,
-            "customer_id": cid,
-            "latency_ms": 190.0,
-            "packet_loss_pct": 12.0,
-            "disconnect_count_last_hour": 3,
-        })
+        window_processor.process_event(
+            {
+                "event_type": "FIBER_DISCONNECT",
+                "topic": "telemetry.network.events",
+                "tenant_id": tid,
+                "customer_id": cid,
+                "latency_ms": 190.0,
+                "packet_loss_pct": 12.0,
+                "disconnect_count_last_hour": 3,
+            }
+        )
 
     # Reavalia o score após as quedas
     updated_score = live_scorer.re_score_customer(cid, tid)

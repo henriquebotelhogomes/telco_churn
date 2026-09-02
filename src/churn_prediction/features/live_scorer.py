@@ -8,6 +8,7 @@ from churn_prediction.streaming.broadcaster import LiveEventMessage, sse_broadca
 
 class LiveCustomerScoreUpdate(BaseModel):
     """Atualização dinâmica de probabilidade de churn de um cliente em tempo real."""
+
     customer_id: str
     tenant_id: str = "tenant-default"
     previous_risk_score: float
@@ -93,7 +94,9 @@ class LiveScorerEngine:
         if disconnects_1h >= 2:
             reasons.append(f"{disconnects_1h} quedas de conexão na última hora")
         if latency_15m > 80.0 or packet_loss_15m > 3.0:
-            reasons.append(f"Degradação de rede (latência {latency_15m:.0f}ms, perda {packet_loss_15m:.1f}%)")
+            reasons.append(
+                f"Degradação de rede (latência {latency_15m:.0f}ms, perda {packet_loss_15m:.1f}%)"
+            )
         if failed_payments > 0:
             reasons.append(f"{failed_payments} falha(s) de pagamento na fatura")
         if crm_sentiment < -0.3:

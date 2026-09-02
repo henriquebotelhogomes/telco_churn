@@ -6,13 +6,18 @@ from pydantic import BaseModel, Field
 
 class TenantInfo(BaseModel):
     """Metadados e limites de uma operadora (tenant)."""
+
     tenant_id: str = Field(..., description="Identificador único (ex: tenant-vivo)")
     name: str = Field(..., description="Nome corporativo da operadora")
-    plan: str = Field(default="ENTERPRISE", description="Plano contratual (STANDARD | ENTERPRISE | DEDICATED)")
+    plan: str = Field(
+        default="ENTERPRISE", description="Plano contratual (STANDARD | ENTERPRISE | DEDICATED)"
+    )
     rate_limit_rps: int = Field(default=200, description="Limite de requisições por segundo")
     status: str = Field(default="ACTIVE", description="ACTIVE | SUSPENDED | PROVISIONING")
     created_at: str = Field(default_factory=lambda: datetime.datetime.now(datetime.UTC).isoformat())
-    custom_model_enabled: bool = Field(default=False, description="Se possui modelo de ML customizado")
+    custom_model_enabled: bool = Field(
+        default=False, description="Se possui modelo de ML customizado"
+    )
 
 
 class TenantManager:

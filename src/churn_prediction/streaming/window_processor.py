@@ -8,12 +8,18 @@ from pydantic import BaseModel, Field
 
 class RealtimeRiskAlert(BaseModel):
     """Alerta de risco emitido em tempo real pelo motor de streaming."""
+
     alert_id: str = Field(..., description="ID único do alerta")
     customer_id: str = Field(..., description="ID do cliente")
+    tenant_id: str = Field(default="tenant-default", description="Identificador multi-tenant")
     severity: str = Field(..., description="CRITICA | ALTA | MEDIA")
     trigger_reason: str = Field(..., description="Condição de streaming que disparou o alerta")
-    recommended_intervention: str = Field(..., description="Ação comercial/técnica imediata sugerida")
-    instability_score: float = Field(..., ge=0.0, le=1.0, description="Score instantâneo de instabilidade")
+    recommended_intervention: str = Field(
+        ..., description="Ação comercial/técnica imediata sugerida"
+    )
+    instability_score: float = Field(
+        ..., ge=0.0, le=1.0, description="Score instantâneo de instabilidade"
+    )
     created_at: str = Field(..., description="Timestamp ISO do disparo")
     acknowledged: bool = Field(default=False, description="Se o alerta já foi tratado")
     acknowledged_by: str | None = Field(default=None, description="Operador que tratou o alerta")
@@ -21,17 +27,36 @@ class RealtimeRiskAlert(BaseModel):
 
 class CustomerWindowMetrics(BaseModel):
     """Métricas agregadas em janelas deslizantes para um cliente."""
+
     customer_id: str
     tenant_id: str = "tenant-default"
-    avg_latency_15min: float = Field(default=0.0, description="Latência média dos últimos 15 min (ms)")
-    avg_packet_loss_15min: float = Field(default=0.0, description="Perda média de pacotes nos últimos 15 min (%)")
-    disconnect_count_1h: int = Field(default=0, description="Total de quedas de conexão na última hora")
-    failed_payment_count_24h: int = Field(default=0, description="Tentativas de pagamento falhas nas últimas 24h")
-    negative_crm_count_7d: int = Field(default=0, description="Interações de CRM negativas (sentimento <= -0.5) nos últimos 7 dias")
-    avg_sentiment_7d: float = Field(default=0.0, description="Sentimento médio dos contatos nos últimos 7 dias")
-    realtime_instability_score: float = Field(default=0.0, ge=0.0, le=1.0, description="Índice de risco/instabilidade em tempo real")
-    last_event_timestamp: str = Field(default="", description="Data/hora do último evento processado")
-    total_events_processed: int = Field(default=0, description="Total de eventos acumulados na história recente")
+    avg_latency_15min: float = Field(
+        default=0.0, description="Latência média dos últimos 15 min (ms)"
+    )
+    avg_packet_loss_15min: float = Field(
+        default=0.0, description="Perda média de pacotes nos últimos 15 min (%)"
+    )
+    disconnect_count_1h: int = Field(
+        default=0, description="Total de quedas de conexão na última hora"
+    )
+    failed_payment_count_24h: int = Field(
+        default=0, description="Tentativas de pagamento falhas nas últimas 24h"
+    )
+    negative_crm_count_7d: int = Field(
+        default=0, description="Interações de CRM negativas (sentimento <= -0.5) nos últimos 7 dias"
+    )
+    avg_sentiment_7d: float = Field(
+        default=0.0, description="Sentimento médio dos contatos nos últimos 7 dias"
+    )
+    realtime_instability_score: float = Field(
+        default=0.0, ge=0.0, le=1.0, description="Índice de risco/instabilidade em tempo real"
+    )
+    last_event_timestamp: str = Field(
+        default="", description="Data/hora do último evento processado"
+    )
+    total_events_processed: int = Field(
+        default=0, description="Total de eventos acumulados na história recente"
+    )
 
 
 class StreamWindowProcessor:
@@ -126,14 +151,16 @@ class StreamWindowProcessor:
         # Janela 1 Hora (Rede - Quedas acumuladas)
         disconnects_1h = sum(
             int(e.get("disconnect_count_last_hour", 0))
-            if e.get("event_type") == "FIBER_DISCONNECT" or int(e.get("disconnect_count_last_hour", 0)) > 0
+            if e.get("event_type") == "FIBER_DISCONNECT"
+            or int(e.get("disconnect_count_last_hour", 0)) > 0
             else 0
             for _, e in self._network_events[customer_id]
         )
 
         # Janela 24 Horas (Billing - Falhas de pagamento)
         failed_payments_24h = sum(
-            1 for _, e in self._billing_events[customer_id]
+            1
+            for _, e in self._billing_events[customer_id]
             if str(e.get("event_type")) == "PAYMENT_FAILED" or e.get("error_code") is not None
         )
 
@@ -151,7 +178,9 @@ class StreamWindowProcessor:
         )
 
         # Score ponderado de instabilidade em tempo real (0.0 a 1.0)
-        score_net = min(0.40, (disconnects_1h / 3.0) * 0.40) + min(0.20, (avg_latency / 200.0) * 0.20)
+        score_net = min(0.40, (disconnects_1h / 3.0) * 0.40) + min(
+            0.20, (avg_latency / 200.0) * 0.20
+        )
         score_bill = min(0.25, (failed_payments_24h / 2.0) * 0.25)
         score_crm = 0.15 if (negative_crm_count > 0 or avg_sentiment < -0.3) else 0.0
 
@@ -185,7 +214,9 @@ class StreamWindowProcessor:
             return None
 
         # Condição 1: Degradação severa de rede
-        if metrics.disconnect_count_1h >= 3 or (metrics.avg_latency_15min >= 150.0 and metrics.avg_packet_loss_15min >= 10.0):
+        if metrics.disconnect_count_1h >= 3 or (
+            metrics.avg_latency_15min >= 150.0 and metrics.avg_packet_loss_15min >= 10.0
+        ):
             self._last_alert_time[customer_id] = current_time
             return RealtimeRiskAlert(
                 alert_id=f"alt_{uuid.uuid4().hex[:8]}",

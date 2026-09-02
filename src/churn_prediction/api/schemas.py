@@ -436,6 +436,7 @@ class TrainingJobsListResponse(BaseModel):
 # 📡 Schemas de Streaming & Event Generation (Marco M11)
 # ==============================================================================
 
+
 class StreamingStartRequest(BaseModel):
     events_per_second: float = Field(
         default=5.0, ge=0.5, le=500.0, description="Taxa de emissão contínua em eventos por segundo"
@@ -443,7 +444,9 @@ class StreamingStartRequest(BaseModel):
 
 
 class ChaosInjectionRequest(BaseModel):
-    enable_chaos: bool = Field(..., description="Ativar ou desativar injeção de anomalias/degradação massiva")
+    enable_chaos: bool = Field(
+        ..., description="Ativar ou desativar injeção de anomalias/degradação massiva"
+    )
 
 
 class StreamingStatusResponse(BaseModel):
@@ -458,6 +461,7 @@ class StreamingStatusResponse(BaseModel):
 # ==============================================================================
 # 🌊 Schemas de Processamento de Janelas e Alertas em Tempo Real (Marco M12)
 # ==============================================================================
+
 
 class AcknowledgeAlertRequest(BaseModel):
     acknowledged_by: str = Field(default="operador", description="Nome/ID do operador ou sistema")
@@ -483,15 +487,20 @@ class RealtimeAlertsListResponse(BaseModel):
 # 🏪 Schemas da Feature Store Unificada (Marco M13)
 # ==============================================================================
 
+
 class OnlineFeaturesRequest(BaseModel):
     customer_ids: list[str] = Field(..., description="Lista de IDs de clientes para busca vetorial")
-    feature_refs: list[str] | None = Field(default=None, description="Lista opcional de features específicas a retornar")
+    feature_refs: list[str] | None = Field(
+        default=None, description="Lista opcional de features específicas a retornar"
+    )
 
 
 class OnlineFeaturesResponse(BaseModel):
     total_entities: int
     features: list[dict[str, Any]]
-    retrieval_latency_ms: float = Field(default=1.2, description="Latência de recuperação da Online Store")
+    retrieval_latency_ms: float = Field(
+        default=1.2, description="Latência de recuperação da Online Store"
+    )
 
 
 class FeatureCatalogResponse(BaseModel):
@@ -500,7 +509,9 @@ class FeatureCatalogResponse(BaseModel):
 
 
 class MaterializeFeaturesRequest(BaseModel):
-    limit: int = Field(default=500, ge=1, le=5000, description="Quantidade máxima de entidades a materializar")
+    limit: int = Field(
+        default=500, ge=1, le=5000, description="Quantidade máxima de entidades a materializar"
+    )
 
 
 class MaterializeFeaturesResponse(BaseModel):
@@ -524,6 +535,7 @@ class FeatureStoreStatsResponse(BaseModel):
 # ==============================================================================
 # 🏢 Schemas de Multi-Tenancy & Row-Level Security (Marco M14)
 # ==============================================================================
+
 
 class TenantItem(BaseModel):
     tenant_id: str
@@ -564,6 +576,7 @@ class TenantSummaryResponse(BaseModel):
 # ==============================================================================
 # ☸️ Schemas de Kubernetes & KEDA Autoscaling (Marco M15)
 # ==============================================================================
+
 
 class K8sHpaInfo(BaseModel):
     min_replicas: int
@@ -615,6 +628,7 @@ class K8sManifestValidationResponse(BaseModel):
 # 🛡️ Schemas de AI Safety Guardrails & Ragas Evaluation (Marco M16)
 # ==============================================================================
 
+
 class GuardrailCheckRequest(BaseModel):
     text: str = Field(..., description="Texto do prompt ou resposta para validação")
     check_type: str = Field(default="INPUT", description="INPUT | OUTPUT")
@@ -631,7 +645,9 @@ class GuardrailCheckResponse(BaseModel):
 
 
 class RagasEvalRequest(BaseModel):
-    num_samples: int = Field(default=5, ge=1, le=25, description="Quantidade de casos de teste a avaliar")
+    num_samples: int = Field(
+        default=5, ge=1, le=25, description="Quantidade de casos de teste a avaliar"
+    )
 
 
 class RagasEvalResponse(BaseModel):
@@ -659,9 +675,14 @@ class SafetySummaryMetricsResponse(BaseModel):
 # ⚡ Schemas de Synthetic Data Engineering (Telco 360 Enterprise)
 # ==============================================================================
 
+
 class SynthesizeDatasetRequest(BaseModel):
-    num_samples: int = Field(default=7043, ge=100, le=50000, description="Quantidade de clientes a sintetizar")
-    chaos_ratio: float = Field(default=0.12, ge=0.0, le=1.0, description="Proporção de instabilidade de rede")
+    num_samples: int = Field(
+        default=7043, ge=100, le=50000, description="Quantidade de clientes a sintetizar"
+    )
+    chaos_ratio: float = Field(
+        default=0.12, ge=0.0, le=1.0, description="Proporção de instabilidade de rede"
+    )
     save_as_default: bool = Field(default=True, description="Sobrescreve a base pública padrão")
 
 
@@ -675,11 +696,3 @@ class SynthesizeDatasetResponse(BaseModel):
     created_at: str
     csv_sample_preview: list[dict[str, Any]]
     csv_content: str | None = None
-
-
-
-
-
-
-
-

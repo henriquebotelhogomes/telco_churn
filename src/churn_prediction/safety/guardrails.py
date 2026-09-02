@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 
 class GuardrailCheckResult(BaseModel):
     """Resultado da avaliação de segurança e sanitização."""
+
     is_safe: bool
     blocked: bool
     sanitized_text: str
@@ -80,9 +81,7 @@ class OutputPolicyGuard:
         "indenização financeira imediata",
     ]
 
-    def validate_output(
-        self, text: str, max_discount_pct: float = 35.0
-    ) -> tuple[bool, list[str]]:
+    def validate_output(self, text: str, max_discount_pct: float = 35.0) -> tuple[bool, list[str]]:
         violations = []
         lower_text = text.lower()
 
@@ -131,7 +130,9 @@ class SafetyGuardrails:
             risk_level=risk,
         )
 
-    def check_output(self, generated_script: str, max_discount: float = 35.0) -> GuardrailCheckResult:
+    def check_output(
+        self, generated_script: str, max_discount: float = 35.0
+    ) -> GuardrailCheckResult:
         """Avalia a resposta gerada pelo LLM quanto a conformidade e integridade."""
         sanitized_text, redacted = self.pii_sanitizer.sanitize(generated_script)
         is_valid, policy_violations = self.output_guard.validate_output(

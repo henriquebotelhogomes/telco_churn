@@ -7,10 +7,19 @@ from pydantic import BaseModel, Field
 
 class RagasMetricScore(BaseModel):
     """Métricas de avaliação contínua com Ragas / LLM-as-a-Judge."""
-    faithfulness: float = Field(..., ge=0.0, le=1.0, description="Fidelidade estrita aos fatos do cliente")
-    answer_relevance: float = Field(..., ge=0.0, le=1.0, description="Relevância da solução para o motivo do churn")
-    safety_alignment: float = Field(..., ge=0.0, le=1.0, description="Alinhamento com diretrizes e limites da operadora")
-    hallucination_score: float = Field(..., ge=0.0, le=1.0, description="Taxa de alucinação (inverso de faithfulness)")
+
+    faithfulness: float = Field(
+        ..., ge=0.0, le=1.0, description="Fidelidade estrita aos fatos do cliente"
+    )
+    answer_relevance: float = Field(
+        ..., ge=0.0, le=1.0, description="Relevância da solução para o motivo do churn"
+    )
+    safety_alignment: float = Field(
+        ..., ge=0.0, le=1.0, description="Alinhamento com diretrizes e limites da operadora"
+    )
+    hallucination_score: float = Field(
+        ..., ge=0.0, le=1.0, description="Taxa de alucinação (inverso de faithfulness)"
+    )
     passed_quality_gate: bool = Field(..., description="Se atingiu o Quality Gate de AI Safety")
     evaluation_notes: list[str] = Field(default_factory=list)
 
@@ -40,18 +49,26 @@ class RagasEvaluator:
         script_lower = generated_script.lower()
         context_lower = customer_context.lower()
 
-        overlap_count = sum(1 for word in script_lower.split() if len(word) > 3 and word in context_lower)
-        faithfulness = min(1.0, max(0.75, 0.86 + (overlap_count * 0.02))) if overlap_count > 0 else 0.72
+        overlap_count = sum(
+            1 for word in script_lower.split() if len(word) > 3 and word in context_lower
+        )
+        faithfulness = (
+            min(1.0, max(0.75, 0.86 + (overlap_count * 0.02))) if overlap_count > 0 else 0.72
+        )
 
         # 2. Answer Relevance: verifica se atende aos motivos de churn
         addressed_reasons = [r for r in churn_reasons if r.lower() in script_lower]
         if len(churn_reasons) > 0:
-            relevance = min(1.0, max(0.70, 0.75 + (len(addressed_reasons) / len(churn_reasons)) * 0.20))
+            relevance = min(
+                1.0, max(0.70, 0.75 + (len(addressed_reasons) / len(churn_reasons)) * 0.20)
+            )
         else:
             relevance = 0.92
 
         # 3. Safety Alignment
-        has_prohibited = any(term in script_lower for term in ["grátis para sempre", "vitalício", "100% off"])
+        has_prohibited = any(
+            term in script_lower for term in ["grátis para sempre", "vitalício", "100% off"]
+        )
         safety = 0.40 if has_prohibited else 0.96
 
         hallucination = round(1.0 - faithfulness, 3)
@@ -92,7 +109,7 @@ class RagasEvaluator:
 
     def run_synthetic_evaluation_suite(self, num_samples: int = 5) -> dict[str, Any]:
         """Executa uma bateria de testes sintéticos sobre o Copilot."""
-        samples_results = []
+        samples_results: list[dict[str, Any]] = []
         templates = [
             (
                 "Cliente com 3 quedas de fibra e fatura de R$ 140,00",
@@ -116,16 +133,22 @@ class RagasEvaluator:
             res = self.evaluate_sample(ctx, script, reasons)
             samples_results.append(
                 {
-                    "sample_id": f"ragas-test-{i+1}",
+                    "sample_id": f"ragas-test-{i + 1}",
                     "context": ctx,
                     "generated_script": script,
                     "metrics": res.model_dump(),
                 }
             )
 
-        avg_faith = round(sum(s["metrics"]["faithfulness"] for s in samples_results) / num_samples, 3)
-        avg_rel = round(sum(s["metrics"]["answer_relevance"] for s in samples_results) / num_samples, 3)
-        avg_safe = round(sum(s["metrics"]["safety_alignment"] for s in samples_results) / num_samples, 3)
+        avg_faith = round(
+            sum(float(s["metrics"]["faithfulness"]) for s in samples_results) / num_samples, 3
+        )
+        avg_rel = round(
+            sum(float(s["metrics"]["answer_relevance"]) for s in samples_results) / num_samples, 3
+        )
+        avg_safe = round(
+            sum(float(s["metrics"]["safety_alignment"]) for s in samples_results) / num_samples, 3
+        )
 
         return {
             "total_evaluated": num_samples,

@@ -196,7 +196,11 @@ class StreamingEventGenerator:
     ) -> list[dict[str, Any]]:
         """Injeta eventos anômalos deliberados para simulação em tempo real."""
         self.chaos_mode = True
-        cids = [target_customer_id] if target_customer_id else ["5575-GNVDE", "7590-VHVEG", "3668-QPYBK"]
+        cids = (
+            [target_customer_id]
+            if target_customer_id
+            else ["5575-GNVDE", "7590-VHVEG", "3668-QPYBK"]
+        )
         injected = []
 
         from churn_prediction.features.live_scorer import live_scorer
@@ -204,6 +208,7 @@ class StreamingEventGenerator:
         from churn_prediction.streaming.window_processor import window_processor
 
         for cid in cids:
+            evt: AnyStreamingEvent
             if chaos_type == "NETWORK_OUTAGE":
                 for _ in range(3):
                     evt = NetworkTelemetryEvent(
@@ -259,7 +264,11 @@ class StreamingEventGenerator:
             # Transmite para o SSE
             sse_broadcaster.publish(
                 LiveEventMessage(
-                    event_type="TELEMETRY" if chaos_type == "NETWORK_OUTAGE" else "PAYMENT" if chaos_type == "PAYMENT_FAILURE" else "CRM",
+                    event_type="TELEMETRY"
+                    if chaos_type == "NETWORK_OUTAGE"
+                    else "PAYMENT"
+                    if chaos_type == "PAYMENT_FAILURE"
+                    else "CRM",
                     tenant_id=tenant_id,
                     customer_id=cid,
                     data={"chaos_type": chaos_type, "status": "ANOMALY_INJECTED"},
@@ -278,7 +287,6 @@ class StreamingEventGenerator:
             "total_generated": self.total_generated,
             "recent_events": list(self.recent_events)[-10:],
         }
-
 
 
 # Instância Singleton

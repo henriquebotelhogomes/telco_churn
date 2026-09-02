@@ -958,9 +958,7 @@ async def acknowledge_streaming_alert(
     alert_id: str, payload: AcknowledgeAlertRequest
 ) -> dict[str, Any]:
     """Marca um alerta de risco em tempo real como tratado pelo operador."""
-    success = window_processor.acknowledge_alert(
-        alert_id, acknowledged_by=payload.acknowledged_by
-    )
+    success = window_processor.acknowledge_alert(alert_id, acknowledged_by=payload.acknowledged_by)
     if not success:
         raise HTTPException(status_code=404, detail=f"Alerta {alert_id} não encontrado")
     return {
@@ -1012,17 +1010,31 @@ async def get_live_scores(tenant_id: str = "tenant-default", limit: int = 20) ->
 async def trigger_chaos_scenario(scenario_id: str) -> dict[str, Any]:
     """Dispara cenários pré-configurados de falha corporativa (fiber_cut, payment_gateway_down, crm_crisis)."""
     if scenario_id == "fiber_cut":
-        generator_instance.inject_chaos(target_customer_id="5575-GNVDE", chaos_type="NETWORK_OUTAGE")
-        generator_instance.inject_chaos(target_customer_id="7590-VHVEG", chaos_type="NETWORK_OUTAGE")
-        generator_instance.inject_chaos(target_customer_id="3668-QPYBK", chaos_type="NETWORK_OUTAGE")
+        generator_instance.inject_chaos(
+            target_customer_id="5575-GNVDE", chaos_type="NETWORK_OUTAGE"
+        )
+        generator_instance.inject_chaos(
+            target_customer_id="7590-VHVEG", chaos_type="NETWORK_OUTAGE"
+        )
+        generator_instance.inject_chaos(
+            target_customer_id="3668-QPYBK", chaos_type="NETWORK_OUTAGE"
+        )
         name = "Rompimento de Fibra Ótica Regional (SP)"
     elif scenario_id == "payment_gateway_down":
-        generator_instance.inject_chaos(target_customer_id="9237-HQITU", chaos_type="PAYMENT_FAILURE")
-        generator_instance.inject_chaos(target_customer_id="9305-CDSKC", chaos_type="PAYMENT_FAILURE")
+        generator_instance.inject_chaos(
+            target_customer_id="9237-HQITU", chaos_type="PAYMENT_FAILURE"
+        )
+        generator_instance.inject_chaos(
+            target_customer_id="9305-CDSKC", chaos_type="PAYMENT_FAILURE"
+        )
         name = "Instabilidade no Gateway de Pagamento PIX"
     elif scenario_id == "crm_crisis":
-        generator_instance.inject_chaos(target_customer_id="5575-GNVDE", chaos_type="CRM_ESCALATION")
-        generator_instance.inject_chaos(target_customer_id="7590-VHVEG", chaos_type="CRM_ESCALATION")
+        generator_instance.inject_chaos(
+            target_customer_id="5575-GNVDE", chaos_type="CRM_ESCALATION"
+        )
+        generator_instance.inject_chaos(
+            target_customer_id="7590-VHVEG", chaos_type="CRM_ESCALATION"
+        )
         name = "Crise de Fila no Atendimento e Reclamações no WhatsApp"
     else:
         generator_instance.inject_chaos()
@@ -1034,7 +1046,6 @@ async def trigger_chaos_scenario(scenario_id: str) -> dict[str, Any]:
         "scenario_name": name,
         "events_injected": 15,
     }
-
 
 
 # ---------------------------------------------------------------------------
@@ -1206,6 +1217,7 @@ async def synthesize_enterprise_dataset_endpoint(
 
 app.include_router(v1)
 
+
 # Roteamento de arquivos estáticos de demonstração
 @app.get("/telco_customers.csv", include_in_schema=False)
 def demo_csv():
@@ -1263,5 +1275,3 @@ else:
     @app.get("/", include_in_schema=False)
     def root():
         return RedirectResponse(url="/docs")
-
-

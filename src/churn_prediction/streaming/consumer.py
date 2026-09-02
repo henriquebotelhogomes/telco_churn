@@ -61,6 +61,7 @@ class StreamingKafkaConsumerWorker:
                                 # 1. Re-avalia o risco em tempo real
                                 if customer_id:
                                     from churn_prediction.features.live_scorer import live_scorer
+
                                     live_scorer.re_score_customer(customer_id, tenant_id)
 
                                 # 2. Transmite o evento bruto para o SSE

@@ -92,7 +92,9 @@ def test_ragas_evaluator_and_quality_gate():
     evaluator = RagasEvaluator()
 
     context = "Cliente de fibra óptica com 4 quedas no mês e fatura de R$ 120"
-    script = "Olá, verificamos a instabilidade na fibra óptica e oferecemos R$ 25 de desconto na fatura."
+    script = (
+        "Olá, verificamos a instabilidade na fibra óptica e oferecemos R$ 25 de desconto na fatura."
+    )
     churn_reasons = ["fibra", "queda", "instabilidade"]
 
     score = evaluator.evaluate_sample(context, script, churn_reasons)

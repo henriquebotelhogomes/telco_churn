@@ -48,7 +48,9 @@ class UnifiedFeatureStore:
                 "SeniorCitizen": 1 if i % 6 == 0 else 0,
                 "Partner": "Yes" if i % 2 == 0 else "No",
                 "Dependents": "Yes" if i % 3 == 0 else "No",
-                "Contract": "Month-to-month" if i % 2 == 0 else ("One year" if i % 3 == 0 else "Two year"),
+                "Contract": "Month-to-month"
+                if i % 2 == 0
+                else ("One year" if i % 3 == 0 else "Two year"),
                 "PaperlessBilling": "Yes" if i % 4 != 0 else "No",
                 "PaymentMethod": "Electronic check" if i % 3 == 0 else "Credit card",
                 "tenure": max(1, (i * 7) % 72),
@@ -137,7 +139,9 @@ class UnifiedFeatureStore:
                 cid = str(row["customer_id"])
                 ts_row = row["timestamp"]
                 try:
-                    ts_epoch = datetime.datetime.fromisoformat(str(ts_row).replace("Z", "+00:00")).timestamp()
+                    ts_epoch = datetime.datetime.fromisoformat(
+                        str(ts_row).replace("Z", "+00:00")
+                    ).timestamp()
                 except Exception:
                     ts_epoch = datetime.datetime.now(datetime.UTC).timestamp()
 

@@ -47,7 +47,9 @@ def test_k8s_cluster_topology_structure():
     assert api_deploy["hpa"]["max_replicas"] == 10
 
     # Valida KEDA ScaledObject
-    worker_deploy = next(d for d in topology["deployments"] if d["name"] == "retainiq-stream-worker")
+    worker_deploy = next(
+        d for d in topology["deployments"] if d["name"] == "retainiq-stream-worker"
+    )
     assert worker_deploy["autoscaling_mode"] == "KEDA_EVENT_DRIVEN"
     assert worker_deploy["keda"]["min_replicas"] == 1
     assert worker_deploy["keda"]["max_replicas"] == 20
