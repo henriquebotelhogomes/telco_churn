@@ -95,10 +95,12 @@ A imensa maioria dos projetos de Data Science limita-se a um arquivo `.ipynb` es
 
 ## ⚡ Live Streaming Engine & Cockpit Reativo
 
+- **Broker Redpanda (Kafka C++ Compatible):** Pipeline de mensageria ultrarrápido com Redpanda e interface visual de inspeção de tópicos via **Redpanda Console** (`http://localhost:8085`).
 - **Event Generator com Chaos Studio:** Simula telemetria de sinal óptico (dBm), latência (ms), perda de pacotes e reclamações de CRM via Kafka.
 - **Injeção de Cenários de Caos:** Queda massiva de fibra regional, degradação de latência 5G e falhas de débito automático acionáveis via API e UI.
 - **SSE Broadcaster Hub:** Distribui eventos de streaming para navegadores conectados com heartbeat a cada 10s e isolamento por Tenant.
 - **Live Scorer Engine:** Recalcula o risco de churn ($p_{\text{live}}$) em menos de **$5\text{ms}$** combinando o modelo com as janelas temporais de Flink.
+
 
 ---
 
@@ -195,7 +197,16 @@ cd ..
 uv run uvicorn churn_prediction.api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
+### Opção 3: Inspecionar Tópicos de Streaming com Redpanda Console (Kafka UI)
+```bash
+# Iniciar broker Redpanda e Redpanda Console UI
+docker compose -f docker-compose.streaming.yml up -d
+```
+Acesse o **Redpanda Console** em [`http://localhost:8085`](http://localhost:8085) para inspecionar tópicos (`telemetry.network.raw`, `crm.interactions`), partições, mensagens em tempo real e consumer lag.
+
+
 ---
+
 
 ## 📚 Links e Documentação
  
