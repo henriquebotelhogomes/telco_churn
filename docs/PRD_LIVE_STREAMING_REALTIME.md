@@ -176,8 +176,3 @@ graph TD
 | **Reconexão Automática do SSE** | Reconexão transparente em $< 3\text{ segundos}$ | Teste de queda forçada do servidor HTTP |
 | **Qualidade de Código & Cobertura** | Cobertura $\ge 90\%$ em testes automatizados | Relatório `pytest-cov` |
 
----
-
-## 5. 🎤 O Pitch Perfeito para Entrevistas
-
-> *"Para demonstrar a arquitetura em escala real, projetei o RetainIQ como uma plataforma **Streaming-First com Arquitetura Lambda**. Quando ativamos o modo Live Stream, um cluster Redpanda/Kafka ingere telemetria de rede e eventos de CRM a 50 msg/s. O Apache Flink agrega esses dados em janelas deslizantes de 15 minutos, a Feature Store atualiza o estado online em menos de 5ms e o modelo recalcula a probabilidade de churn na hora. Se eu injetar uma falha de rede aqui ao vivo, veja como o risco do cliente sobe instantaneamente na tela e dispara o Copilot de Retenção antes mesmo da fatura fechar."*
