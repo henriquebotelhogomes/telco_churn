@@ -1,0 +1,301 @@
+customerID,gender,SeniorCitizen,Partner,Dependents,tenure,PhoneService,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,TotalCharges,Churn,operator,region_uf,plan_speed_mbps,avg_download_speed_mbps,avg_latency_ms,packet_loss_pct_30d,fiber_outages_count_90d,modem_reboots_count_30d,technical_visit_count_12m,nps_score,csat_score,whatsapp_sentiment_score,crm_tickets_opened_60d,anatel_complaint_flag,billing_disputes_count_12m,auto_debit_failures_count,price_increase_pct_last_cycle,pix_payment_enabled,b2b_cnpj_flag
+CLARO-00001-125,Female,0,Yes,Yes,13,Yes,No,Fiber optic,Yes,No,Yes,Yes,No,No,One year,Yes,Bank transfer (automatic),143.62,1879.19,No,Claro,MG,300,275.4,36.2,0.85,0,0,1,8,3.9,0.26,1,0,0,0,14.6,1,0
+CLARO-00002-949,Female,0,No,No,72,Yes,Yes,Fiber optic,No,Yes,No,No,Yes,Yes,Month-to-month,No,Bank transfer (automatic),180.61,12404.64,No,Claro,BA,500,449.5,31.0,0.66,0,0,0,5,4.6,0.34,0,0,0,0,6.0,1,0
+TIM-00003-680,Female,0,No,No,36,Yes,Yes,Fiber optic,No,No,No,No,No,Yes,Two year,Yes,Credit card (automatic),152.08,5245.04,No,TIM,PR,700,678.5,16.8,0.83,0,0,0,8,4.1,0.56,1,0,0,0,11.5,1,0
+VIVO-00004-261,Female,1,No,No,25,No,No phone service,DSL,No,Yes,No,No,Yes,No,One year,Yes,Credit card (automatic),89.51,2201.99,No,Vivo,PR,50,51.8,21.7,0.07,0,1,0,8,3.9,0.77,1,0,0,0,11.5,1,0
+CLARO-00005-662,Male,0,No,No,4,Yes,No,DSL,No,Yes,No,No,No,No,Month-to-month,Yes,Electronic check,91.01,351.3,Yes,Claro,SC,50,8.6,158.3,13.95,7,4,2,0,2.4,-0.48,2,0,2,3,8.6,1,0
+CLARO-00006-516,Male,1,No,No,4,Yes,No,Fiber optic,Yes,No,No,Yes,Yes,No,Month-to-month,Yes,Electronic check,153.42,600.45,No,Claro,PE,300,306.4,14.3,0.98,1,0,0,8,3.8,0.26,0,0,0,0,13.5,1,0
+VIVO-00007-499,Female,0,No,No,1,Yes,No,DSL,Yes,Yes,No,No,No,No,Month-to-month,Yes,Bank transfer (automatic),100.48,99.64,No,Vivo,RJ,100,86.6,16.7,1.15,1,0,0,9,4.1,0.28,1,0,0,0,8.8,1,0
+TIM-00008-309,Female,0,Yes,No,56,Yes,No,Fiber optic,No,No,Yes,No,No,Yes,One year,Yes,Electronic check,149.62,8474.81,No,TIM,DF,1000,910.5,25.1,0.67,0,2,0,8,4.6,0.56,1,0,0,0,11.1,1,0
+VIVO-00009-315,Female,0,No,No,25,Yes,No,DSL,No,No,Yes,No,Yes,No,Month-to-month,Yes,Mailed check,111.19,2822.33,No,Vivo,SP,50,49.4,15.4,1.14,0,0,0,8,4.5,0.48,0,0,0,0,5.4,1,0
+CLARO-00010-462,Female,0,No,No,34,Yes,Yes,DSL,No,Yes,No,No,No,No,Two year,No,Credit card (automatic),102.14,3346.07,No,Claro,PE,50,51.1,15.2,1.05,1,0,0,8,4.2,0.72,0,0,0,0,14.5,1,0
+CLARO-00011-509,Female,0,Yes,No,1,No,No phone service,Fiber optic,No,Yes,No,No,No,Yes,Month-to-month,No,Electronic check,120.09,120.14,Yes,Claro,SP,300,93.5,110.4,32.99,6,7,3,3,1.1,-0.58,4,0,3,2,4.9,1,0
+CLARO-00012-296,Female,0,Yes,No,72,Yes,Yes,DSL,Yes,No,No,No,No,Yes,Month-to-month,Yes,Mailed check,127.19,8715.45,No,Claro,RJ,100,95.3,17.1,0.15,1,1,0,10,4.7,0.64,0,0,0,0,12.7,1,0
+CLARO-00013-744,Male,0,Yes,Yes,50,Yes,No,DSL,No,Yes,No,No,No,No,Month-to-month,No,Electronic check,89.68,4309.76,No,Claro,RJ,50,45.7,27.9,0.69,0,1,0,10,4.9,0.48,1,0,0,0,11.3,0,0
+VIVO-00014-896,Female,0,Yes,Yes,6,Yes,Yes,Fiber optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic check,218.35,1321.24,No,Vivo,PR,500,427.0,35.1,1.14,0,1,0,8,4.9,0.39,0,0,0,0,12.0,0,0
+CLARO-00015-379,Female,0,Yes,No,5,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,One year,No,Bank transfer (automatic),44.03,222.7,No,Claro,SC,0,0.0,31.9,0.15,0,0,1,7,4.1,0.41,0,0,0,0,6.3,0,0
+CLARO-00016-867,Male,0,Yes,No,5,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,One year,Yes,Electronic check,42.69,215.02,No,Claro,SP,0,0.0,32.1,0.7,0,0,0,9,4.0,0.59,0,0,0,0,0.4,1,0
+CLARO-00017-484,Female,0,Yes,No,10,Yes,No,Fiber optic,No,No,Yes,No,No,Yes,One year,No,Electronic check,140.52,1411.14,No,Claro,BA,300,308.5,25.0,0.47,0,0,0,7,4.4,0.62,0,0,0,0,8.9,1,0
+VIVO-00018-188,Female,0,Yes,Yes,20,Yes,Yes,DSL,No,Yes,Yes,Yes,No,No,One year,Yes,Bank transfer (automatic),128.46,2560.15,No,Vivo,MG,50,44.9,24.2,0.69,0,0,0,8,3.8,0.39,0,0,0,0,5.2,0,0
+CLARO-00019-460,Female,0,Yes,Yes,15,Yes,No,DSL,Yes,No,Yes,No,No,No,Month-to-month,No,Credit card (automatic),99.62,1420.87,Yes,Claro,RJ,50,43.8,21.1,0.86,0,0,0,8,4.9,0.61,0,0,0,0,5.1,0,0
+VIVO-00020-982,Female,1,Yes,Yes,9,Yes,Yes,DSL,Yes,Yes,No,No,No,No,Month-to-month,No,Mailed check,114.49,996.19,No,Vivo,SP,100,96.4,29.7,0.54,0,0,1,7,4.7,0.61,0,0,0,0,6.1,1,0
+CLARO-00021-133,Male,0,Yes,No,26,Yes,Yes,DSL,No,No,No,No,No,Yes,Month-to-month,Yes,Electronic check,116.59,2948.17,Yes,Claro,SP,50,49.4,20.7,0.19,0,1,1,8,4.4,0.25,0,0,0,0,14.4,0,0
+CLARO-00022-121,Female,0,No,No,4,Yes,No,Fiber optic,No,No,Yes,No,Yes,No,Month-to-month,No,Electronic check,154.93,617.26,No,Claro,RJ,1000,960.0,40.4,0.99,0,0,0,8,5.0,0.46,0,0,0,0,2.8,1,0
+TIM-00023-740,Female,0,Yes,Yes,9,Yes,No,Fiber optic,No,Yes,Yes,No,Yes,No,One year,Yes,Credit card (automatic),152.6,1376.48,Yes,TIM,SP,500,495.5,40.0,0.39,0,0,0,8,4.3,0.29,0,0,0,0,11.6,0,0
+VIVO-00024-906,Female,0,Yes,Yes,12,No,No phone service,Fiber optic,No,No,Yes,No,Yes,No,Month-to-month,No,Credit card (automatic),119.91,1464.16,Yes,Vivo,SC,500,456.8,37.7,0.52,0,0,1,8,5.0,0.72,0,0,0,0,5.0,1,0
+TIM-00025-202,Female,1,Yes,No,17,Yes,No,Fiber optic,No,No,No,No,Yes,Yes,Two year,No,Credit card (automatic),163.66,2778.27,No,TIM,SP,1000,1034.2,14.1,0.78,0,2,0,8,3.9,0.61,1,0,0,0,11.9,1,0
+VIVO-00026-249,Male,0,No,No,43,Yes,Yes,DSL,No,No,Yes,No,No,No,Two year,No,Mailed check,107.12,4410.24,No,Vivo,RJ,50,52.4,14.2,1.14,0,0,1,9,4.3,0.4,1,0,0,0,4.4,1,0
+VIVO-00027-949,Female,0,No,No,6,Yes,Yes,DSL,No,No,No,Yes,No,Yes,Month-to-month,Yes,Electronic check,134.46,784.87,No,Vivo,SP,100,86.9,32.4,0.21,1,1,0,9,3.8,0.44,0,0,0,0,11.8,0,0
+VIVO-00028-613,Female,0,Yes,No,20,Yes,No,Fiber optic,No,Yes,No,Yes,No,No,One year,Yes,Credit card (automatic),132.05,2596.11,No,Vivo,SC,300,262.4,23.8,0.35,0,0,0,8,4.3,0.62,0,0,0,0,4.9,1,0
+CLARO-00029-750,Female,0,Yes,Yes,25,No,No phone service,Fiber optic,Yes,Yes,No,No,Yes,No,Month-to-month,No,Bank transfer (automatic),142.42,3472.87,No,Claro,RJ,1000,1016.7,38.6,0.8,0,1,1,8,4.6,0.34,0,0,0,0,13.5,1,0
+VIVO-00030-382,Male,0,No,No,1,Yes,Yes,DSL,Yes,Yes,No,No,Yes,No,One year,Yes,Bank transfer (automatic),141.2,135.44,No,Vivo,BA,50,48.5,35.2,0.96,0,0,1,6,4.4,0.72,0,0,0,0,8.8,1,0
+VIVO-00031-229,Female,0,No,No,26,Yes,No,Fiber optic,No,Yes,No,No,No,No,One year,No,Electronic check,120.29,3042.36,No,Vivo,MG,500,516.0,32.6,0.61,0,0,0,9,3.9,0.38,0,0,0,0,6.8,1,0
+VIVO-00032-818,Male,0,No,No,5,Yes,Yes,Fiber optic,No,No,No,No,Yes,Yes,One year,Yes,Credit card (automatic),170.02,832.04,No,Vivo,SC,500,468.2,14.7,0.15,0,1,0,7,3.9,0.82,0,0,0,0,6.3,0,0
+VIVO-00033-394,Female,0,No,No,1,Yes,Yes,Fiber optic,Yes,Yes,Yes,No,No,No,Month-to-month,No,Bank transfer (automatic),161.94,154.63,No,Vivo,GO,700,599.1,31.7,0.85,0,0,0,5,4.2,0.32,0,0,0,0,1.4,1,0
+VIVO-00034-564,Female,1,Yes,Yes,72,Yes,No,Fiber optic,No,Yes,No,No,Yes,Yes,Two year,No,Electronic check,157.82,10998.13,No,Vivo,SP,300,295.0,32.4,0.61,0,0,0,9,3.8,0.4,0,0,0,0,11.2,1,0
+CLARO-00035-820,Male,0,No,No,72,Yes,No,Fiber optic,No,Yes,Yes,No,Yes,No,Two year,Yes,Mailed check,150.22,10839.7,No,Claro,BA,300,296.4,40.4,0.58,0,0,0,7,4.3,0.46,0,0,0,0,1.1,1,0
+CLARO-00036-298,Female,0,No,No,46,Yes,Yes,Fiber optic,No,No,No,Yes,No,No,Two year,No,Credit card (automatic),138.65,6084.08,No,Claro,SP,500,487.5,28.9,0.78,1,1,0,7,3.9,0.49,0,0,0,0,6.8,1,0
+TIM-00037-178,Male,0,No,No,10,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Month-to-month,Yes,Credit card (automatic),43.04,416.34,No,TIM,RJ,0,0.0,26.3,0.22,0,0,0,10,4.2,0.66,0,0,0,0,7.8,1,0
+VIVO-00038-389,Female,0,Yes,No,2,Yes,Yes,Fiber optic,Yes,No,No,No,No,Yes,One year,Yes,Electronic check,170.97,342.53,No,Vivo,MG,1000,969.0,33.0,0.5,2,2,0,8,4.7,0.73,0,0,0,0,9.7,1,0
+VIVO-00039-471,Female,0,Yes,No,32,Yes,Yes,Fiber optic,No,No,No,No,No,No,One year,No,Bank transfer (automatic),122.51,3939.4,No,Vivo,SP,300,309.2,32.8,0.77,0,1,0,8,4.7,0.83,0,0,0,0,14.5,0,0
+TIM-00040-298,Female,0,No,No,16,Yes,No,Fiber optic,No,No,No,Yes,Yes,No,Month-to-month,No,Bank transfer (automatic),156.71,2443.35,Yes,TIM,SP,1000,1002.6,37.5,0.38,1,0,1,7,4.3,0.82,0,0,0,0,7.5,1,0
+TIM-00041-483,Male,1,No,No,3,Yes,No,Fiber optic,No,No,No,No,No,No,One year,No,Electronic check,111.38,337.0,No,TIM,MG,700,654.3,40.2,0.75,0,1,0,7,4.1,0.62,0,0,0,0,9.5,1,0
+CLARO-00042-398,Female,1,Yes,No,19,Yes,No,Fiber optic,No,No,No,No,Yes,Yes,Month-to-month,No,Electronic check,151.17,2855.63,No,Claro,SP,300,275.0,35.1,0.9,0,0,0,10,4.0,0.71,0,0,0,0,11.6,1,0
+VIVO-00043-144,Male,0,Yes,Yes,1,Yes,No,Fiber optic,Yes,No,Yes,No,Yes,No,Month-to-month,Yes,Mailed check,156.97,151.1,Yes,Vivo,SP,500,494.2,22.2,0.26,2,0,0,8,3.9,0.48,0,0,0,0,4.9,1,0
+CLARO-00044-834,Female,0,Yes,Yes,67,No,No phone service,DSL,Yes,No,No,Yes,No,Yes,Two year,No,Bank transfer (automatic),110.07,7495.77,No,Claro,PR,100,85.7,30.2,0.95,0,0,0,8,4.3,0.57,0,0,0,0,8.6,1,0
+CLARO-00045-765,Female,0,Yes,No,8,Yes,No,Fiber optic,No,Yes,No,No,No,Yes,Month-to-month,Yes,Electronic check,143.95,1151.22,No,Claro,SP,700,730.5,41.9,0.98,0,2,0,9,4.5,0.39,0,0,0,0,5.4,1,0
+TIM-00046-911,Male,0,No,No,30,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Month-to-month,Yes,Credit card (automatic),44.79,1325.18,Yes,TIM,BA,0,0.0,33.5,0.6,0,0,0,9,4.0,0.41,0,0,0,3,9.6,1,0
+TIM-00047-543,Male,0,No,No,10,Yes,No,Fiber optic,No,Yes,No,No,Yes,Yes,Month-to-month,Yes,Bank transfer (automatic),168.85,1672.25,No,TIM,PR,700,695.9,16.6,0.81,1,1,0,9,4.8,0.22,0,0,0,0,6.2,1,0
+CLARO-00048-742,Female,0,Yes,Yes,20,Yes,No,DSL,No,No,Yes,No,Yes,No,One year,No,Credit card (automatic),112.69,2180.28,No,Claro,SP,50,45.7,23.1,0.7,0,0,0,7,3.9,0.39,0,0,0,0,4.9,1,0
+VIVO-00049-881,Male,0,No,No,22,Yes,Yes,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,One year,Yes,Credit card (automatic),62.29,1371.65,No,Vivo,RJ,0,0.0,13.5,0.62,0,1,0,8,4.4,0.75,0,0,0,0,6.0,1,0
+VIVO-00050-666,Female,1,No,No,5,Yes,No,DSL,Yes,Yes,Yes,No,No,Yes,One year,Yes,Bank transfer (automatic),133.36,662.24,No,Vivo,MG,50,50.5,13.2,0.87,0,0,0,10,4.0,0.81,0,0,0,0,7.6,1,0
+CLARO-00051-676,Female,0,Yes,Yes,72,Yes,Yes,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Month-to-month,No,Bank transfer (automatic),61.65,4334.99,No,Claro,SP,0,0.0,31.7,1.17,0,0,0,7,4.4,0.54,0,0,0,0,8.6,0,0
+VIVO-00052-551,Female,0,Yes,Yes,41,Yes,No,DSL,No,No,No,No,No,Yes,One year,No,Mailed check,104.65,4371.13,No,Vivo,PR,50,49.3,32.3,1.05,0,1,0,8,4.9,0.38,0,0,0,0,10.4,1,0
+CLARO-00053-673,Female,0,No,No,72,Yes,Yes,Fiber optic,Yes,Yes,No,No,Yes,Yes,One year,Yes,Electronic check,190.48,13717.51,No,Claro,BA,500,486.6,32.9,0.21,1,0,0,9,4.4,0.61,0,0,0,0,0.1,1,0
+TIM-00054-516,Female,0,Yes,No,63,Yes,No,Fiber optic,No,No,No,No,Yes,No,One year,Yes,Credit card (automatic),130.71,8393.14,No,TIM,RJ,500,521.2,26.9,1.13,0,2,1,7,4.5,0.27,1,0,0,0,14.1,0,0
+CLARO-00055-297,Male,0,No,No,25,Yes,Yes,Fiber optic,No,No,Yes,No,No,No,One year,Yes,Electronic check,136.07,3387.32,No,Claro,SP,700,629.7,16.2,0.42,0,0,0,9,4.9,0.4,0,0,0,0,1.8,1,0
+CLARO-00056-614,Female,0,No,No,71,Yes,Yes,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Two year,Yes,Mailed check,61.72,4324.21,No,Claro,RJ,0,0.0,33.1,1.1,0,1,0,10,4.7,0.64,0,0,0,0,13.8,1,0
+TIM-00057-617,Male,0,Yes,Yes,2,Yes,Yes,DSL,No,No,Yes,Yes,Yes,No,Month-to-month,Yes,Bank transfer (automatic),144.92,284.93,No,TIM,SP,50,44.7,19.6,0.05,0,0,0,9,4.4,0.24,1,0,0,0,2.0,1,0
+TIM-00058-530,Female,0,Yes,No,6,Yes,No,DSL,No,Yes,Yes,No,No,No,One year,Yes,Electronic check,101.59,580.44,Yes,TIM,MG,50,13.9,207.2,27.42,5,10,2,1,1.7,-0.86,3,0,3,1,3.6,1,0
+CLARO-00059-557,Male,0,Yes,Yes,1,Yes,No,Fiber optic,Yes,No,No,No,No,No,Month-to-month,Yes,Credit card (automatic),125.07,124.45,Yes,Claro,MG,700,672.9,24.4,0.37,0,0,0,7,4.6,0.56,0,0,0,0,10.4,1,0
+VIVO-00060-288,Female,0,Yes,No,11,Yes,Yes,Fiber optic,No,Yes,Yes,Yes,No,No,Month-to-month,No,Electronic check,172.22,1843.85,No,Vivo,SP,1000,970.6,20.1,0.82,0,1,0,9,4.7,0.56,0,0,0,0,14.1,0,0
+VIVO-00061-872,Female,0,No,No,13,Yes,Yes,Fiber optic,No,No,Yes,Yes,No,No,One year,Yes,Credit card (automatic),153.51,1917.14,No,Vivo,RJ,700,653.0,39.4,0.48,1,0,0,7,4.1,0.81,0,0,0,0,12.5,1,0
+CLARO-00062-801,Female,0,No,No,8,Yes,No,Fiber optic,Yes,No,No,No,No,No,Two year,Yes,Electronic check,126.71,1010.31,No,Claro,RJ,700,652.7,32.0,0.93,1,1,0,9,3.8,0.53,0,0,0,0,7.3,1,0
+CLARO-00063-112,Male,0,Yes,No,49,Yes,No,DSL,Yes,Yes,Yes,Yes,No,No,Month-to-month,Yes,Mailed check,126.28,6117.73,No,Claro,SP,50,44.8,29.0,1.19,0,1,0,9,4.8,0.69,0,0,0,0,2.6,1,0
+CLARO-00064-903,Female,0,No,No,12,Yes,Yes,Fiber optic,Yes,No,No,Yes,No,No,Month-to-month,Yes,Credit card (automatic),160.99,1937.47,Yes,Claro,GO,1000,363.8,233.3,28.31,4,10,1,2,1.2,-0.82,5,0,3,3,1.2,0,0
+VIVO-00065-200,Female,0,Yes,No,9,Yes,No,Fiber optic,No,No,Yes,No,Yes,Yes,Month-to-month,Yes,Mailed check,170.66,1506.96,No,Vivo,SP,700,632.5,19.4,0.13,0,0,0,7,4.3,0.43,0,0,0,0,1.3,1,0
+CLARO-00066-624,Female,1,Yes,No,21,Yes,No,Fiber optic,No,Yes,No,No,No,No,One year,Yes,Mailed check,130.56,2642.2,Yes,Claro,SP,1000,936.9,26.8,0.12,0,0,0,7,4.1,0.36,0,0,0,0,14.2,1,0
+CLARO-00067-923,Female,0,Yes,No,4,Yes,Yes,DSL,No,Yes,No,Yes,No,No,Month-to-month,No,Credit card (automatic),122.66,473.31,No,Claro,PE,50,51.8,35.6,0.47,0,0,1,7,4.7,0.22,0,0,0,0,1.0,0,0
+TIM-00068-789,Female,1,Yes,Yes,45,Yes,Yes,Fiber optic,No,No,No,No,Yes,Yes,Month-to-month,No,Bank transfer (automatic),181.8,7961.85,No,TIM,SP,1000,899.6,39.4,0.18,0,1,0,9,4.5,0.62,0,0,0,0,1.5,1,0
+TIM-00069-671,Male,0,Yes,No,2,Yes,Yes,Fiber optic,Yes,No,Yes,No,No,Yes,Month-to-month,Yes,Credit card (automatic),166.8,338.64,No,TIM,MG,300,282.1,14.9,0.88,0,0,0,9,3.8,0.42,0,0,0,0,8.3,1,0
+CLARO-00070-573,Male,0,No,No,72,Yes,Yes,DSL,No,No,Yes,Yes,Yes,No,Month-to-month,No,Bank transfer (automatic),139.69,9802.61,No,Claro,SP,50,43.6,23.0,0.28,0,1,0,6,4.2,0.45,0,0,0,0,10.1,0,0
+TIM-00071-704,Male,0,Yes,Yes,41,Yes,Yes,Fiber optic,No,No,No,No,No,No,Month-to-month,Yes,Electronic check,124.45,5022.96,No,TIM,RJ,500,511.6,37.3,0.76,0,2,0,7,4.3,0.57,0,0,0,0,2.5,1,0
+TIM-00072-325,Female,1,Yes,Yes,6,Yes,No,Fiber optic,No,Yes,No,No,No,No,One year,No,Mailed check,113.7,686.86,No,TIM,PR,300,269.9,34.1,0.8,0,1,0,8,4.8,0.26,1,0,0,0,10.3,0,0
+CLARO-00073-538,Male,0,No,No,1,Yes,No,Fiber optic,Yes,No,Yes,Yes,No,No,One year,No,Electronic check,148.06,145.73,No,Claro,SP,500,511.7,39.6,1.19,1,0,1,7,4.7,0.74,0,0,0,0,6.2,1,0
+CLARO-00074-887,Male,0,No,No,47,Yes,No,Fiber optic,No,No,Yes,No,No,No,Two year,No,Credit card (automatic),117.57,5267.27,No,Claro,PE,300,274.4,36.7,0.62,2,0,0,7,4.8,0.71,1,0,0,0,0.2,0,0
+VIVO-00075-567,Male,0,Yes,No,34,Yes,Yes,DSL,Yes,Yes,Yes,No,No,Yes,Two year,No,Bank transfer (automatic),146.72,5039.48,No,Vivo,RJ,100,89.3,14.7,0.16,0,0,0,8,4.3,0.21,0,0,0,0,3.4,1,0
+TIM-00076-205,Female,0,Yes,Yes,36,Yes,No,DSL,No,Yes,No,No,No,No,One year,Yes,Mailed check,87.51,3114.88,No,TIM,MG,50,50.0,14.6,0.17,1,0,0,6,4.2,0.29,0,0,0,0,11.7,1,0
+TIM-00077-774,Female,0,No,No,41,Yes,No,DSL,No,Yes,No,No,No,No,Month-to-month,No,Credit card (automatic),87.24,3413.14,No,TIM,MG,50,49.3,29.1,0.47,1,1,1,9,3.8,0.24,0,0,0,0,9.4,1,0
+CLARO-00078-818,Female,1,No,No,2,Yes,Yes,Fiber optic,No,Yes,Yes,No,No,No,Month-to-month,No,Electronic check,142.08,272.68,Yes,Claro,RJ,500,517.5,19.2,0.33,2,0,0,7,4.6,0.63,0,0,0,0,5.2,1,0
+TIM-00079-365,Male,0,No,No,12,Yes,Yes,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,One year,Yes,Mailed check,61.64,749.0,No,TIM,SP,0,0.0,41.3,0.77,0,0,0,7,4.8,0.31,0,0,0,0,11.1,1,0
+TIM-00080-112,Male,1,Yes,No,3,No,No phone service,Fiber optic,Yes,Yes,No,Yes,No,No,Month-to-month,Yes,Bank transfer (automatic),136.21,396.54,Yes,TIM,PR,1000,436.2,278.9,34.5,4,5,4,2,2.2,-0.78,2,0,1,1,7.0,1,0
+CLARO-00081-891,Male,0,No,No,55,Yes,No,Fiber optic,No,No,Yes,No,No,Yes,Two year,No,Electronic check,148.37,8014.21,No,Claro,MG,700,731.2,24.6,1.16,2,0,0,7,4.1,0.75,0,0,0,0,7.6,1,0
+CLARO-00082-706,Male,0,No,No,27,Yes,Yes,DSL,Yes,Yes,Yes,Yes,No,No,Month-to-month,Yes,Electronic check,143.18,3683.48,No,Claro,SP,100,89.2,28.1,1.16,0,0,0,7,4.0,0.65,1,0,0,0,1.4,1,0
+VIVO-00083-625,Male,0,Yes,No,11,Yes,No,DSL,Yes,Yes,No,Yes,Yes,No,Month-to-month,Yes,Electronic check,136.55,1516.03,No,Vivo,SP,50,48.4,40.1,0.15,0,2,0,6,4.0,0.62,1,0,0,0,14.1,1,0
+TIM-00084-543,Female,0,Yes,Yes,1,No,No phone service,Fiber optic,No,Yes,No,Yes,Yes,Yes,Month-to-month,Yes,Electronic check,169.27,166.55,No,TIM,MG,1000,955.2,18.0,1.07,0,1,0,9,5.0,0.71,0,0,0,0,5.8,1,0
+VIVO-00085-324,Male,0,No,No,10,No,No phone service,Fiber optic,No,Yes,No,Yes,No,No,Month-to-month,Yes,Credit card (automatic),112.17,1120.62,No,Vivo,MG,500,508.9,35.9,0.46,1,1,0,9,4.8,0.65,1,0,0,0,8.4,1,0
+TIM-00086-604,Female,0,Yes,Yes,11,Yes,No,Fiber optic,No,Yes,Yes,No,No,Yes,Month-to-month,Yes,Bank transfer (automatic),153.39,1654.52,No,TIM,RJ,500,432.3,27.8,0.47,0,1,0,9,4.2,0.41,1,0,0,0,4.8,0,0
+CLARO-00087-728,Female,0,No,No,36,Yes,No,Fiber optic,No,No,No,No,No,Yes,Month-to-month,No,Credit card (automatic),129.25,4628.51,No,Claro,RJ,300,263.4,29.0,1.13,0,1,0,6,4.0,0.78,0,0,0,0,4.0,1,0
+VIVO-00088-362,Male,0,Yes,Yes,28,Yes,Yes,DSL,No,Yes,No,No,No,No,Month-to-month,Yes,Electronic check,105.56,2934.86,No,Vivo,SP,100,86.5,21.6,1.14,0,0,0,9,4.5,0.78,0,0,0,0,14.1,1,0
+TIM-00089-260,Male,1,Yes,Yes,61,Yes,No,Fiber optic,Yes,Yes,No,No,No,Yes,Two year,Yes,Electronic check,160.37,9474.91,No,TIM,RJ,700,624.0,26.4,0.16,0,1,1,8,3.9,0.71,0,0,0,0,5.6,1,0
+VIVO-00090-145,Female,0,Yes,No,17,Yes,No,Fiber optic,No,No,No,Yes,Yes,Yes,One year,Yes,Credit card (automatic),175.9,2871.65,No,Vivo,RJ,700,636.8,29.2,0.32,1,0,1,7,4.5,0.54,0,0,0,0,14.2,1,0
+VIVO-00091-297,Male,1,Yes,No,3,Yes,Yes,DSL,No,No,Yes,No,Yes,Yes,Month-to-month,Yes,Mailed check,149.38,428.9,No,Vivo,MG,100,93.4,30.7,0.65,1,0,0,9,4.7,0.81,1,0,0,0,5.2,1,0
+CLARO-00092-597,Female,1,Yes,Yes,34,Yes,Yes,DSL,No,Yes,No,Yes,Yes,Yes,One year,No,Electronic check,161.54,5387.57,No,Claro,RJ,100,89.6,32.5,1.17,1,0,0,9,4.2,0.67,0,0,0,0,7.3,1,0
+VIVO-00093-157,Male,1,No,No,40,Yes,No,DSL,Yes,No,No,Yes,No,No,One year,No,Electronic check,104.98,4252.17,No,Vivo,RS,50,42.8,31.1,0.19,0,0,0,7,4.8,0.58,0,0,0,0,4.3,1,0
+VIVO-00094-685,Male,0,No,No,23,Yes,Yes,Fiber optic,No,Yes,Yes,No,Yes,No,One year,No,Bank transfer (automatic),166.0,3885.4,No,Vivo,MG,300,282.5,38.9,1.03,0,0,0,8,4.5,0.58,0,0,0,0,8.9,1,0
+CLARO-00095-593,Male,0,Yes,Yes,41,Yes,No,DSL,Yes,No,No,No,No,No,One year,No,Bank transfer (automatic),90.33,3656.96,No,Claro,DF,50,46.7,41.9,0.35,0,0,0,9,4.5,0.32,0,0,0,0,10.1,1,0
+TIM-00096-960,Male,0,Yes,No,19,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,One year,No,Bank transfer (automatic),45.81,862.23,No,TIM,RJ,0,0.0,38.1,0.53,0,1,0,9,4.4,0.28,0,0,0,0,2.9,1,0
+CLARO-00097-642,Female,0,No,No,20,No,No phone service,Fiber optic,Yes,No,Yes,Yes,Yes,No,Month-to-month,Yes,Electronic check,158.86,3019.38,No,Claro,PR,1000,881.7,35.2,0.71,0,1,0,7,4.3,0.48,0,0,0,0,14.3,0,0
+TIM-00098-643,Male,1,Yes,No,15,Yes,Yes,Fiber optic,Yes,No,Yes,Yes,No,No,Month-to-month,Yes,Credit card (automatic),167.4,2489.1,Yes,TIM,RJ,700,621.4,39.0,0.46,0,2,1,8,4.1,0.67,0,0,0,0,9.8,1,0
+TIM-00099-361,Male,0,Yes,Yes,1,Yes,Yes,Fiber optic,No,No,Yes,No,No,Yes,One year,No,Bank transfer (automatic),151.58,149.55,No,TIM,PR,300,261.3,16.1,1.01,0,1,0,7,3.9,0.33,0,0,0,0,4.4,1,0
+CLARO-00100-312,Female,0,Yes,No,3,Yes,No,Fiber optic,No,Yes,No,No,No,No,One year,No,Electronic check,116.98,337.58,Yes,Claro,RJ,300,77.4,293.6,31.01,4,9,4,0,1.1,-0.53,2,1,1,3,4.0,0,0
+VIVO-00101-450,Male,1,Yes,Yes,1,Yes,No,Fiber optic,Yes,No,Yes,No,Yes,Yes,One year,Yes,Credit card (automatic),175.47,167.26,No,Vivo,SP,500,427.9,23.4,0.46,0,1,0,6,4.0,0.8,0,0,0,0,10.6,1,0
+TIM-00102-690,Male,0,No,No,28,Yes,No,Fiber optic,No,No,No,Yes,No,No,Month-to-month,No,Electronic check,124.27,3504.6,Yes,TIM,RJ,500,441.5,26.1,0.62,0,1,0,8,4.1,0.53,0,0,0,0,8.6,1,0
+CLARO-00103-423,Male,0,No,No,10,Yes,Yes,Fiber optic,No,No,No,No,No,No,Month-to-month,Yes,Electronic check,118.01,1150.43,No,Claro,BA,300,301.0,37.3,0.43,1,0,0,8,4.3,0.26,0,0,0,0,8.2,1,0
+VIVO-00104-268,Female,1,No,No,19,Yes,No,Fiber optic,Yes,No,Yes,No,No,Yes,One year,No,Bank transfer (automatic),166.55,3179.25,No,Vivo,RS,1000,950.8,25.7,0.73,1,2,0,9,4.5,0.48,0,0,0,0,2.6,0,0
+VIVO-00105-773,Female,0,Yes,No,66,Yes,Yes,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Two year,No,Mailed check,58.21,3817.62,No,Vivo,SP,0,0.0,33.0,0.91,0,0,0,10,4.7,0.81,0,0,0,0,10.1,0,0
+CLARO-00106-282,Female,0,No,No,8,Yes,No,DSL,No,No,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic check,150.05,1187.59,Yes,Claro,RS,100,86.2,32.5,0.22,2,1,0,8,4.2,0.49,0,0,0,0,5.8,1,0
+TIM-00107-812,Female,0,Yes,Yes,14,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Month-to-month,Yes,Bank transfer (automatic),43.18,604.97,No,TIM,RJ,0,0.0,37.8,0.56,1,0,0,9,4.2,0.58,0,0,0,0,14.8,1,0
+TIM-00108-852,Male,0,Yes,No,39,Yes,Yes,Fiber optic,Yes,No,No,No,No,No,Month-to-month,Yes,Credit card (automatic),139.3,5413.32,No,TIM,SP,500,520.7,33.2,0.65,0,0,0,7,4.5,0.46,0,0,0,0,14.3,1,0
+CLARO-00109-674,Male,1,Yes,Yes,7,No,No phone service,Fiber optic,No,Yes,No,No,Yes,No,Month-to-month,Yes,Credit card (automatic),118.23,786.65,Yes,Claro,RS,300,257.6,36.1,0.56,0,1,0,8,4.9,0.31,1,0,0,0,11.6,0,0
+CLARO-00110-206,Male,0,No,No,2,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Two year,No,Electronic check,45.78,89.76,Yes,Claro,RS,0,0.0,14.6,0.11,0,1,0,9,4.1,0.37,0,0,0,0,8.0,1,0
+CLARO-00111-874,Male,0,Yes,No,9,Yes,Yes,Fiber optic,No,No,Yes,Yes,Yes,No,Month-to-month,No,Credit card (automatic),179.25,1597.26,No,Claro,MG,1000,1043.1,20.9,1.07,0,1,0,6,3.8,0.77,0,0,0,0,1.3,1,0
+TIM-00112-843,Female,0,No,No,4,Yes,Yes,DSL,Yes,Yes,No,No,No,No,One year,No,Mailed check,119.4,464.34,No,TIM,MG,100,99.5,14.0,0.16,0,0,0,7,4.6,0.27,0,0,0,0,4.6,1,0
+CLARO-00113-473,Female,0,Yes,Yes,72,Yes,No,Fiber optic,Yes,No,No,No,Yes,Yes,Two year,Yes,Electronic check,167.19,11926.12,No,Claro,MG,700,670.4,37.8,0.21,1,0,1,7,3.9,0.21,0,0,0,0,13.6,1,0
+CLARO-00114-652,Female,0,Yes,Yes,46,Yes,No,Fiber optic,No,No,No,No,No,No,Two year,Yes,Bank transfer (automatic),105.22,4612.62,No,Claro,DF,300,313.1,40.5,0.81,0,1,0,8,4.1,0.52,0,0,0,0,5.4,1,0
+CLARO-00115-147,Male,0,Yes,No,28,Yes,No,Fiber optic,No,Yes,No,No,Yes,Yes,One year,No,Electronic check,161.9,4356.47,No,Claro,BA,500,513.7,22.4,0.96,1,0,1,8,4.1,0.53,0,0,0,0,9.9,1,0
+VIVO-00116-216,Female,0,Yes,No,57,Yes,Yes,Fiber optic,Yes,No,No,Yes,Yes,No,Two year,Yes,Mailed check,173.46,9491.63,No,Vivo,PR,500,507.1,38.4,0.89,0,2,0,9,4.4,0.51,0,0,0,0,9.3,1,0
+VIVO-00117-802,Female,0,No,No,45,Yes,Yes,Fiber optic,No,No,Yes,No,No,No,Month-to-month,Yes,Credit card (automatic),146.74,6449.35,Yes,Vivo,PR,1000,150.4,299.4,22.56,4,10,4,2,2.3,-0.57,5,1,2,3,8.6,1,0
+VIVO-00118-884,Male,0,Yes,No,5,Yes,Yes,DSL,No,Yes,Yes,No,No,Yes,Month-to-month,Yes,Electronic check,136.22,673.5,Yes,Vivo,SP,50,46.2,37.6,0.54,0,0,0,9,4.3,0.71,0,0,0,0,5.2,0,0
+TIM-00119-975,Male,0,Yes,No,62,Yes,Yes,Fiber optic,Yes,No,Yes,Yes,Yes,No,Month-to-month,Yes,Electronic check,180.84,10996.0,No,TIM,RS,300,314.1,13.1,0.49,0,1,0,9,4.5,0.81,1,0,0,0,12.1,1,0
+VIVO-00120-713,Male,0,No,No,21,Yes,No,Fiber optic,No,Yes,No,No,No,No,Month-to-month,Yes,Electronic check,123.44,2481.95,Yes,Vivo,SP,700,729.9,39.5,0.45,1,0,0,7,4.9,0.57,0,0,0,0,14.2,0,0
+TIM-00121-997,Female,0,No,No,46,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Two year,Yes,Mailed check,45.1,1972.28,No,TIM,SP,0,0.0,15.5,0.13,0,1,1,9,4.1,0.41,1,0,0,0,1.4,1,0
+TIM-00122-177,Male,0,Yes,No,63,No,No phone service,DSL,No,Yes,No,No,Yes,Yes,One year,Yes,Bank transfer (automatic),113.95,7315.07,No,TIM,PE,50,49.1,39.6,0.83,0,1,0,8,3.9,0.51,0,0,0,0,7.4,0,0
+TIM-00123-386,Female,0,No,No,10,Yes,No,Fiber optic,No,No,Yes,No,No,No,Month-to-month,No,Electronic check,122.26,1221.44,Yes,TIM,PE,700,631.4,21.8,0.75,0,0,0,8,4.5,0.44,0,0,0,0,4.2,1,0
+VIVO-00124-689,Male,0,No,No,3,Yes,No,Fiber optic,No,Yes,No,Yes,No,No,One year,Yes,Electronic check,133.56,390.75,No,Vivo,BA,500,434.9,37.8,0.1,0,0,0,8,4.8,0.26,0,0,0,0,5.2,1,0
+VIVO-00125-795,Male,0,No,No,7,No,No phone service,Fiber optic,No,No,No,No,Yes,Yes,Month-to-month,No,Electronic check,136.6,951.54,Yes,Vivo,RJ,700,675.0,22.1,0.78,1,1,0,7,4.1,0.41,0,0,0,0,12.9,1,0
+CLARO-00126-561,Female,0,No,No,15,Yes,Yes,DSL,Yes,Yes,Yes,No,No,Yes,Month-to-month,No,Bank transfer (automatic),147.02,2100.46,No,Claro,DF,50,51.8,30.5,0.15,0,0,0,9,4.3,0.28,0,0,0,0,13.0,1,0
+TIM-00127-378,Female,1,No,No,47,Yes,No,DSL,No,No,Yes,No,No,No,One year,Yes,Mailed check,87.05,4010.06,No,TIM,SP,100,102.0,12.0,0.99,0,0,0,7,4.9,0.82,0,0,0,0,0.1,1,0
+CLARO-00128-674,Female,0,Yes,No,55,Yes,Yes,Fiber optic,No,No,No,No,Yes,No,One year,Yes,Electronic check,144.13,8070.34,No,Claro,SP,500,470.5,16.1,0.18,0,0,0,8,4.2,0.3,1,0,0,0,6.6,1,0
+VIVO-00129-115,Female,0,Yes,No,1,Yes,No,Fiber optic,No,No,Yes,No,Yes,No,Month-to-month,Yes,Credit card (automatic),138.13,140.72,No,Vivo,RS,300,269.9,15.7,0.93,1,1,0,9,3.8,0.5,0,0,0,0,4.7,1,0
+CLARO-00130-143,Male,0,No,No,20,Yes,No,Fiber optic,Yes,No,Yes,No,No,Yes,Month-to-month,Yes,Credit card (automatic),147.36,2873.18,Yes,Claro,MG,300,301.2,32.7,0.23,0,0,0,9,4.2,0.83,0,0,0,0,1.6,1,0
+VIVO-00131-671,Female,0,Yes,Yes,15,Yes,Yes,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,One year,Yes,Mailed check,57.41,827.44,No,Vivo,SP,0,0.0,17.7,0.26,0,0,0,8,4.8,0.79,0,0,0,0,5.5,1,0
+CLARO-00132-488,Male,0,No,No,7,Yes,Yes,Fiber optic,Yes,No,No,Yes,Yes,Yes,Month-to-month,Yes,Electronic check,206.74,1434.62,Yes,Claro,SP,1000,856.3,40.1,0.26,0,0,0,7,4.6,0.45,0,0,0,0,10.8,1,0
+TIM-00133-771,Female,0,No,No,3,Yes,Yes,DSL,No,No,Yes,No,No,No,Month-to-month,No,Electronic check,106.48,320.6,No,TIM,RS,100,92.7,15.0,0.32,0,0,0,9,4.9,0.56,0,0,0,0,10.5,1,0
+VIVO-00134-911,Male,0,No,No,11,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Month-to-month,No,Bank transfer (automatic),46.47,498.49,No,Vivo,SC,0,0.0,24.4,0.78,1,1,0,7,4.5,0.44,0,0,0,0,0.0,1,0
+VIVO-00135-116,Male,0,Yes,Yes,72,Yes,Yes,DSL,No,No,No,No,Yes,No,One year,Yes,Electronic check,119.39,8589.2,No,Vivo,SP,100,96.4,19.7,0.4,0,0,0,7,4.2,0.51,0,0,0,0,9.6,1,0
+TIM-00136-490,Male,0,No,No,10,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Month-to-month,Yes,Credit card (automatic),46.19,443.76,No,TIM,GO,0,0.0,39.9,0.78,1,1,0,8,4.2,0.57,0,0,0,0,14.6,0,0
+CLARO-00137-192,Male,0,No,No,20,Yes,No,DSL,Yes,Yes,No,No,No,No,Month-to-month,Yes,Mailed check,101.19,1949.6,No,Claro,RS,100,89.8,41.9,0.65,0,0,0,9,4.5,0.27,0,0,0,0,11.5,1,0
+VIVO-00138-941,Female,0,Yes,No,33,Yes,Yes,DSL,Yes,Yes,No,No,No,No,Month-to-month,Yes,Bank transfer (automatic),118.19,3710.28,No,Vivo,RS,50,47.9,12.7,0.29,0,0,0,8,4.4,0.67,0,0,0,0,0.7,1,0
+VIVO-00139-908,Female,1,No,No,12,Yes,Yes,DSL,No,Yes,No,No,Yes,Yes,Month-to-month,No,Electronic check,148.36,1710.87,Yes,Vivo,RJ,100,95.0,27.9,0.26,1,0,1,7,4.1,0.54,0,0,0,0,9.4,1,0
+TIM-00140-613,Female,0,No,No,72,Yes,No,Fiber optic,Yes,Yes,No,Yes,No,No,Two year,No,Credit card (automatic),149.21,10309.82,No,TIM,DF,700,638.7,29.2,0.54,0,1,0,7,4.6,0.58,0,0,0,0,13.6,1,0
+TIM-00141-888,Male,0,No,No,72,Yes,No,DSL,Yes,No,No,No,No,Yes,Month-to-month,Yes,Mailed check,112.39,7818.99,No,TIM,RJ,50,50.3,40.0,0.36,1,0,0,9,4.5,0.37,0,0,0,0,10.3,1,0
+CLARO-00142-719,Female,0,Yes,No,8,Yes,Yes,Fiber optic,No,No,Yes,No,Yes,Yes,Month-to-month,Yes,Credit card (automatic),177.63,1406.88,No,Claro,RS,300,308.3,32.6,1.05,0,0,0,9,4.8,0.67,0,0,0,0,10.6,1,0
+VIVO-00143-567,Male,0,Yes,Yes,19,Yes,Yes,DSL,Yes,No,No,No,Yes,Yes,Two year,Yes,Credit card (automatic),149.94,2711.38,No,Vivo,DF,50,43.4,25.9,0.79,1,0,0,9,4.9,0.56,0,0,0,0,13.4,0,0
+VIVO-00144-431,Male,0,Yes,Yes,10,Yes,No,Fiber optic,No,Yes,No,No,No,No,Month-to-month,Yes,Credit card (automatic),118.52,1163.99,No,Vivo,MG,500,501.9,24.6,0.41,0,0,0,7,4.0,0.33,0,0,0,0,0.1,0,0
+VIVO-00145-702,Female,0,Yes,No,9,Yes,Yes,DSL,Yes,Yes,No,Yes,No,No,Month-to-month,No,Electronic check,132.47,1210.36,Yes,Vivo,SP,50,49.2,24.5,0.25,0,1,0,9,4.7,0.32,0,0,0,0,5.5,1,0
+VIVO-00146-537,Male,0,Yes,No,1,Yes,No,DSL,Yes,No,No,No,No,No,Month-to-month,No,Credit card (automatic),90.08,89.42,No,Vivo,GO,50,52.5,21.5,0.65,0,0,0,9,4.4,0.61,0,0,0,0,0.0,1,0
+CLARO-00147-220,Male,0,No,No,26,Yes,No,DSL,No,No,Yes,Yes,Yes,No,Month-to-month,No,Electronic check,124.81,3118.1,No,Claro,PE,50,50.8,29.1,1.15,0,0,0,5,4.4,0.51,0,0,0,0,13.4,1,0
+TIM-00148-860,Male,0,Yes,No,19,Yes,Yes,DSL,Yes,Yes,No,No,Yes,No,Month-to-month,Yes,Bank transfer (automatic),137.82,2583.9,Yes,TIM,RJ,100,102.2,35.5,0.4,0,1,0,7,4.9,0.44,1,0,0,0,0.6,1,0
+VIVO-00149-618,Male,0,No,No,1,Yes,No,DSL,No,Yes,No,No,No,No,Month-to-month,Yes,Bank transfer (automatic),90.95,88.39,No,Vivo,SP,100,103.6,27.7,0.05,0,1,0,7,4.4,0.23,0,0,0,0,13.4,1,0
+VIVO-00150-383,Female,0,No,No,9,Yes,Yes,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Month-to-month,Yes,Electronic check,57.3,490.96,No,Vivo,SP,0,0.0,20.1,1.13,0,1,0,7,4.2,0.78,0,0,0,0,5.8,1,0
+CLARO-00151-821,Female,0,Yes,No,66,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Two year,No,Mailed check,47.17,3092.01,No,Claro,RJ,0,0.0,39.6,0.59,1,0,0,9,4.4,0.35,0,0,0,0,10.5,1,0
+TIM-00152-432,Female,0,Yes,Yes,7,Yes,Yes,Fiber optic,No,No,No,Yes,No,Yes,Month-to-month,Yes,Mailed check,161.05,1125.76,No,TIM,RS,500,473.2,19.3,0.23,0,0,0,9,4.3,0.84,0,0,0,0,11.1,0,0
+TIM-00153-217,Female,0,Yes,Yes,4,Yes,No,DSL,Yes,No,Yes,Yes,Yes,No,Month-to-month,No,Credit card (automatic),141.51,574.85,No,TIM,DF,100,97.3,25.6,0.39,0,0,0,10,4.2,0.72,0,0,0,0,14.9,1,0
+CLARO-00154-622,Female,0,No,No,18,No,No phone service,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Month-to-month,Yes,Bank transfer (automatic),23.27,403.0,No,Claro,MG,0,0.0,20.5,0.09,0,0,0,9,4.7,0.46,0,0,0,0,12.6,1,0
+CLARO-00155-395,Male,1,Yes,Yes,72,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Two year,Yes,Bank transfer (automatic),43.11,3080.08,No,Claro,PE,0,0.0,35.7,0.75,0,0,0,8,4.5,0.49,0,0,0,0,3.6,1,0
+CLARO-00156-659,Female,1,Yes,Yes,7,Yes,No,Fiber optic,No,Yes,No,Yes,No,No,Month-to-month,No,Electronic check,141.76,998.15,Yes,Claro,SP,700,643.1,21.4,0.11,1,1,0,8,4.4,0.68,0,0,0,0,13.8,0,0
+TIM-00157-677,Female,1,Yes,Yes,31,No,No phone service,DSL,Yes,Yes,No,No,Yes,Yes,Month-to-month,Yes,Credit card (automatic),128.17,3869.96,Yes,TIM,SP,50,18.6,236.8,32.57,3,11,3,1,1.4,-0.56,5,1,3,1,12.6,0,0
+CLARO-00158-492,Male,0,No,No,40,Yes,No,Fiber optic,No,Yes,Yes,No,Yes,No,Month-to-month,No,Bank transfer (automatic),153.25,6217.29,No,Claro,SC,700,716.8,26.2,0.22,0,0,1,8,4.6,0.83,0,0,0,0,6.5,0,0
+TIM-00159-443,Female,0,Yes,No,7,Yes,No,DSL,No,No,No,Yes,Yes,Yes,Month-to-month,Yes,Mailed check,139.6,936.67,No,TIM,SP,50,45.0,22.5,0.88,0,0,0,7,4.5,0.78,0,0,0,0,9.1,1,0
+TIM-00160-763,Male,0,No,No,36,Yes,No,DSL,No,No,No,No,Yes,No,Month-to-month,Yes,Electronic check,102.24,3607.72,No,TIM,SP,100,88.6,19.7,0.98,2,0,1,7,4.3,0.62,0,0,0,0,6.6,1,0
+VIVO-00161-172,Female,0,Yes,Yes,12,Yes,Yes,Fiber optic,No,No,No,No,No,No,Month-to-month,Yes,Credit card (automatic),124.4,1484.23,No,Vivo,SP,500,520.4,28.2,0.05,1,1,0,9,4.9,0.43,0,0,0,0,8.0,0,0
+VIVO-00162-570,Female,0,Yes,Yes,28,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Month-to-month,No,Mailed check,43.85,1212.3,No,Vivo,RJ,0,0.0,34.1,0.21,0,0,0,9,4.4,0.24,0,0,0,1,0.6,1,0
+TIM-00163-143,Female,1,No,No,28,Yes,No,DSL,No,Yes,Yes,No,No,Yes,One year,No,Bank transfer (automatic),119.69,3323.33,No,TIM,SP,50,51.5,12.4,0.78,0,1,0,9,4.8,0.24,1,0,0,0,3.0,1,0
+TIM-00164-855,Female,0,No,No,21,Yes,No,DSL,No,Yes,Yes,Yes,Yes,No,One year,Yes,Mailed check,137.91,2931.11,No,TIM,BA,50,48.6,15.0,1.02,0,1,0,8,3.8,0.32,0,0,0,0,11.6,1,0
+VIVO-00165-755,Female,0,Yes,No,2,Yes,Yes,Fiber optic,No,No,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic check,189.85,365.4,No,Vivo,SP,300,301.2,28.2,0.3,1,1,0,7,4.8,0.65,1,0,0,0,9.7,1,0
+CLARO-00166-442,Female,1,No,No,50,Yes,No,Fiber optic,Yes,Yes,No,No,Yes,No,Two year,No,Electronic check,150.66,7250.24,No,Claro,RJ,300,267.0,19.1,0.52,0,1,0,9,3.9,0.48,0,0,0,0,2.9,1,0
+VIVO-00167-443,Male,1,No,No,10,Yes,No,Fiber optic,Yes,Yes,Yes,No,No,No,Month-to-month,Yes,Bank transfer (automatic),145.61,1405.96,No,Vivo,SC,700,625.3,27.7,1.04,0,0,0,7,4.3,0.77,0,0,0,0,13.7,0,0
+CLARO-00168-145,Male,0,No,No,5,Yes,Yes,DSL,No,Yes,No,Yes,No,No,Month-to-month,Yes,Electronic check,119.43,600.31,Yes,Claro,RJ,50,49.5,26.4,0.4,0,1,0,7,4.3,0.7,1,0,0,0,9.5,0,0
+VIVO-00169-807,Female,0,Yes,No,1,Yes,No,Fiber optic,No,Yes,No,No,No,Yes,Month-to-month,Yes,Mailed check,139.42,139.79,No,Vivo,PR,300,297.3,23.0,0.8,0,0,0,7,4.2,0.55,0,0,0,0,11.3,0,0
+VIVO-00170-373,Female,0,Yes,Yes,25,Yes,Yes,DSL,No,Yes,No,No,No,No,One year,Yes,Credit card (automatic),107.71,2562.39,Yes,Vivo,RS,100,43.7,298.6,15.79,6,5,2,2,1.2,-0.87,3,0,3,1,7.1,1,0
+TIM-00171-121,Female,0,Yes,No,31,Yes,Yes,DSL,No,No,No,No,No,No,One year,No,Electronic check,93.09,2776.92,No,TIM,DF,100,101.9,23.2,0.38,0,0,0,6,4.5,0.3,0,0,0,0,11.9,1,0
+VIVO-00172-424,Male,0,Yes,Yes,1,Yes,No,Fiber optic,No,Yes,Yes,No,Yes,No,Month-to-month,Yes,Mailed check,159.88,158.21,No,Vivo,RJ,1000,916.3,34.2,1.17,0,1,0,8,4.9,0.84,0,0,0,0,10.3,0,0
+TIM-00173-242,Male,0,Yes,No,20,Yes,Yes,DSL,No,No,Yes,Yes,No,No,Month-to-month,No,Credit card (automatic),119.07,2313.69,No,TIM,MG,50,43.1,30.1,0.64,0,1,0,9,4.3,0.45,0,0,0,0,3.2,0,0
+TIM-00174-525,Female,0,No,No,7,Yes,No,Fiber optic,Yes,Yes,No,No,Yes,No,Two year,Yes,Mailed check,152.01,1033.5,Yes,TIM,RJ,300,108.9,197.0,23.01,5,6,2,1,2.2,-0.79,5,1,2,1,11.9,1,0
+VIVO-00175-755,Female,1,No,No,29,Yes,No,DSL,Yes,Yes,No,Yes,No,No,Month-to-month,Yes,Credit card (automatic),114.81,3201.08,No,Vivo,RJ,50,47.6,32.8,0.19,0,0,0,7,3.9,0.41,1,0,0,0,13.7,1,0
+VIVO-00176-642,Male,0,No,No,5,Yes,No,Fiber optic,No,No,Yes,No,No,Yes,Month-to-month,Yes,Credit card (automatic),146.68,739.41,Yes,Vivo,MG,700,191.5,169.1,29.03,7,6,1,1,1.2,-0.83,3,0,3,3,10.5,0,0
+CLARO-00177-178,Male,0,No,No,32,Yes,Yes,DSL,Yes,Yes,No,Yes,Yes,No,One year,No,Electronic check,154.56,4861.03,No,Claro,SP,100,87.2,24.7,0.93,2,0,0,8,4.0,0.22,0,0,0,0,4.5,1,0
+VIVO-00178-226,Male,0,Yes,No,13,Yes,No,Fiber optic,No,No,No,No,No,Yes,Month-to-month,No,Credit card (automatic),137.19,1717.41,No,Vivo,SP,700,700.6,40.9,0.25,0,0,0,5,4.9,0.75,0,0,0,0,12.5,0,0
+CLARO-00179-626,Male,0,No,No,72,Yes,No,Fiber optic,No,No,Yes,No,Yes,Yes,One year,No,Electronic check,170.99,12119.41,No,Claro,RJ,700,714.8,28.6,0.38,0,0,0,10,4.4,0.64,0,0,0,0,9.9,1,0
+VIVO-00180-510,Male,0,No,No,4,Yes,Yes,Fiber optic,Yes,No,No,Yes,No,No,Month-to-month,Yes,Credit card (automatic),162.77,624.66,Yes,Vivo,SP,1000,930.9,26.3,0.74,0,0,0,9,3.9,0.36,0,0,0,0,1.0,1,0
+TIM-00181-491,Female,1,No,No,11,Yes,No,DSL,Yes,No,No,Yes,Yes,No,Month-to-month,Yes,Credit card (automatic),128.95,1360.88,Yes,TIM,RJ,100,28.5,294.8,11.22,6,10,4,3,1.1,-0.85,4,0,1,1,8.5,1,0
+CLARO-00182-652,Female,0,No,No,3,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Month-to-month,No,Mailed check,42.58,124.44,No,Claro,RJ,0,0.0,12.8,0.1,0,1,0,9,3.8,0.78,0,0,0,0,9.9,1,0
+CLARO-00183-706,Male,0,Yes,Yes,72,Yes,Yes,Fiber optic,No,No,Yes,No,No,No,One year,Yes,Mailed check,144.98,10535.78,No,Claro,PE,1000,917.2,15.0,0.83,1,0,0,8,4.5,0.44,0,0,0,0,8.0,1,0
+VIVO-00184-687,Female,0,No,No,58,Yes,No,DSL,Yes,No,No,Yes,No,No,Two year,Yes,Credit card (automatic),107.46,6013.95,No,Vivo,PR,100,97.5,18.0,0.51,0,0,0,7,3.8,0.66,1,0,0,0,7.0,0,0
+CLARO-00185-729,Female,0,No,No,8,Yes,No,Fiber optic,No,No,No,No,No,No,Month-to-month,Yes,Electronic check,116.43,898.04,Yes,Claro,SP,700,616.0,19.1,0.32,0,0,0,8,4.4,0.84,0,0,0,0,11.8,1,0
+CLARO-00186-759,Male,0,No,No,30,Yes,Yes,DSL,No,No,Yes,No,Yes,No,Month-to-month,No,Electronic check,128.84,3761.03,No,Claro,RJ,50,50.8,40.0,0.65,0,2,1,8,4.9,0.35,0,0,0,0,11.2,1,0
+CLARO-00187-247,Male,0,No,No,47,Yes,No,Fiber optic,No,Yes,No,No,Yes,Yes,One year,No,Electronic check,166.52,7645.87,No,Claro,PR,700,721.7,21.2,0.79,0,0,0,9,3.9,0.8,0,0,0,0,13.5,1,0
+CLARO-00188-342,Female,0,No,No,22,No,No phone service,Fiber optic,No,No,Yes,No,Yes,Yes,Month-to-month,Yes,Credit card (automatic),137.6,2909.82,Yes,Claro,SP,300,301.8,20.2,0.14,1,0,0,5,4.2,0.47,1,0,0,0,6.3,0,0
+CLARO-00189-434,Female,0,No,No,21,Yes,No,DSL,No,No,Yes,Yes,Yes,No,One year,No,Credit card (automatic),125.19,2573.82,No,Claro,PE,50,45.7,32.6,0.96,1,0,0,8,4.6,0.74,0,0,0,0,14.2,0,0
+VIVO-00190-123,Male,0,No,No,7,Yes,Yes,Fiber optic,No,Yes,No,Yes,No,Yes,Month-to-month,Yes,Credit card (automatic),180.24,1217.63,No,Vivo,PR,1000,890.6,26.8,0.31,1,2,0,8,4.7,0.45,0,0,0,0,2.8,1,0
+TIM-00191-129,Female,0,Yes,Yes,2,Yes,No,Fiber optic,Yes,Yes,No,No,No,No,Month-to-month,No,Electronic check,141.23,287.48,Yes,TIM,MG,1000,291.3,120.9,33.14,3,9,1,0,1.4,-0.61,4,0,3,2,2.5,1,0
+VIVO-00192-579,Male,1,No,No,63,Yes,Yes,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,One year,Yes,Credit card (automatic),61.42,3809.05,No,Vivo,MG,0,0.0,24.9,1.09,0,0,0,5,4.4,0.48,0,0,0,0,13.8,1,0
+CLARO-00193-293,Male,1,Yes,Yes,64,Yes,Yes,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Month-to-month,Yes,Mailed check,61.5,3965.83,No,Claro,RS,0,0.0,25.7,0.18,0,1,0,8,4.0,0.38,1,0,0,0,3.2,0,0
+VIVO-00194-885,Male,0,Yes,No,28,Yes,Yes,DSL,No,No,No,No,Yes,Yes,One year,No,Bank transfer (automatic),139.41,3766.06,No,Vivo,RS,50,52.2,29.8,0.06,2,1,1,8,4.7,0.68,1,0,0,0,4.8,1,0
+VIVO-00195-716,Female,1,Yes,Yes,11,Yes,Yes,Fiber optic,No,Yes,No,No,Yes,No,One year,Yes,Credit card (automatic),168.54,1866.49,No,Vivo,RJ,1000,1016.4,15.9,0.82,0,0,0,10,4.4,0.57,0,0,0,0,6.4,1,0
+VIVO-00196-574,Male,0,No,No,12,Yes,No,Fiber optic,No,No,No,Yes,Yes,No,One year,No,Bank transfer (automatic),154.49,1826.52,No,Vivo,RS,1000,871.5,14.3,0.1,0,0,0,9,4.5,0.36,0,0,0,0,2.7,1,0
+CLARO-00197-185,Female,0,Yes,No,36,Yes,No,Fiber optic,Yes,Yes,No,Yes,No,Yes,One year,Yes,Mailed check,166.75,5708.68,Yes,Claro,SP,500,173.7,206.6,18.94,6,11,3,4,2.2,-0.61,5,0,1,1,12.9,1,0
+CLARO-00198-765,Male,0,No,No,63,Yes,Yes,Fiber optic,No,Yes,No,No,Yes,No,Two year,Yes,Mailed check,168.39,10820.02,No,Claro,RJ,1000,916.8,36.9,0.5,0,0,0,8,4.3,0.52,0,0,0,0,7.7,0,0
+TIM-00199-936,Female,0,Yes,Yes,61,Yes,Yes,DSL,Yes,No,No,No,Yes,Yes,Two year,No,Mailed check,150.5,9326.32,No,TIM,RJ,100,103.4,29.6,0.84,0,1,0,8,4.9,0.67,0,0,0,0,7.1,0,0
+VIVO-00200-312,Female,0,Yes,Yes,42,Yes,No,DSL,Yes,Yes,Yes,Yes,No,Yes,Month-to-month,Yes,Credit card (automatic),151.27,6154.64,Yes,Vivo,RS,100,97.4,13.9,0.55,0,0,0,8,4.2,0.43,0,0,0,0,7.7,1,0
+CLARO-00201-548,Female,0,No,No,28,Yes,No,DSL,No,Yes,Yes,No,No,No,Two year,Yes,Electronic check,98.47,2775.47,No,Claro,MG,50,49.0,34.0,0.16,0,0,0,10,4.3,0.47,0,0,0,0,1.3,1,0
+TIM-00202-469,Male,1,No,No,2,Yes,No,Fiber optic,No,No,No,No,No,Yes,Month-to-month,No,Bank transfer (automatic),144.87,295.13,No,TIM,PE,1000,1004.5,22.1,0.51,0,0,0,7,4.9,0.3,0,0,0,0,14.6,1,0
+TIM-00203-817,Female,0,Yes,Yes,4,No,No phone service,DSL,No,No,Yes,No,No,No,One year,No,Credit card (automatic),67.56,267.17,No,TIM,PR,50,42.9,17.9,0.4,0,0,0,9,4.0,0.84,0,0,0,0,2.4,1,0
+TIM-00204-706,Female,0,No,No,64,No,No phone service,Fiber optic,No,Yes,No,Yes,No,No,Two year,Yes,Bank transfer (automatic),110.27,7068.75,Yes,TIM,MG,300,134.0,316.4,29.75,5,12,2,2,1.4,-0.58,6,0,3,1,12.3,1,0
+VIVO-00205-828,Female,0,Yes,Yes,26,Yes,No,Fiber optic,No,No,No,Yes,No,Yes,Two year,Yes,Credit card (automatic),156.84,4087.03,No,Vivo,RJ,1000,875.4,36.7,0.22,2,1,0,9,4.8,0.28,0,0,0,0,14.3,1,0
+CLARO-00206-223,Female,0,Yes,Yes,1,No,No phone service,Fiber optic,Yes,Yes,No,No,No,Yes,Month-to-month,Yes,Electronic check,146.0,140.06,Yes,Claro,RS,1000,858.9,28.4,0.13,0,0,0,8,4.2,0.45,1,0,0,0,11.4,1,0
+VIVO-00207-845,Female,1,No,No,2,Yes,No,Fiber optic,No,No,No,No,No,No,Month-to-month,Yes,Credit card (automatic),108.38,207.75,No,Vivo,SP,300,266.5,15.7,0.69,0,1,0,7,4.5,0.32,0,0,0,0,0.3,0,0
+VIVO-00208-822,Female,1,No,No,30,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Month-to-month,Yes,Electronic check,47.71,1427.73,Yes,Vivo,SC,0,0.0,23.5,0.15,0,2,0,8,4.0,0.7,0,0,0,1,0.4,1,0
+CLARO-00209-427,Male,0,Yes,Yes,1,Yes,Yes,DSL,No,No,No,Yes,Yes,No,One year,Yes,Mailed check,129.5,128.79,No,Claro,SC,50,52.1,38.6,0.36,0,1,0,9,4.7,0.4,0,0,0,0,5.6,0,0
+TIM-00210-650,Female,0,No,No,4,Yes,No,DSL,Yes,No,No,No,No,Yes,Month-to-month,Yes,Bank transfer (automatic),113.59,451.06,No,TIM,SP,50,48.1,13.4,0.9,0,0,0,7,4.0,0.56,0,0,0,0,10.2,1,0
+VIVO-00211-870,Female,0,No,No,22,Yes,No,Fiber optic,No,Yes,No,No,No,Yes,Month-to-month,No,Bank transfer (automatic),143.96,3088.12,Yes,Vivo,PR,500,432.8,35.6,0.8,0,0,0,9,4.6,0.43,1,0,0,0,10.5,1,0
+CLARO-00212-297,Female,1,No,No,32,Yes,No,Fiber optic,No,Yes,No,No,Yes,No,One year,No,Bank transfer (automatic),147.48,4525.49,Yes,Claro,PE,700,210.1,133.3,15.49,6,6,2,4,2.0,-0.62,3,1,1,3,10.9,1,0
+TIM-00213-123,Female,0,No,No,29,Yes,No,DSL,No,No,Yes,No,No,Yes,Month-to-month,No,Credit card (automatic),111.54,3089.78,No,TIM,SP,100,85.1,24.6,0.57,0,0,0,9,3.8,0.68,1,0,0,0,4.7,1,0
+VIVO-00214-591,Female,0,No,No,7,Yes,Yes,Fiber optic,No,No,No,No,Yes,Yes,Month-to-month,Yes,Mailed check,166.33,1155.87,Yes,Vivo,SP,500,84.1,231.6,10.31,6,4,4,2,2.3,-0.57,3,1,2,1,8.4,1,0
+CLARO-00215-198,Female,0,No,No,34,Yes,Yes,DSL,Yes,No,No,No,Yes,Yes,One year,Yes,Bank transfer (automatic),148.36,4902.08,Yes,Claro,SC,50,15.1,299.9,11.4,4,9,4,3,2.1,-0.71,3,1,1,2,4.7,0,0
+TIM-00216-250,Female,0,Yes,Yes,7,Yes,No,Fiber optic,No,Yes,Yes,No,No,Yes,Month-to-month,No,Bank transfer (automatic),146.32,973.29,Yes,TIM,SP,300,312.8,21.9,0.72,0,1,0,7,4.3,0.71,0,0,0,0,9.4,1,0
+TIM-00217-934,Female,0,Yes,Yes,11,Yes,Yes,Fiber optic,Yes,No,No,No,Yes,No,One year,Yes,Electronic check,155.93,1735.73,No,TIM,SP,300,269.8,17.2,1.02,0,0,0,8,3.9,0.74,0,0,0,0,6.8,1,0
+VIVO-00218-275,Female,0,Yes,Yes,38,Yes,Yes,Fiber optic,Yes,No,No,No,No,No,Two year,No,Electronic check,141.69,5178.11,No,Vivo,DF,700,612.7,30.9,0.37,0,0,0,8,4.7,0.71,0,0,0,0,11.3,1,0
+CLARO-00219-283,Female,0,No,No,29,No,No phone service,Fiber optic,No,No,No,Yes,No,No,One year,Yes,Electronic check,115.07,3248.75,No,Claro,RJ,1000,900.9,16.7,1.02,0,0,0,8,4.4,0.35,0,0,0,0,5.5,1,0
+VIVO-00220-125,Male,0,Yes,Yes,52,Yes,No,Fiber optic,No,No,Yes,Yes,Yes,Yes,Two year,Yes,Electronic check,173.8,9105.94,No,Vivo,RJ,300,297.3,32.5,0.37,1,2,1,9,4.7,0.79,0,0,0,0,6.1,1,0
+CLARO-00221-583,Male,0,Yes,No,30,Yes,No,DSL,No,No,No,Yes,Yes,No,Month-to-month,No,Electronic check,118.11,3466.18,No,Claro,MG,100,87.6,23.2,0.71,0,2,0,10,4.8,0.42,0,0,0,0,4.9,1,0
+TIM-00222-242,Male,0,No,No,23,Yes,No,DSL,No,Yes,No,No,Yes,Yes,One year,Yes,Mailed check,132.4,3033.54,Yes,TIM,SP,100,85.6,15.1,0.69,0,1,0,7,3.9,0.83,0,0,0,0,7.8,1,0
+TIM-00223-520,Female,1,Yes,Yes,2,Yes,No,DSL,No,Yes,No,No,Yes,No,Month-to-month,Yes,Electronic check,111.78,212.99,Yes,TIM,RS,50,47.0,18.1,1.19,0,1,0,7,4.2,0.57,0,0,0,0,13.8,1,0
+TIM-00224-911,Female,0,No,No,12,Yes,Yes,DSL,No,No,Yes,No,Yes,No,One year,Yes,Credit card (automatic),124.46,1429.84,No,TIM,SP,100,99.0,20.8,1.1,0,1,0,8,5.0,0.56,1,0,0,0,6.8,1,0
+CLARO-00225-573,Male,1,No,No,8,Yes,No,DSL,Yes,Yes,No,Yes,No,No,Month-to-month,Yes,Electronic check,115.01,917.32,Yes,Claro,SP,100,90.6,25.1,0.59,0,0,0,9,4.0,0.28,0,0,0,0,6.6,1,0
+CLARO-00226-791,Male,0,Yes,No,7,Yes,No,Fiber optic,No,No,Yes,No,Yes,Yes,Month-to-month,No,Electronic check,167.49,1122.65,Yes,Claro,MG,700,145.4,317.8,17.1,3,5,2,0,2.2,-0.49,3,0,1,1,9.4,0,0
+CLARO-00227-538,Male,0,Yes,Yes,72,Yes,Yes,Fiber optic,Yes,No,No,No,Yes,Yes,Month-to-month,Yes,Bank transfer (automatic),183.83,13216.71,No,Claro,RS,500,510.0,28.1,1.19,0,0,1,9,5.0,0.65,0,0,0,0,13.3,1,0
+TIM-00228-593,Male,0,No,No,13,Yes,No,Fiber optic,Yes,No,No,Yes,No,No,One year,No,Electronic check,133.86,1745.81,No,TIM,GO,300,257.3,16.6,0.29,0,2,0,5,4.7,0.41,0,0,0,0,9.7,1,0
+VIVO-00229-967,Female,0,Yes,Yes,62,No,No phone service,DSL,No,Yes,Yes,No,Yes,No,Two year,Yes,Electronic check,103.33,6195.97,No,Vivo,SP,50,48.4,18.1,0.16,0,1,1,7,3.9,0.67,0,0,0,0,4.3,1,0
+CLARO-00230-378,Female,1,No,No,27,Yes,No,Fiber optic,No,No,No,Yes,Yes,No,Month-to-month,No,Credit card (automatic),154.93,4029.48,Yes,Claro,MG,1000,942.7,33.8,0.35,0,0,0,9,3.9,0.29,0,0,0,0,10.9,1,0
+TIM-00231-504,Female,0,Yes,No,44,Yes,No,Fiber optic,Yes,No,Yes,No,No,No,Month-to-month,Yes,Bank transfer (automatic),130.57,5641.0,No,TIM,SP,500,449.2,39.8,0.9,0,0,0,9,4.6,0.65,0,0,0,0,9.0,0,0
+TIM-00232-112,Male,0,No,No,19,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Two year,Yes,Electronic check,46.37,842.46,No,TIM,BA,0,0.0,19.6,0.4,1,2,0,8,4.2,0.47,1,0,0,0,5.2,1,0
+TIM-00233-866,Female,0,Yes,Yes,24,Yes,No,Fiber optic,No,No,Yes,No,No,Yes,One year,Yes,Credit card (automatic),154.21,3559.03,No,TIM,RJ,1000,886.5,17.6,0.12,1,1,0,5,4.3,0.61,0,0,0,0,4.2,1,0
+CLARO-00234-589,Female,0,Yes,Yes,18,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,One year,Yes,Bank transfer (automatic),48.0,870.2,No,Claro,RS,0,0.0,41.6,0.93,0,2,0,8,4.3,0.44,1,0,0,2,9.2,0,0
+TIM-00235-925,Male,1,No,No,6,Yes,No,Fiber optic,No,Yes,No,No,Yes,No,Month-to-month,No,Mailed check,138.64,813.55,No,TIM,SP,300,303.8,41.6,1.15,0,0,0,7,4.8,0.41,0,0,0,0,6.4,0,0
+TIM-00236-774,Male,0,Yes,Yes,35,Yes,No,DSL,Yes,No,Yes,No,No,No,Month-to-month,Yes,Mailed check,104.42,3668.01,Yes,TIM,SP,50,50.0,19.2,0.29,0,1,0,8,4.7,0.3,1,0,0,0,7.1,0,0
+VIVO-00237-239,Female,1,No,No,9,No,No phone service,DSL,No,Yes,No,No,Yes,No,One year,Yes,Credit card (automatic),94.72,844.28,Yes,Vivo,SP,50,43.4,15.5,0.15,0,1,1,9,3.9,0.44,1,0,0,0,8.0,0,0
+TIM-00238-427,Female,0,No,No,1,Yes,No,Fiber optic,No,No,Yes,No,No,No,Month-to-month,Yes,Bank transfer (automatic),117.97,116.16,No,TIM,RJ,300,290.9,36.0,0.86,0,0,1,7,5.0,0.66,0,0,0,0,14.7,1,0
+TIM-00239-315,Male,0,Yes,No,29,Yes,Yes,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Month-to-month,No,Credit card (automatic),58.17,1703.69,No,TIM,SP,0,0.0,22.1,0.83,0,2,0,8,4.4,0.38,0,0,0,0,11.3,1,0
+TIM-00240-970,Female,0,Yes,Yes,5,Yes,Yes,Fiber optic,No,Yes,No,No,No,No,Month-to-month,Yes,Credit card (automatic),135.76,664.06,Yes,TIM,SP,500,522.4,39.8,0.16,1,0,0,6,4.6,0.59,1,0,0,0,7.3,1,0
+TIM-00241-768,Female,0,No,No,72,Yes,No,DSL,Yes,No,Yes,Yes,Yes,No,Two year,No,Bank transfer (automatic),136.6,9387.16,Yes,TIM,BA,100,35.8,317.3,20.95,7,5,2,3,1.7,-0.6,5,1,1,1,6.1,0,0
+CLARO-00242-937,Female,1,No,No,72,Yes,No,DSL,No,No,Yes,No,Yes,No,One year,No,Electronic check,114.67,7843.48,No,Claro,SC,50,51.0,16.8,0.7,0,0,1,8,4.2,0.55,0,0,0,0,7.8,0,0
+CLARO-00243-555,Male,0,No,No,68,No,No phone service,Fiber optic,No,No,Yes,Yes,Yes,No,One year,Yes,Electronic check,138.06,9536.54,No,Claro,SP,500,467.2,20.3,0.89,0,0,0,9,4.0,0.5,1,0,0,0,9.4,1,0
+CLARO-00244-761,Male,0,No,No,12,Yes,Yes,DSL,No,No,Yes,No,Yes,Yes,Month-to-month,Yes,Bank transfer (automatic),150.7,1733.61,Yes,Claro,PE,100,23.2,186.2,17.0,3,7,3,0,1.1,-0.41,3,1,1,3,12.3,1,0
+CLARO-00245-817,Female,0,No,No,1,Yes,No,Fiber optic,No,No,No,No,No,Yes,One year,Yes,Electronic check,135.51,133.08,No,Claro,RJ,700,674.5,31.7,0.21,0,0,1,9,4.2,0.71,0,0,0,0,7.0,1,0
+TIM-00246-633,Male,0,No,No,72,Yes,Yes,Fiber optic,Yes,Yes,Yes,No,Yes,Yes,Two year,No,Credit card (automatic),197.21,13832.13,No,TIM,RS,300,57.3,252.2,33.18,6,11,1,3,1.0,-0.85,2,0,3,3,10.3,1,0
+CLARO-00247-272,Male,0,Yes,Yes,15,Yes,No,Fiber optic,Yes,No,No,No,No,Yes,Month-to-month,Yes,Electronic check,139.76,2035.36,Yes,Claro,SP,300,128.6,192.7,32.92,7,12,1,3,2.3,-0.48,2,1,3,3,2.8,1,0
+VIVO-00248-603,Male,1,No,No,72,Yes,No,Fiber optic,Yes,Yes,Yes,No,Yes,No,Month-to-month,Yes,Mailed check,170.41,11793.73,Yes,Vivo,RJ,700,645.3,22.6,0.55,0,1,0,7,3.8,0.46,0,0,0,0,10.0,1,0
+CLARO-00249-663,Female,0,No,No,72,Yes,No,Fiber optic,Yes,No,No,Yes,Yes,Yes,One year,No,Electronic check,189.69,13084.76,No,Claro,PR,1000,946.0,29.9,0.06,0,0,0,8,4.5,0.67,0,0,0,0,10.0,1,0
+CLARO-00250-901,Male,0,No,No,53,No,No phone service,DSL,Yes,Yes,Yes,No,No,Yes,Month-to-month,No,Electronic check,113.18,6094.58,Yes,Claro,SP,50,22.2,220.2,26.9,6,7,3,3,1.7,-0.67,2,1,2,1,2.7,1,0
+CLARO-00251-429,Male,0,Yes,No,9,Yes,No,Fiber optic,Yes,Yes,No,No,Yes,No,Month-to-month,Yes,Credit card (automatic),150.93,1308.56,No,Claro,DF,300,278.0,31.5,0.29,0,1,0,9,3.9,0.58,1,0,0,0,1.1,1,0
+VIVO-00252-842,Female,0,Yes,No,13,Yes,No,Fiber optic,No,No,No,No,Yes,Yes,Month-to-month,No,Bank transfer (automatic),157.63,2019.78,Yes,Vivo,RJ,700,165.8,167.6,34.12,7,4,2,3,1.7,-0.66,6,0,1,3,4.1,1,0
+VIVO-00253-323,Male,0,No,No,53,Yes,No,Fiber optic,Yes,Yes,Yes,Yes,No,Yes,One year,No,Credit card (automatic),177.95,9584.61,No,Vivo,SP,500,523.0,38.2,0.11,0,2,0,7,4.6,0.61,1,0,0,0,2.0,0,0
+VIVO-00254-158,Male,0,Yes,No,10,No,No phone service,Fiber optic,No,No,No,Yes,No,No,Month-to-month,Yes,Mailed check,100.76,1014.75,Yes,Vivo,MG,300,278.7,30.9,1.04,0,0,0,8,4.0,0.51,0,0,0,0,14.2,1,0
+VIVO-00255-417,Male,0,No,No,5,Yes,Yes,Fiber optic,No,No,Yes,No,No,No,Month-to-month,No,Mailed check,147.75,707.31,Yes,Vivo,SP,1000,163.1,270.3,25.4,3,7,1,2,1.2,-0.6,2,0,1,3,1.3,1,0
+TIM-00256-554,Male,0,Yes,Yes,22,Yes,No,Fiber optic,Yes,Yes,No,No,Yes,No,One year,Yes,Mailed check,152.74,3276.31,No,TIM,SP,300,278.1,18.8,1.06,0,1,0,7,4.0,0.27,0,0,0,0,13.8,0,0
+TIM-00257-719,Male,0,No,No,72,Yes,Yes,DSL,No,Yes,No,Yes,No,Yes,Two year,Yes,Credit card (automatic),139.68,9855.03,No,TIM,SP,100,100.6,37.9,1.17,1,0,0,8,4.8,0.83,1,0,0,0,4.8,1,0
+TIM-00258-461,Female,0,No,No,33,Yes,No,Fiber optic,No,No,No,No,No,Yes,Two year,Yes,Bank transfer (automatic),129.66,4337.81,No,TIM,PE,500,433.7,36.3,0.3,1,0,0,10,4.2,0.51,0,0,0,0,11.7,1,0
+CLARO-00259-955,Female,0,No,No,23,Yes,No,DSL,No,No,No,Yes,Yes,No,Month-to-month,Yes,Bank transfer (automatic),119.69,2705.83,No,Claro,RJ,100,85.2,16.2,0.33,0,1,0,9,4.4,0.29,0,0,0,0,9.7,1,0
+VIVO-00260-161,Male,0,Yes,Yes,2,Yes,No,Fiber optic,No,No,No,No,Yes,No,Month-to-month,Yes,Credit card (automatic),136.85,275.86,Yes,Vivo,BA,700,620.7,30.6,0.3,0,1,0,10,4.8,0.5,0,0,0,0,9.7,1,0
+VIVO-00261-179,Female,0,No,No,26,Yes,No,Fiber optic,No,Yes,No,No,Yes,Yes,Month-to-month,No,Bank transfer (automatic),161.35,4271.32,No,Vivo,SP,300,311.6,13.4,0.41,1,0,0,8,4.3,0.33,0,0,0,0,6.1,0,0
+VIVO-00262-926,Male,1,No,No,72,Yes,Yes,Fiber optic,Yes,No,No,Yes,Yes,No,One year,Yes,Bank transfer (automatic),181.24,13047.89,No,Vivo,SP,1000,954.7,41.8,0.75,0,1,0,7,4.1,0.61,1,0,0,0,15.0,1,0
+TIM-00263-680,Female,1,Yes,No,4,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Month-to-month,Yes,Mailed check,46.58,182.77,No,TIM,SC,0,0.0,14.0,0.71,0,0,0,9,4.4,0.84,1,0,0,0,14.6,1,0
+VIVO-00264-393,Female,0,No,No,20,Yes,No,DSL,No,No,No,Yes,No,No,One year,No,Bank transfer (automatic),92.56,1819.01,No,Vivo,DF,100,102.1,36.6,0.06,0,0,0,8,3.9,0.45,0,0,0,0,7.0,1,0
+TIM-00265-506,Female,0,Yes,Yes,58,Yes,No,Fiber optic,No,No,No,Yes,Yes,No,Two year,No,Credit card (automatic),150.43,8470.9,Yes,TIM,PE,700,149.8,275.8,34.42,5,7,1,3,1.4,-0.6,2,1,2,3,3.2,0,0
+VIVO-00266-155,Male,0,Yes,No,37,Yes,No,Fiber optic,No,No,No,No,No,No,One year,No,Electronic check,110.0,3956.64,No,Vivo,RS,500,507.4,16.3,0.81,0,1,0,9,3.8,0.78,1,0,0,0,3.9,0,0
+TIM-00267-952,Male,0,No,No,33,Yes,No,Fiber optic,No,Yes,Yes,Yes,No,No,One year,Yes,Mailed check,144.01,4822.88,No,TIM,RJ,500,474.9,36.6,0.19,0,2,0,8,4.8,0.48,1,0,0,0,8.3,1,0
+CLARO-00268-391,Female,0,No,No,33,No,No phone service,Fiber optic,No,Yes,No,No,Yes,No,Two year,No,Credit card (automatic),120.7,3881.7,Yes,Claro,RJ,300,105.1,215.7,29.76,6,10,2,1,2.2,-0.65,2,1,2,3,10.6,0,0
+VIVO-00269-483,Male,0,Yes,No,12,No,No phone service,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Month-to-month,No,Electronic check,24.58,291.69,No,Vivo,MG,0,0.0,12.8,0.96,0,1,0,9,4.2,0.31,0,0,0,0,5.9,1,0
+TIM-00270-539,Male,0,Yes,No,9,Yes,Yes,Fiber optic,No,No,No,No,No,Yes,Month-to-month,Yes,Credit card (automatic),144.78,1279.25,No,TIM,RJ,500,484.3,25.1,0.77,0,0,0,5,3.9,0.45,0,0,0,0,3.6,0,0
+VIVO-00271-648,Male,0,No,No,46,Yes,Yes,Fiber optic,No,No,No,Yes,No,No,One year,Yes,Electronic check,141.12,6337.46,No,Vivo,DF,500,508.8,26.8,0.47,0,0,0,7,3.9,0.82,0,0,0,0,12.1,1,0
+VIVO-00272-282,Male,1,Yes,Yes,46,Yes,Yes,Fiber optic,No,Yes,Yes,Yes,No,Yes,Two year,No,Electronic check,187.47,8491.73,No,Vivo,RJ,700,726.6,18.6,0.89,0,0,0,6,4.2,0.56,0,0,0,0,2.9,1,0
+CLARO-00273-834,Female,0,Yes,No,56,Yes,Yes,DSL,No,No,No,No,No,No,Two year,Yes,Bank transfer (automatic),94.11,5017.7,No,Claro,SP,100,85.7,13.9,0.24,0,0,0,8,4.8,0.62,1,0,0,0,11.9,1,0
+VIVO-00274-772,Female,0,No,No,68,Yes,Yes,Fiber optic,No,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Bank transfer (automatic),213.96,13869.47,No,Vivo,SP,1000,964.8,36.2,0.82,1,1,0,8,4.8,0.33,0,0,0,0,6.8,1,0
+CLARO-00275-342,Male,0,No,No,20,No,No phone service,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Two year,Yes,Credit card (automatic),26.52,518.74,No,Claro,SP,0,0.0,39.5,0.09,1,1,0,7,4.8,0.67,0,0,0,0,9.2,1,0
+CLARO-00276-565,Female,0,No,No,19,Yes,No,Fiber optic,No,Yes,No,No,No,Yes,Month-to-month,Yes,Bank transfer (automatic),139.13,2657.78,Yes,Claro,RS,300,296.3,28.1,0.06,1,0,1,7,3.9,0.4,0,0,0,0,13.9,1,0
+VIVO-00277-426,Male,0,No,No,44,Yes,No,Fiber optic,No,No,No,No,No,Yes,Two year,Yes,Electronic check,133.91,5674.94,Yes,Vivo,SP,500,172.1,285.5,14.54,7,7,1,0,2.5,-0.92,2,0,2,3,11.4,1,0
+VIVO-00278-419,Female,0,No,No,29,Yes,No,Fiber optic,No,No,No,Yes,Yes,Yes,Month-to-month,Yes,Credit card (automatic),181.56,5032.96,No,Vivo,SP,1000,898.1,38.3,0.91,0,1,0,7,4.6,0.49,0,0,0,0,7.5,1,0
+VIVO-00279-379,Female,1,No,No,33,Yes,Yes,Fiber optic,No,No,No,No,No,No,One year,Yes,Electronic check,130.71,4202.72,Yes,Vivo,MG,700,162.8,160.1,22.37,5,10,4,3,1.2,-0.55,4,0,1,3,0.0,1,0
+TIM-00280-737,Female,0,No,No,44,Yes,No,Fiber optic,No,Yes,Yes,No,Yes,Yes,Two year,Yes,Electronic check,180.01,7815.64,No,TIM,SP,700,676.6,29.8,1.16,1,0,0,7,4.8,0.57,1,0,0,0,1.4,1,0
+TIM-00281-563,Female,0,No,No,61,Yes,Yes,Fiber optic,Yes,Yes,No,No,No,No,One year,Yes,Electronic check,149.24,8705.35,No,TIM,RJ,700,625.8,16.4,0.52,0,2,0,7,4.5,0.65,0,0,0,0,1.6,1,0
+CLARO-00282-657,Female,0,No,No,11,No,No phone service,Fiber optic,No,No,No,Yes,Yes,No,Month-to-month,Yes,Bank transfer (automatic),131.74,1444.07,No,Claro,SP,700,635.4,41.0,0.96,0,2,0,9,4.4,0.3,1,0,0,0,12.0,1,0
+VIVO-00283-389,Male,1,Yes,Yes,13,Yes,Yes,Fiber optic,No,No,No,No,No,No,One year,Yes,Bank transfer (automatic),131.52,1695.73,Yes,Vivo,RJ,700,725.6,20.7,0.09,1,0,0,8,4.3,0.79,1,0,0,0,13.1,0,0
+VIVO-00284-886,Male,0,Yes,Yes,2,Yes,No,Fiber optic,No,No,No,Yes,Yes,Yes,Month-to-month,No,Bank transfer (automatic),167.46,330.18,Yes,Vivo,MG,500,427.8,24.6,0.52,0,0,1,8,4.7,0.6,0,0,0,0,8.5,1,0
+TIM-00285-502,Male,0,Yes,No,24,Yes,Yes,Fiber optic,Yes,Yes,Yes,No,Yes,Yes,Two year,No,Bank transfer (automatic),199.93,4560.57,No,TIM,RS,300,299.4,18.2,0.22,0,0,0,9,4.8,0.4,0,0,0,0,1.7,1,0
+CLARO-00286-223,Male,0,Yes,Yes,1,Yes,No,Fiber optic,No,No,No,No,No,No,Month-to-month,No,Bank transfer (automatic),122.75,120.85,No,Claro,RJ,1000,981.5,17.5,0.99,0,0,0,8,4.4,0.39,0,0,0,0,10.5,1,0
+CLARO-00287-535,Male,1,Yes,No,17,Yes,No,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Month-to-month,No,Electronic check,46.24,768.27,Yes,Claro,RS,0,0.0,26.0,0.88,2,0,1,8,4.8,0.53,0,0,0,0,5.3,0,0
+VIVO-00288-832,Male,0,No,No,21,Yes,No,DSL,No,No,Yes,No,No,No,Month-to-month,Yes,Bank transfer (automatic),88.94,1804.62,No,Vivo,DF,100,86.4,29.5,1.0,0,0,0,7,4.6,0.52,0,0,0,0,11.9,1,0
+TIM-00289-845,Female,0,Yes,Yes,9,Yes,No,Fiber optic,No,No,No,No,No,Yes,Month-to-month,No,Bank transfer (automatic),137.01,1189.0,No,TIM,DF,700,623.2,25.1,0.38,0,0,0,10,4.0,0.58,0,0,0,0,5.4,1,0
+CLARO-00290-173,Female,0,No,No,25,Yes,No,DSL,No,Yes,No,No,No,Yes,Two year,No,Credit card (automatic),111.34,2714.06,No,Claro,SP,100,95.0,27.5,0.17,0,0,0,7,4.8,0.39,1,0,0,0,4.3,1,0
+VIVO-00291-630,Female,0,Yes,No,1,Yes,No,Fiber optic,Yes,No,Yes,No,Yes,Yes,Month-to-month,No,Electronic check,171.5,171.8,No,Vivo,DF,300,303.3,13.9,0.62,1,0,0,10,4.8,0.42,0,0,0,0,7.2,1,0
+TIM-00292-206,Male,0,Yes,Yes,1,Yes,No,Fiber optic,Yes,No,Yes,No,Yes,No,Month-to-month,Yes,Mailed check,152.51,147.43,Yes,TIM,SP,300,288.0,15.8,0.86,0,0,0,9,4.9,0.43,0,0,0,0,6.2,0,0
+TIM-00293-649,Male,0,Yes,No,48,Yes,Yes,Fiber optic,Yes,No,No,No,Yes,Yes,Two year,No,Bank transfer (automatic),177.16,8237.75,Yes,TIM,MG,300,118.2,153.2,27.04,7,7,4,2,2.4,-0.52,4,0,1,1,5.2,1,0
+TIM-00294-597,Female,1,No,No,12,Yes,Yes,DSL,No,No,Yes,No,No,No,One year,Yes,Electronic check,102.27,1183.55,No,TIM,RJ,50,50.8,20.3,0.49,0,0,0,9,4.4,0.76,0,0,0,0,0.8,1,0
+CLARO-00295-456,Male,0,No,No,3,Yes,Yes,DSL,No,Yes,No,No,Yes,No,Month-to-month,No,Electronic check,126.29,379.7,No,Claro,SP,50,51.1,33.6,0.83,0,2,0,9,4.5,0.54,0,0,0,0,0.2,0,0
+TIM-00296-187,Male,0,Yes,No,20,Yes,Yes,Fiber optic,Yes,No,Yes,Yes,Yes,No,Month-to-month,Yes,Mailed check,181.6,3520.61,No,TIM,SP,300,258.5,37.3,0.3,0,2,0,9,4.2,0.24,0,0,0,0,9.5,1,0
+CLARO-00297-150,Male,1,Yes,No,41,Yes,Yes,DSL,No,No,No,Yes,No,No,Two year,Yes,Electronic check,108.7,4241.57,No,Claro,RJ,50,43.3,27.2,0.18,0,0,0,10,4.6,0.25,0,0,0,0,14.6,0,0
+VIVO-00298-401,Male,0,Yes,No,6,Yes,No,DSL,No,Yes,No,No,Yes,No,One year,No,Credit card (automatic),112.96,668.56,No,Vivo,SP,100,97.6,29.0,1.2,2,1,0,7,4.9,0.72,0,0,0,0,8.6,0,0
+VIVO-00299-918,Female,0,Yes,No,27,Yes,No,Fiber optic,No,No,No,No,No,Yes,One year,Yes,Bank transfer (automatic),127.53,3508.14,No,Vivo,RS,300,279.5,28.1,0.94,0,0,0,8,4.1,0.4,0,0,0,0,11.6,0,0
+TIM-00300-115,Male,1,Yes,No,2,Yes,Yes,Fiber optic,Yes,Yes,Yes,No,No,Yes,One year,Yes,Electronic check,191.7,388.67,No,TIM,PR,1000,1014.9,20.8,0.44,0,0,0,7,4.7,0.25,1,0,0,0,6.5,0,0

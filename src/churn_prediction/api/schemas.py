@@ -655,6 +655,28 @@ class SafetySummaryMetricsResponse(BaseModel):
     evaluator_engine: str
 
 
+# ==============================================================================
+# ⚡ Schemas de Synthetic Data Engineering (Telco 360 Enterprise)
+# ==============================================================================
+
+class SynthesizeDatasetRequest(BaseModel):
+    num_samples: int = Field(default=7043, ge=100, le=50000, description="Quantidade de clientes a sintetizar")
+    chaos_ratio: float = Field(default=0.12, ge=0.0, le=1.0, description="Proporção de instabilidade de rede")
+    save_as_default: bool = Field(default=True, description="Sobrescreve a base pública padrão")
+
+
+class SynthesizeDatasetResponse(BaseModel):
+    success: bool
+    total_records: int
+    total_columns: int
+    file_path: str
+    operators_distribution: dict[str, int]
+    chaos_count: int
+    created_at: str
+    csv_sample_preview: list[dict[str, Any]]
+
+
+
 
 
 

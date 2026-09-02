@@ -53,16 +53,19 @@ export function juntarLinhas(analise: AnalysisResult): LinhaRisco[] {
 type AnalysisInput = { tipo: 'bundled' } | { tipo: 'arquivo'; arquivo: File }
 
 async function carregarDatasetBundled(): Promise<File> {
-  const resposta = await fetch(`${import.meta.env.BASE_URL}telco_customers.csv`)
-  if (!resposta.ok) throw new Error('Dataset de exemplo indisponível (public/telco_customers.csv).')
+  let resposta = await fetch(`${import.meta.env.BASE_URL}telco_enterprise_customers.csv`)
+  if (!resposta.ok) {
+    resposta = await fetch(`${import.meta.env.BASE_URL}telco_customers.csv`)
+  }
+  if (!resposta.ok) throw new Error('Dataset de exemplo indisponível (telco_enterprise_customers.csv).')
   const texto = await resposta.text()
 
   const tenantId = getTenantId()
   if (tenantId === 'tenant-default') {
-    return new File([texto], 'telco_customers_global.csv', { type: 'text/csv' })
+    return new File([texto], 'telco_enterprise_global.csv', { type: 'text/csv' })
   }
 
-  // Particionamento determinístico por operadora (Row-Level Security)
+  // Particionamento por operadora (Row-Level Security)
   const linhas = texto.trim().split('\n')
   const cabecalho = linhas[0]
   const dados = linhas.slice(1)
@@ -76,29 +79,37 @@ async function carregarDatasetBundled(): Promise<File> {
     prefixo = 'VIVO'
     modulo = 3
     resto = 0
-    nomeArquivo = 'telco_customers_vivo.csv'
+    nomeArquivo = 'telco_enterprise_vivo.csv'
   } else if (tenantId === 'tenant-claro') {
     prefixo = 'CLARO'
     modulo = 3
     resto = 1
-    nomeArquivo = 'telco_customers_claro.csv'
+    nomeArquivo = 'telco_enterprise_claro.csv'
   } else if (tenantId === 'tenant-tim') {
     prefixo = 'TIM'
     modulo = 3
     resto = 2
-    nomeArquivo = 'telco_customers_tim.csv'
+    nomeArquivo = 'telco_enterprise_tim.csv'
   } else {
     prefixo = tenantId.replace('tenant-', '').toUpperCase()
     modulo = 4
     resto = 0
-    nomeArquivo = `telco_customers_${prefixo.toLowerCase()}.csv`
+    nomeArquivo = `telco_enterprise_${prefixo.toLowerCase()}.csv`
   }
 
   const linhasFiltradas = dados
-    .filter((_, index) => index % modulo === resto)
+    .filter((linha, index) => {
+      // Se a linha já tem coluna operator (ex: Vivo, Claro, TIM)
+      if (linha.includes('Vivo') && tenantId === 'tenant-vivo') return true
+      if (linha.includes('Claro') && tenantId === 'tenant-claro') return true
+      if (linha.includes('TIM') && tenantId === 'tenant-tim') return true
+      return index % modulo === resto
+    })
     .map((linha) => {
       const colunas = linha.split(',')
-      colunas[0] = `${prefixo}-${colunas[0]}`
+      if (!colunas[0].startsWith(prefixo)) {
+        colunas[0] = `${prefixo}-${colunas[0]}`
+      }
       return colunas.join(',')
     })
 

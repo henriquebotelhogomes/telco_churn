@@ -1,6 +1,7 @@
 import io
 import json
 from contextlib import asynccontextmanager
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, cast
 
@@ -68,6 +69,8 @@ from churn_prediction.api.schemas import (
     StreamingStartRequest,
     StreamingStatusResponse,
     StreamingWindowsListResponse,
+    SynthesizeDatasetRequest,
+    SynthesizeDatasetResponse,
     TenantItem,
     TenantListResponse,
     TenantSummaryResponse,
@@ -1156,6 +1159,50 @@ async def get_safety_summary_metrics() -> dict[str, Any]:
     return ragas_evaluator.get_safety_summary_metrics()
 
 
+# ---------------------------------------------------------------------------
+# ⚡ Synthetic Data Engineering (Telco 360 Enterprise)
+# ---------------------------------------------------------------------------
+
+
+@v1.post(
+    "/admin/data/synthesize-enterprise-dataset",
+    response_model=SynthesizeDatasetResponse,
+)
+async def synthesize_enterprise_dataset_endpoint(
+    payload: SynthesizeDatasetRequest | None = None,
+) -> dict[str, Any]:
+    """Gera sob demanda uma base enriquecida com telemetria FTTH/5G, CRM, NPS e faturamento BRL."""
+    req = payload or SynthesizeDatasetRequest()
+    from churn_prediction.data.generate_enterprise_dataset import generate_enterprise_dataset
+
+    df = generate_enterprise_dataset(num_samples=req.num_samples, chaos_ratio=req.chaos_ratio)
+    out_path = Path("data/raw/telco_enterprise_customers.csv")
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(out_path, index=False)
+
+    # Copia para frontend/public e frontend/dist para uso no Cockpit
+    for target_dir in [Path("frontend/public"), Path("frontend/dist")]:
+        if target_dir.exists():
+            try:
+                df.to_csv(target_dir / "telco_enterprise_customers.csv", index=False)
+            except Exception:
+                pass
+
+    op_dist = df["operator"].value_counts().to_dict()
+    chaos_count = int(df["anatel_complaint_flag"].sum()) if "anatel_complaint_flag" in df else 0
+
+    return {
+        "success": True,
+        "total_records": len(df),
+        "total_columns": len(df.columns),
+        "file_path": str(out_path),
+        "operators_distribution": {str(k): int(v) for k, v in op_dist.items()},
+        "chaos_count": chaos_count,
+        "created_at": datetime.now(UTC).isoformat(),
+        "csv_sample_preview": df.head(5).to_dict(orient="records"),
+    }
+
+
 app.include_router(v1)
 
 # Se os arquivos estáticos do frontend (Vite) existirem, serve na raiz /
@@ -1192,8 +1239,19 @@ if _dist_path is not None:
         if csv_file.exists():
             return FileResponse(csv_file)
         raise HTTPException(status_code=404, detail="Demo CSV not found")
+
+    @app.get("/telco_enterprise_customers.csv", include_in_schema=False)
+    def demo_enterprise_csv():
+        csv_file = _dist_path / "telco_enterprise_customers.csv"
+        if csv_file.exists():
+            return FileResponse(csv_file)
+        raw_file = Path("data/raw/telco_enterprise_customers.csv")
+        if raw_file.exists():
+            return FileResponse(raw_file)
+        raise HTTPException(status_code=404, detail="Enterprise CSV not found")
 else:
 
     @app.get("/", include_in_schema=False)
     def root():
         return RedirectResponse(url="/docs")
+

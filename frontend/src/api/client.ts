@@ -289,6 +289,16 @@ export const api = {
   getLiveScores(tenantId: string = 'tenant-default'): Promise<{ total_customers: number; scores: import('@/hooks/useLiveStream').LiveCustomerScore[] }> {
     return request(`/api/v1/streaming/live-scores?tenant_id=${encodeURIComponent(tenantId)}`)
   },
+
+  synthesizeEnterpriseDataset(
+    payload?: import('@/types').SynthesizeDatasetRequest,
+  ): Promise<import('@/types').SynthesizeDatasetResponse> {
+    return request('/api/v1/admin/data/synthesize-enterprise-dataset', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload ?? {}),
+    })
+  },
 }
 
 

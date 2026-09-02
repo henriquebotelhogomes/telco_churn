@@ -692,6 +692,24 @@ export interface SafetySummaryMetricsResponse {
   evaluator_engine: string
 }
 
+export interface SynthesizeDatasetRequest {
+  num_samples?: number
+  chaos_ratio?: number
+  save_as_default?: boolean
+}
+
+export interface SynthesizeDatasetResponse {
+  success: boolean
+  total_records: number
+  total_columns: number
+  file_path: string
+  operators_distribution: Record<string, number>
+  chaos_count: number
+  created_at: string
+  csv_sample_preview: Record<string, unknown>[]
+}
+
+
 
 
 

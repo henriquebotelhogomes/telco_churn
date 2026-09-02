@@ -99,6 +99,7 @@ nav:
       - Kubernetes & KEDA Autoscaling: architecture/kubernetes-keda.md
       - Visão de Produto: architecture/product-vision.md
   - Ciência de Dados & ML:
+      - Dados Sintéticos (Telco 360): ml-data/synthetic-data-generator.md
       - Modelagem & Benchmarks: ml-data/modeling-benchmarks.md
       - Explicabilidade & TreeSHAP: ml-data/explainability.md
       - Contratos de Dados (Pandera): ml-data/contracts.md
