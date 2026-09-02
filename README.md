@@ -8,11 +8,16 @@
 [![Feature Store](https://img.shields.io/badge/Feature_Store-Feast%20%2B%20Redis-red?style=flat&logo=redis&logoColor=white)](https://feast.dev/)
 [![Kubernetes](https://img.shields.io/badge/Kubernetes-KEDA_Autoscaling-326CE5?style=flat&logo=kubernetes&logoColor=white)](https://keda.sh/)
 [![AI Safety](https://img.shields.io/badge/AI_Safety-Guardrails%20%26%20Ragas-6C5CE7?style=flat)](https://github.com/henriquebotelhogomes/telco_churn)
+[![Google Cloud Run](https://img.shields.io/badge/Google_Cloud_Run-Live_Demo-4285F4?style=flat&logo=googlecloud&logoColor=white)](https://retainiq-197215016090.us-central1.run.app/)
+[![Docs](https://img.shields.io/badge/Docs-MkDocs_Material-526CFE?style=flat&logo=material-for-mkdocs&logoColor=white)](https://henriquebotelhogomes.github.io/telco_churn/)
 [![Tests](https://img.shields.io/badge/Tests-102_Passing_(100%25)-success?style=flat&logo=pytest&logoColor=white)](https://docs.pytest.org/)
 [![Coverage](https://img.shields.io/badge/Coverage-90.32%25-brightgreen?style=flat)](https://github.com/henriquebotelhogomes/telco_churn)
-[![Docs](https://img.shields.io/badge/Docs-MkDocs_Material-526CFE?style=flat&logo=material-for-mkdocs&logoColor=white)](https://henriquebotelhogomes.github.io/telco_churn/)
+
+> **🚀 Aplicação Online (Google Cloud Run):** [https://retainiq-197215016090.us-central1.run.app/](https://retainiq-197215016090.us-central1.run.app/)  
+> **📖 Documentação Técnica (GitHub Pages):** [https://henriquebotelhogomes.github.io/telco_churn/](https://henriquebotelhogomes.github.io/telco_churn/)
 
 > **Plataforma Enterprise de Inteligência de Retenção, Streaming em Tempo Real e MLOps:** Uma solução completa de Machine Learning e Inteligência Artificial que fecha o ciclo operacional corporativo: **Ingestão em Streaming $\rightarrow$ Feature Store (Feast) $\rightarrow$ Predição de Risco de Churn $\rightarrow$ Explicabilidade com TreeSHAP $\rightarrow$ Prescrição com ROI Anual $\rightarrow$ Copilot GenAI com AI Safety $\rightarrow$ Closed-Loop com Desfecho Real $\rightarrow$ Continuous Training com Quality Gate**.
+
 
 ---
 
@@ -192,8 +197,8 @@ uv run uvicorn churn_prediction.api.main:app --host 0.0.0.0 --port 8000 --reload
 
 ---
 
-## 📚 Documentação Completa
-
-Acesse a documentação interativa gerada com **Material for MkDocs**:
-- **Portal Online:** [`https://henriquebotelhogomes.github.io/telco_churn/`](https://henriquebotelhogomes.github.io/telco_churn/)
-- **Swagger / OpenAPI:** [`http://localhost:8000/docs`](http://localhost:8000/docs)
+## 📚 Links e Documentação
+ 
+- **🚀 Cockpit Online (Google Cloud Run):** [`https://retainiq-197215016090.us-central1.run.app/`](https://retainiq-197215016090.us-central1.run.app/)
+- **📖 Portal de Documentação (GitHub Pages):** [`https://henriquebotelhogomes.github.io/telco_churn/`](https://henriquebotelhogomes.github.io/telco_churn/)
+- **⚡ Swagger / OpenAPI:** [`https://retainiq-197215016090.us-central1.run.app/docs`](https://retainiq-197215016090.us-central1.run.app/docs)
