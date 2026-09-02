@@ -18,7 +18,7 @@ dependencies = [
     "shap>=0.44.1",
     "sqlalchemy>=2.0.28",
     "aiosqlite>=0.20.0",
-    "uvicorn>=0.27.1",
+    "uvicorn>=0.52.4",
     "xgboost>=2.0.3",
     "aiokafka>=0.14.0",
 ]
