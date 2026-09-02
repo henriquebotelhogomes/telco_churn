@@ -4,7 +4,7 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from 'react'
 import { useQuery } from '@tanstack/react-query'
 
-import { api } from '@/api/client'
+import { api, getTenantId } from '@/api/client'
 import { parseCsv } from '@/lib/csv'
 import type { PrevisaoBatchLinha, PrevisaoBatchResponse } from '@/types'
 
@@ -27,15 +27,13 @@ export interface LinhaRisco {
   row: Record<string, string>
 }
 
-/** Junta os resultados da API às linhas do CSV enviado (pelo índice do lote). */
-export function juntarLinhas(resultado: AnalysisResult): LinhaRisco[] {
-  const porIndice = new Map<number, PrevisaoBatchLinha>()
-  for (const linha of resultado.resposta.results) porIndice.set(linha.indice, linha)
-
+/** Junta o CSV original com as predições alinhadas por índice (1:1). */
+export function juntarLinhas(analise: AnalysisResult): LinhaRisco[] {
   const juntas: LinhaRisco[] = []
-  resultado.linhas.forEach((row, indice) => {
-    const previsao = porIndice.get(indice)
-    if (!previsao) return
+  analise.resposta.results.forEach((previsao: PrevisaoBatchLinha, i: number) => {
+    const indice = previsao.indice ?? i
+    const row = analise.linhas[indice]
+    if (!row) return
     juntas.push({
       indice,
       customerId: previsao.customer_id ?? row.customerID ?? `#${indice}`,
@@ -57,8 +55,55 @@ type AnalysisInput = { tipo: 'bundled' } | { tipo: 'arquivo'; arquivo: File }
 async function carregarDatasetBundled(): Promise<File> {
   const resposta = await fetch(`${import.meta.env.BASE_URL}telco_customers.csv`)
   if (!resposta.ok) throw new Error('Dataset de exemplo indisponível (public/telco_customers.csv).')
-  const blob = await resposta.blob()
-  return new File([blob], 'telco_customers.csv', { type: 'text/csv' })
+  const texto = await resposta.text()
+
+  const tenantId = getTenantId()
+  if (tenantId === 'tenant-default') {
+    return new File([texto], 'telco_customers_global.csv', { type: 'text/csv' })
+  }
+
+  // Particionamento determinístico por operadora (Row-Level Security)
+  const linhas = texto.trim().split('\n')
+  const cabecalho = linhas[0]
+  const dados = linhas.slice(1)
+
+  let modulo: number
+  let resto: number
+  let prefixo: string
+  let nomeArquivo: string
+
+  if (tenantId === 'tenant-vivo') {
+    prefixo = 'VIVO'
+    modulo = 3
+    resto = 0
+    nomeArquivo = 'telco_customers_vivo.csv'
+  } else if (tenantId === 'tenant-claro') {
+    prefixo = 'CLARO'
+    modulo = 3
+    resto = 1
+    nomeArquivo = 'telco_customers_claro.csv'
+  } else if (tenantId === 'tenant-tim') {
+    prefixo = 'TIM'
+    modulo = 3
+    resto = 2
+    nomeArquivo = 'telco_customers_tim.csv'
+  } else {
+    prefixo = tenantId.replace('tenant-', '').toUpperCase()
+    modulo = 4
+    resto = 0
+    nomeArquivo = `telco_customers_${prefixo.toLowerCase()}.csv`
+  }
+
+  const linhasFiltradas = dados
+    .filter((_, index) => index % modulo === resto)
+    .map((linha) => {
+      const colunas = linha.split(',')
+      colunas[0] = `${prefixo}-${colunas[0]}`
+      return colunas.join(',')
+    })
+
+  const novoConteudoCsv = [cabecalho, ...linhasFiltradas].join('\n')
+  return new File([novoConteudoCsv], nomeArquivo, { type: 'text/csv' })
 }
 
 async function analisarArquivo(arquivo: File): Promise<AnalysisResult> {
@@ -83,7 +128,11 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
   const query = useQuery({
     queryKey: [
       'batch-analysis',
-      input === null ? 'idle' : input.tipo === 'bundled' ? 'bundled' : `${input.arquivo.name}:${input.arquivo.size}`,
+      input === null
+        ? 'idle'
+        : input.tipo === 'bundled'
+          ? `bundled:${getTenantId()}`
+          : `${input.arquivo.name}:${input.arquivo.size}:${getTenantId()}`,
     ],
     queryFn: async () => {
       if (!input) throw new Error('Nenhuma fonte de análise selecionada.')
