@@ -204,16 +204,16 @@ Para eliminar qualquer ambiguidade de integração entre Produtor, Motor de Stre
 ### 🟢 ÉPICO 2: Motor de Processamento em Fluxo & Online Feature Store (QuixStreams + Redis)
 **Objetivo:** Consumir eventos em tempo real, calcular métricas de janelas deslizantes e armazenar o estado operacional do cliente no Redis.
 
-- [ ] **Tarefa 2.1: Implementar o Worker de Streaming com QuixStreams**
-  - [ ] *Micro-tarefa 2.1.1:* Criar `src/churn_prediction/streaming/worker.py` consumindo os tópicos de rede, faturamento e CRM.
-  - [ ] *Micro-tarefa 2.1.2:* Implementar agregação com janelas deslizantes de 15 minutos (quedas de fibra acumuladas, latência média móvel).
-  - [ ] *Micro-tarefa 2.1.3:* Salvar e atualizar o hash do cliente no Redis (`churn:live:customer:{customer_id}`) com TTL de expiração automática.
+- [x] **Tarefa 2.1: Implementar o Worker de Streaming com QuixStreams**
+  - [x] *Micro-tarefa 2.1.1:* Criar `src/churn_prediction/streaming/worker.py` consumindo os tópicos de rede, faturamento e CRM.
+  - [x] *Micro-tarefa 2.1.2:* Implementar agregação com janelas deslizantes de 15 minutos (quedas de fibra acumuladas, latência média móvel).
+  - [x] *Micro-tarefa 2.1.3:* Salvar e atualizar o hash do cliente no Redis (`churn:live:customer:{customer_id}`) com TTL de expiração automática.
   - 🎯 **Checkpoint 2.1:** Injetar eventos e validar via CLI do Redis (`HGETALL churn:live:customer:VIVO-5575`) que as features agregadas são atualizadas em $< 5\text{ ms}$.
 
-- [ ] **Tarefa 2.2: Motor de Reavaliação de Risco (Live Re-Scoring Engine)**
-  - [ ] *Micro-tarefa 2.2.1:* Criar `src/churn_prediction/streaming/live_scorer.py` que combina o vetor de features cadastrais (batch) com os deltas da Online Feature Store (Redis).
-  - [ ] *Micro-tarefa 2.2.2:* Executar inferência instantânea com o modelo Champion pré-carregado em memória.
-  - [ ] *Micro-tarefa 2.2.3:* Calcular o $\Delta p$ (diferença entre score anterior e novo score) e disparar alerta caso $\Delta p \ge +0.25$ ou $p \ge 0.70$.
+- [x] **Tarefa 2.2: Motor de Reavaliação de Risco (Live Re-Scoring Engine)**
+  - [x] *Micro-tarefa 2.2.1:* Criar `src/churn_prediction/streaming/live_scorer.py` que combina o vetor de features cadastrais (batch) com os deltas da Online Feature Store (Redis).
+  - [x] *Micro-tarefa 2.2.2:* Executar inferência instantânea com o modelo Champion pré-carregado em memória.
+  - [x] *Micro-tarefa 2.2.3:* Calcular o $\Delta p$ (diferença entre score anterior e novo score) e disparar alerta caso $\Delta p \ge +0.25$ ou $p \ge 0.70$.
   - 🎯 **Checkpoint 2.2:** Validar em teste unitário que um cliente com probabilidade inicial de $15\%$ sobe para $> 75\%$ após 3 eventos consecutivos de queda de fibra.
 
 ---
@@ -221,15 +221,15 @@ Para eliminar qualquer ambiguidade de integração entre Produtor, Motor de Stre
 ### 🟢 ÉPICO 3: Broadcast Hub em Tempo Real na FastAPI (Server-Sent Events)
 **Objetivo:** Disponibilizar canal HTTP assíncrono de streaming entre o backend e a interface web com isolamento multi-tenant.
 
-- [ ] **Tarefa 3.1: Broadcast Hub com Filas Assíncronas**
-  - [ ] *Micro-tarefa 3.1.1:* Criar `src/churn_prediction/streaming/broadcaster.py` com registro de listeners ativos (`asyncio.Queue`) segmentados por `tenant_id`.
-  - [ ] *Micro-tarefa 3.1.2:* Criar endpoint `GET /api/v1/streaming/live-feed` com `StreamingResponse(media_type="text/event-stream")`.
-  - [ ] *Micro-tarefa 3.1.3:* Adicionar heartbeat automático a cada 15 segundos (`: ping\n\n`) para prevenir desconexões de proxies reversos e firewalls.
+- [x] **Tarefa 3.1: Broadcast Hub com Filas Assíncronas**
+  - [x] *Micro-tarefa 3.1.1:* Criar `src/churn_prediction/streaming/broadcaster.py` com registro de listeners ativos (`asyncio.Queue`) segmentados por `tenant_id`.
+  - [x] *Micro-tarefa 3.1.2:* Criar endpoint `GET /api/v1/streaming/live-feed` com `StreamingResponse(media_type="text/event-stream")`.
+  - [x] *Micro-tarefa 3.1.3:* Adicionar heartbeat automático a cada 15 segundos (`: ping\n\n`) para prevenir desconexões de proxies reversos e firewalls.
   - 🎯 **Checkpoint 3.1:** Conectar via `curl -N http://localhost:8000/api/v1/streaming/live-feed` e receber streams contínuos com latência $< 20\text{ ms}$.
 
-- [ ] **Tarefa 3.2: Endpoint de Controle da Simulação de Caos**
-  - [ ] *Micro-tarefa 3.2.1:* Criar endpoint `POST /api/v1/streaming/chaos/trigger` aceitando o tipo de cenário (`fiber_cut`, `pix_gateway_fail`, `support_crisis`).
-  - [ ] *Micro-tarefa 3.2.2:* Emitir confirmação imediata e despachar a carga de eventos em background task assíncrona.
+- [x] **Tarefa 3.2: Endpoint de Controle da Simulação de Caos**
+  - [x] *Micro-tarefa 3.2.1:* Criar endpoint `POST /api/v1/streaming/chaos/trigger` aceitando o tipo de cenário (`fiber_cut`, `pix_gateway_fail`, `support_crisis`).
+  - [x] *Micro-tarefa 3.2.2:* Emitir confirmação imediata e despachar a carga de eventos em background task assíncrona.
   - 🎯 **Checkpoint 3.2:** Disparar chamada POST para acionar o Cenário A e verificar propagação no feed SSE em menos de 100ms.
 
 ---
@@ -264,8 +264,8 @@ Para eliminar qualquer ambiguidade de integração entre Produtor, Motor de Stre
   - [x] *Micro-tarefa 5.1.3:* Criar `tests/test_sse_broadcaster.py` validando enfileiramento e isolamento de mensagens por `tenant_id`.
   - 🎯 **Checkpoint 5.1:** Executar `pytest tests/test_streaming*.py` e obter 100% de sucesso.
 
-- [ ] **Tarefa 5.2: Teste de Resiliência e Latência E2E**
-  - [ ] *Micro-tarefa 5.2.1:* Implementar teste de carga medindo o tempo decorrido entre a emissão da mensagem no produtor e o recebimento no cliente SSE.
+- [x] **Tarefa 5.2: Teste de Resiliência e Latência E2E**
+  - [x] *Micro-tarefa 5.2.1:* Implementar teste de carga medindo o tempo decorrido entre a emissão da mensagem no produtor e o recebimento no cliente SSE.
   - 🎯 **Checkpoint 5.2:** Comprovar latência média $< 50\text{ ms}$ em 500 mensagens consecutivas.
 
 ---
