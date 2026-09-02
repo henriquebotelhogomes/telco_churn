@@ -186,14 +186,14 @@ Para eliminar qualquer ambiguidade de integração entre Produtor, Motor de Stre
 ### 🟢 ÉPICO 1: Infraestrutura de Streaming & Simulador de Eventos
 **Objetivo:** Inicializar o broker Redpanda localmente e criar o gerador sintético de telemetria e eventos com suporte a cenários de injeção de falhas.
 
-- [ ] **Tarefa 1.1: Validação do Broker Redpanda & Tópicos Kafka**
-  - [ ] *Micro-tarefa 1.1.1:* Ajustar `docker-compose.streaming.yml` garantindo inicialização de Redpanda e Redis com healthchecks automáticos.
+- [x] **Tarefa 1.1: Validação do Broker Redpanda & Tópicos Kafka**
+  - [x] *Micro-tarefa 1.1.1:* Ajustar `docker-compose.streaming.yml` garantindo inicialização de Redpanda e Redis com healthchecks automáticos.
   - [ ] *Micro-tarefa 1.1.2:* Criar script de provisionamento automático de tópicos: `telemetry.network.events`, `billing.payment.events`, `crm.interaction.events` com partição única para dev local.
   - 🎯 **Checkpoint 1.1:** Subir containers com `docker compose -f docker-compose.streaming.yml up -d` e verificar tópicos no console Redpanda em `http://localhost:8085`.
 
-- [ ] **Tarefa 1.2: Implementar o Gerador de Eventos e Simulador de Caos**
-  - [ ] *Micro-tarefa 1.2.1:* Criar `src/churn_prediction/streaming/producer.py` baseado em `aiokafka` com throughput ajustável (1 a 100 msg/s).
-  - [ ] *Micro-tarefa 1.2.2:* Implementar injeção de cenários de teste controlados:
+- [x] **Tarefa 1.2: Implementar o Gerador de Eventos e Simulador de Caos**
+  - [x] *Micro-tarefa 1.2.1:* Criar `src/churn_prediction/streaming/producer.py` baseado em `aiokafka` com throughput ajustável (1 a 100 msg/s).
+  - [x] *Micro-tarefa 1.2.2:* Implementar injeção de cenários de teste controlados:
     - 💥 **Cenário A:** Rompimento de fibra regional (50 eventos seguidos de `fiber_down: true` e `latency > 150ms`).
     - 💳 **Cenário B:** Falha de gateway financeiro (30 eventos seguidos de rejeição de pagamento).
     - 😡 **Cenário C:** Escalada de tickets de suporte no CRM.
@@ -259,7 +259,7 @@ Para eliminar qualquer ambiguidade de integração entre Produtor, Motor de Stre
 **Objetivo:** Garantir robustez industrial, cobertura $> 85\%$ e validação ponta a ponta da pipeline de streaming.
 
 - [ ] **Tarefa 5.1: Testes Unitários e de Integração da Pipeline**
-  - [ ] *Micro-tarefa 5.1.1:* Criar `tests/test_streaming_schemas.py` validando integridade e coerência de validação dos contratos Pydantic.
+  - [x] *Micro-tarefa 5.1.1:* Criar `tests/test_streaming_schemas.py` validando integridade e coerência de validação dos contratos Pydantic.
   - [ ] *Micro-tarefa 5.1.2:* Criar `tests/test_live_scorer.py` validando cálculo determinístico de deltas de risco e limiares de alerta.
   - [ ] *Micro-tarefa 5.1.3:* Criar `tests/test_sse_broadcaster.py` validando enfileiramento e isolamento de mensagens por `tenant_id`.
   - 🎯 **Checkpoint 5.1:** Executar `pytest tests/test_streaming*.py` e obter 100% de sucesso.

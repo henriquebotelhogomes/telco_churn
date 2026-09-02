@@ -22,3 +22,14 @@ services:
       - "8085:8080"
     environment:
       KAFKA_BROKERS: "redpanda:9092"
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: retainiq-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
